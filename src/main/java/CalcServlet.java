@@ -94,7 +94,7 @@ public class CalcServlet extends HttpServlet {
 	         // Echo client's request information
 	         out.println("<form>");
 	         out.println("<p>First part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\"" + first + "\"><em style=\"color:red;\"> " + (er1?error:"") + "</em>");
-	         out.println("<p>Second part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" " +  second + " \"> <em style=\\\"color:red;\\\">" + (er2?error:"") + "</em>");
+	         out.println("<p>Second part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" " +  second + " \"> <em style=\"color:red;\">" + (er2?error:"") + "</em>");
 	         out.println("<p>Action : <strong> " + act + "</strong> </p><select name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
 	         		+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
 	         out.println("<button style=\"width : 170px; height : 35px; border-radius: 15px; border: 3px solid 	#228B22; \" type=\"submit\">Calculate</button><br/>");
