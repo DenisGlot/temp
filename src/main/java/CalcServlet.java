@@ -16,6 +16,8 @@ public class CalcServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private double result;
+	private double first;
+	private double second;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -29,21 +31,19 @@ public class CalcServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// Logig
-	      
-	      double first;
-	      double second;
+		// Logic below
 	      String act;
-	      String error ="Please, write correct number";
+	      String pattern = "[-+]?\\d+?[.]?[0-9]*?";
+	      String error ="Please, write correct number. Example 12.34";
 	      boolean er1=false,er2=false;
 	      
-	        if(request.getParameter("first")!=null && request.getParameter("first").matches("[-+]?[0-9]*\\\\.?[0-9]+")) {
+	        if(request.getParameter("first")!=null && request.getParameter("first")!="" && request.getParameter("first").matches(pattern)) {
 	        	first = Double.parseDouble(request.getParameter("first"));
 	        } else {
 	        	er1=true;
 	        	first=-1;
 	        }
-	        if(request.getParameter("second")!=null && request.getParameter("first").matches("[-+]?[0-9]*\\\\.?[0-9]+")) {
+	        if(request.getParameter("second")!=null && request.getParameter("second")!="" && request.getParameter("first").matches(pattern)) {
 	        	second= Double.parseDouble(request.getParameter("second"));
 	        } else {
 	        	er2=true;
@@ -69,6 +69,12 @@ public class CalcServlet extends HttpServlet {
 			case ":":
 				result=first/second;
 				break;
+			case "sqrt first":
+				result = Math.sqrt(first);
+			    break;
+			case "sqrt second":
+				result = Math.sqrt(second);
+				break;
 			}
 		
 		
@@ -87,10 +93,11 @@ public class CalcServlet extends HttpServlet {
 	         out.println("<h1>Calculator Pro</h1>");  // says Hello
 	         // Echo client's request information
 	         out.println("<form>");
-	         out.println("<p>First part</p><input name=\"first\" type=\"text\"> " + (er1?error:""));
-	         out.println("<p>Second part</p><input name=\"second\" type=\"text\">" + (er2?error:""));
-	         out.println("<p>Action : </p><select name=\"action\"><option value=\"+\">+</option><option value=\"-\">-</option><option value=\"*\">*</option><option value=\":\">:</option></select> <br/>");
-	         out.println("<button type=\"submit\">Calculate</button><br/>");
+	         out.println("<p>First part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\"" + first + "\"><em style=\"color:red;\"> " + (er1?error:"") + "</em>");
+	         out.println("<p>Second part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" " +  second + " \"> <em style=\\\"color:red;\\\">" + (er2?error:"") + "</em>");
+	         out.println("<p>Action : <strong> " + act + "</strong> </p><select name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
+	         		+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
+	         out.println("<button style=\"width : 170px; height : 35px; border-radius: 15px; border: 3px solid 	#228B22; \" type=\"submit\">Calculate</button><br/>");
 	         out.println("<label><strong> Your result is : <h2>" + result + "</h2></strong></label>");
 	         out.println("</form>");
 	         out.println("</body>");
