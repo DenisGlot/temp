@@ -83,7 +83,7 @@ public class CalcServlet extends HttpServlet {
 	      // Allocate a output writer to write the response message into the network socket
 	      PrintWriter out = response.getWriter();
 	 
-	      // Write the response message, in a HTML page
+	      // Write the response message, in an HTML page
 	      try {
 	         out.println("<!DOCTYPE html>");
 	         out.println("<html><head>");
