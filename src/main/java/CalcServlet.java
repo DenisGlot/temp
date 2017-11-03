@@ -84,7 +84,7 @@ public class CalcServlet extends HttpServlet {
 	         out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
 	         out.println("<title>Calculator</title></head>");
 	         out.println("<body>");
-	         out.println("<h1>Calculator</h1>");  // says Hello
+	         out.println("<h1>Calculator Pro</h1>");  // says Hello
 	         // Echo client's request information
 	         out.println("<form>");
 	         out.println("<p>First part</p><input name=\"first\" type=\"text\"> " + (er1?error:""));
