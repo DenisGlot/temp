@@ -91,7 +91,7 @@ public class CalcServlet extends HttpServlet {
 	         out.println("<p>Second part</p><input name=\"second\" type=\"text\">" + (er2?error:""));
 	         out.println("<p>Action : </p><select name=\"action\"><option value=\"+\">+</option><option value=\"-\">-</option><option value=\"*\">*</option><option value=\":\">:</option></select> <br/>");
 	         out.println("<button type=\"submit\">Calculate</button><br/>");
-	         out.println("<label><strong> Your result is : " + result + "</strong></label>");
+	         out.println("<label><strong> Your result is : <h2>" + result + "</h2></strong></label>");
 	         out.println("</form>");
 	         out.println("</body>");
 	         out.println("</html>");
