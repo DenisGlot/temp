@@ -10,6 +10,7 @@
 
 	<login-config>
 		<auth-method>BASIC</auth-method>
+		<realm-name>Test</realm-name>
 	</login-config>
 
 	<security-constraint>

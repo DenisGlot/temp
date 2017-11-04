@@ -2,7 +2,7 @@
   <Call name="addBean">
     <Arg>
       <New class="org.eclipse.jetty.security.HashLoginService">
-        <Set name="name">Test Realm</Set>
+        <Set name="name">Test</Set>
         <Set name="config"><SystemProperty name="jetty.home" default="."/>realm.properties</Set>
         <Set name="refreshInterval">0</Set>
       </New>
