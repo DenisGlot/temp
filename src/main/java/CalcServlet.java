@@ -15,9 +15,9 @@ public class CalcServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private double result;
-	private double first;
-	private double second;
+	private Double result;
+	private Double first;
+	private Double second;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,20 +41,21 @@ public class CalcServlet extends HttpServlet {
 	        	first = Double.parseDouble(request.getParameter("first"));
 	        } else {
 	        	er1=true;
-	        	first=-1;
+	        	first=null;
 	        }
 	        if(request.getParameter("second")!=null && request.getParameter("second")!="" && request.getParameter("first").matches(pattern)) {
 	        	second= Double.parseDouble(request.getParameter("second"));
 	        } else {
 	        	er2=true;
-	        	second=-1;
+	        	second=null;
 	        }
-		    result=0;
+		    result=null;
 		    if(request.getParameter("action")==null) {
 		    	act="+";
 		    } else {
 			act = request.getParameter("action");
 		    }
+		    if(first!=null && second != null)
 			switch(act)
 			{
 			case "+":
