@@ -34,7 +34,7 @@ public class CalcServlet extends HttpServlet {
 		// Logic below
 	      String act;
 	      String pattern = "[-+]?\\d+?[.]?[0-9]*?";
-	      String error ="Please, write correct number. Example 12.34";
+	      String error ="Please, write correct number. Example -12.34";
 	      boolean er1=false,er2=false;
 	      
 	        if(request.getParameter("first")!=null && request.getParameter("first")!="" && request.getParameter("first").matches(pattern)) {
@@ -89,7 +89,7 @@ public class CalcServlet extends HttpServlet {
 	         out.println("<html><head>");
 	         out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
 	         out.println("<title>Calculator</title></head>");
-	         out.println("<body>");
+	         out.println("<body style=\"width : 500px ; margin : 0 auto ; background-color : #FFFACD;\">");
 	         out.println("<h1>Calculator Pro</h1>");  // says Hello
 	         // Echo client's request information
 	         out.println("<form>");
