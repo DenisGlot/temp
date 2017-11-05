@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
 				chain.doFilter(request, response);
 			} else {
 				out.println("<h1>username or password is not correct</h1>");
-				out.println("<a href=\"/calculator\">Registation</a>");
+				out.println("<a href=\"/\">Registation</a>");
 			}
 		} finally {
 			out.close();
