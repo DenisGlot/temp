@@ -24,13 +24,14 @@ public class AuthFilter implements Filter {
 			throws IOException, ServletException {
 		PrintWriter out = response.getWriter();
 		try {
-			if(username==null) {
-			username = request.getParameter("username");
+			if(request.getParameter("action")==null) {
+				if(username==null) {
+					username = request.getParameter("username");
+					}
+					if(password==null) {
+					password = request.getParameter("password");
+					}
 			}
-			if(password==null) {
-			password = request.getParameter("password");
-			}
-			System.out.println(username + "  " + password);
 			if (username!=null && password!=null && username.equals("admin") && password.equals("admin")) {
 				chain.doFilter(request, response);
 			} else {
