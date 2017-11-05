@@ -24,13 +24,9 @@ public class AuthFilter implements Filter {
 			throws IOException, ServletException {
 		PrintWriter out = response.getWriter();
 		try {
+			declareForFirstTime(request, response);
 			if(request.getParameter("action")==null) {
-				if(username==null) {
-					username = request.getParameter("username");
-					}
-					if(password==null) {
-					password = request.getParameter("password");
-					}
+				declareForSecondTime(request, response);
 			}
 			if (username!=null && password!=null && username.equals("admin") && password.equals("admin")) {
 				chain.doFilter(request, response);
@@ -42,6 +38,24 @@ public class AuthFilter implements Filter {
 			out.close();
 		}
 	}
+	
+	private void declareForFirstTime(ServletRequest request, ServletResponse response) {
+		if(username==null) {
+			username = request.getParameter("username");
+			}
+			if(password==null) {
+			password = request.getParameter("password");
+			}
+	}
+	private void declareForSecondTime(ServletRequest request, ServletResponse response) {
+		if(request.getParameter("username")!=null) {
+			username = request.getParameter("username");
+			}
+			if(request.getParameter("username")!=null) {
+			password = request.getParameter("password");
+			}
+	}
+	
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
