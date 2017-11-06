@@ -31,8 +31,16 @@ public class AuthFilter implements Filter {
 			if (username!=null && password!=null && username.equals("admin") && password.equals("admin")) {
 				chain.doFilter(request, response);
 			} else {
+				out.println("<!DOCTYPE html>");
+				out.println("<html><head>");
+				out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
+				out.println("<title>Error</title></head>");
+				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
+				out.println("</head>");
+				out.println("<body>");
 				out.println("<h1>username or password is not correct</h1>");
-				out.println("<a href=\"/\">Registation</a>");
+				out.println("<a href=\"/\">Try again?</a>");
+				out.println("</body></html>");
 			}
 		} finally {
 			out.close();

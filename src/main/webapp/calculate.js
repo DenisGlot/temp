@@ -1,10 +1,9 @@
 function calculate() {
-$(function() {
-    $.ajax({
-  success: function(html){ 
-$("#mydiv").html(html);
-}
-      
-    })
-})
+	$.ajax({
+		url : "calc",
+		type : "POST",
+		success : function(html) {
+			$('#mydiv').load('calc');
+		}
+	});
 }

@@ -95,15 +95,19 @@ public class CalcServlet extends HttpServlet {
 			out.println("<!DOCTYPE html>");
 			out.println("<html><head>");
 			out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
+//			// Well, I tried to use ajax with JS.
+//			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
+//			out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
+			//
 			out.println("<title>Calculator</title></head>");
 			out.println("<body style=\"width : 500px ; margin : 0 auto ; background-color : #FFFACD;\">");
+			out.println("<div id=\"mydiv\">");
 			out.println(
 					"<h1>Calculator Pro</h1>"); // Username : <input type=\"text\" style=\"width : 80px\" name=\"user\" value=\""
 						   // user
 						//	+ "\"> Password : <input type=\"text\" style=\"width : 80px\" name=\"password\" value=\""
 						//	+ AuthFilter.password + "\" />"); // says Hello
 			// Echo client's request information
-			out.println("<div id=\"mydiv\">");
 			out.println("<form id=\"myform\">");
 			out.println(
 					"<p>First part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\""
@@ -115,14 +119,10 @@ public class CalcServlet extends HttpServlet {
 					+ "</strong> </p><select name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
 					+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
 			out.println(
-					"<button onclick=\"calculate()\" id=\"btn\" style=\"width : 170px; height : 35px; border-radius: 15px; border: 3px solid 	#228B22; \" type=\"submit\">Calculate</button><br/>");
+					"<button id=\"btn\" style=\"width : 170px; height : 35px; border-radius: 15px; border: 3px solid 	#228B22; \" type=\"submit\">Calculate</button><br/>");
 			out.println("<div id=\"result\"><strong> Your result is : <h2>" + result + "</h2></strong></div>");
 			out.println("</form>");
 			out.println("</div>");
-			// Well, I tried to use ajax with JS.
-			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
-		    out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
-		    //
 			out.println("</body>");
 			out.println("</html>");
 		} finally {
