@@ -1,9 +1,9 @@
 function calculate() {
 	$.ajax({
 		url : "calc",
-		type : "POST",
+		type:"POST",
 		success : function(html) {
-			$('#mydiv').load('calc');
+			$('#result').innerHTML = 'Your result is : ' + html
 		}
 	});
 }

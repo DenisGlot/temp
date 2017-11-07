@@ -7,12 +7,19 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+/**
+ * This class was for authentication. It's not for use
+ * @author Denis
+ *
+ */
 public class AuthFilter implements Filter {
 
-	public static String username;
+	private String username;
 
-	public static String password;
+	private String password;
 
 	@Override
 	public void destroy() {
@@ -22,13 +29,17 @@ public class AuthFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		
+		  HttpSession session = ((HttpServletRequest) request).getSession();
+		  
+	        
 		PrintWriter out = response.getWriter();
 		try {
 			declareForFirstTime(request, response);
-			if(request.getParameter("action")==null) {
-				declareForSecondTime(request, response);
-			}
-			if (username!=null && password!=null && username.equals("admin") && password.equals("admin")) {
+			if (session.getAttribute("email")!=null || username!=null && password!=null && username.equals("admin") && password.equals("admin")) {
+				if(session.getAttribute("email")==null) {
+				  session.setAttribute("email", "LOGIN");
+				}
 				chain.doFilter(request, response);
 			} else {
 				out.println("<!DOCTYPE html>");
@@ -46,24 +57,12 @@ public class AuthFilter implements Filter {
 			out.close();
 		}
 	}
-	
+
+
 	private void declareForFirstTime(ServletRequest request, ServletResponse response) {
-		if(username==null) {
 			username = request.getParameter("username");
-			}
-			if(password==null) {
 			password = request.getParameter("password");
-			}
 	}
-	private void declareForSecondTime(ServletRequest request, ServletResponse response) {
-		if(request.getParameter("username")!=null) {
-			username = request.getParameter("username");
-			}
-			if(request.getParameter("username")!=null) {
-			password = request.getParameter("password");
-			}
-	}
-	
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
