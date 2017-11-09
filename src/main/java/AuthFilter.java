@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,6 +31,7 @@ public class AuthFilter implements Filter {
 	private String driver = null;
 	private String jdbc_url=null;
 	private static final String FIND_ALL = "select * from access";
+	private static final String FIND_WHERE = "select email, password from access where email = ? and password = ?";
 
 	@Override
 	public void destroy() {
@@ -86,34 +88,41 @@ public class AuthFilter implements Filter {
 		}
 	}
 	private boolean checkInDB(String email,String password) {
-		Connection connection = null;
-		Statement statement =null;
-			try {
-				Class.forName(driver);
-				connection = DriverManager.getConnection(jdbc_url);
-				statement = connection.createStatement();
-				ResultSet resultSet= statement.executeQuery(FIND_ALL);
-				String result1 = null;
-				String result2 = null;
-				while(resultSet.next()) {
-					result1 = resultSet.getString(1);
-					result2 = resultSet.getString(2);
-					if(result1!=null && result2!=null && result1.equals(email) && result2.equals(password)) {
-						return true;
-					}
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(jdbc_url);
+			ps = con.prepareStatement(FIND_WHERE);
+			
+			//set the parameter
+			ps.setString(1, email);
+			ps.setString(2, password);
+			rs = ps.executeQuery();
+			String result1 = null;
+			String result2 = null;
+			while(rs.next()) {
+				result1 = rs.getString(1);
+				result2 = rs.getString(2);
+				if(result1!=null && result2!=null && result1.equals(email) && result2.equals(password)) {
+					return true;
 				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 				try {
-					connection.close();
-					statement.close();
+					if (rs != null)
+					rs.close();
+					ps.close();
+					con.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}
+		}
 
 		return false;
 	}

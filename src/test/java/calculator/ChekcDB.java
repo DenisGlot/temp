@@ -44,10 +44,11 @@ public class ChekcDB {
 			Class.forName(driver);
 			connection = DriverManager.getConnection(jdbc_url);
 			statement = connection.createStatement();
-			ResultSet resultSet= statement.executeQuery(FIND_ALL);
-			while(resultSet.next()) {
-			System.out.println(resultSet.getString(1) + "   " + resultSet.getString(2));	
-			}
+     		statement.execute("insert into access values ('iliya','123456')");
+//			ResultSet resultSet= statement.executeQuery(FIND_ALL);
+//			while(resultSet.next()) {
+//			System.out.println(resultSet.getString(1) + "   " + resultSet.getString(2));	
+//			}
 		} catch (ClassNotFoundException | SQLException e) {
 			assertThat(e.getMessage(), is("Index: 0, Size: 0"));
 			e.printStackTrace();
