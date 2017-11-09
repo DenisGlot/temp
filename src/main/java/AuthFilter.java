@@ -1,4 +1,3 @@
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,8 +29,8 @@ public class AuthFilter implements Filter {
 	private InputStream input=null;
 	private String driver = null;
 	private String jdbc_url=null;
-	private static final String FIND_ALL = "select * from access";
-	private static final String FIND_WHERE = "select email, password from access where email = ? and password = ?";
+	private static final String FIND_ALL = "select * from ACCESS";
+	private static final String FIND_WHERE = "select email, password from ACCESS where email = ? and password = ?";
 
 	@Override
 	public void destroy() {
@@ -43,18 +42,18 @@ public class AuthFilter implements Filter {
 			throws IOException, ServletException {
 		
 		  HttpSession session = ((HttpServletRequest) request).getSession();
-		  
+		  if(session.getAttribute("login")!=null && session.getAttribute("login").equals("LOGIN")) {
+			  chain.doFilter(request, response);
+		  }
 	    String email = null;
 	    String password = null;
 		PrintWriter out = response.getWriter();
 		try {
 			email = request.getParameter("username");
 			password = request.getParameter("password");
-			if (session.getAttribute("login")!=null || email!=null && password!=null && checkInDB(email,password)) {
-				if(session.getAttribute("login")==null) {
+			if (email!=null && password!=null && checkInDB(email,password)) {
 				  session.setAttribute("login", "LOGIN");
-				}
-				chain.doFilter(request, response);
+				  chain.doFilter(request, response);
 			} else {
 				out.println("<!DOCTYPE html>");
 				out.println("<html><head>");
@@ -76,11 +75,25 @@ public class AuthFilter implements Filter {
 	public void init(FilterConfig arg0) throws ServletException {
 		System.out.println("***intit AuthFilter");
 		prop = new Properties();
+		Connection con = null;
 		try {
 		    input = getClass().getResourceAsStream("file.properties");
 			prop.load(input);
 			driver = prop.getProperty("driver_derby");
 			jdbc_url = prop.getProperty("jdbc_url");
+//			// Because i don't know how to check on existing tables. So i wrote down a try catch
+//		    // It will work only once on deployment
+//			try {
+//				Class.forName(driver);
+//				con = DriverManager.getConnection(jdbc_url);
+//				System.out.println("*******Creating Table******");
+//			    con.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
+//			    con.createStatement().execute("insert into ACCESS values ('admin','admin')");
+//		    } catch (SQLException e){
+//			    e.printStackTrace();
+//			} catch (ClassNotFoundException e) {
+//				e.printStackTrace();
+//			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -95,7 +108,6 @@ public class AuthFilter implements Filter {
 			Class.forName(driver);
 			con = DriverManager.getConnection(jdbc_url);
 			ps = con.prepareStatement(FIND_WHERE);
-			
 			//set the parameter
 			ps.setString(1, email);
 			ps.setString(2, password);
@@ -105,6 +117,7 @@ public class AuthFilter implements Filter {
 			while(rs.next()) {
 				result1 = rs.getString(1);
 				result2 = rs.getString(2);
+				System.out.println(result1 + "  " + result2);
 				if(result1!=null && result2!=null && result1.equals(email) && result2.equals(password)) {
 					return true;
 				}
@@ -117,7 +130,9 @@ public class AuthFilter implements Filter {
 				try {
 					if (rs != null)
 					rs.close();
+					if (ps != null)
 					ps.close();
+					if (con != null)
 					con.close();
 				} catch (SQLException e) {
 					e.printStackTrace();

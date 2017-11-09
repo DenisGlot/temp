@@ -16,8 +16,8 @@ public class CreateDB {
 		try {
 			Class.forName(DRIVER);
 			connection = DriverManager.getConnection(JDBC_URL);
-			connection.createStatement().execute("create table access(email varchar(45), password varchar(45))");
-			connection.createStatement().execute("insert into access values ('admin','admin')");
+			connection.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
+			connection.createStatement().execute("insert into ACCESS values ('admin','admin')");
 		} catch (ClassNotFoundException e) {
 			System.err.println("Driver for derby not found!!!");
 			e.printStackTrace();

@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 /**
  * Servlet implementation class CalcServlet
  */
@@ -14,52 +17,64 @@ import javax.servlet.http.HttpServletResponse;
 public class CalcServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static String email;
 
 	private Double result;
 	private Double first;
 	private Double second;
+	private String firstString;
+	private String secondString;
+	private String act;
+	private boolean er1, er2;
+	private boolean isPOST;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public CalcServlet() {
 		super();
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		// Logic below
-		String act;
 		String pattern = "[-+]?\\d+?[.]?[0-9]*?";
 		String error = "Please, write correct number. Example -12.34";
-		boolean er1 = false, er2 = false;
-
-		if (request.getParameter("first") != null && request.getParameter("first") != ""
-				&& request.getParameter("first").matches(pattern)) {
-			first = Double.parseDouble(request.getParameter("first"));
+        email = request.getParameter("email"); 
+        er1=false;
+        er2=false;
+		if (!isPOST) {
+			if (request.getParameter("first") != null && request.getParameter("first") != ""
+					&& request.getParameter("first").matches(pattern)) {
+				first = Double.parseDouble(request.getParameter("first"));
+			} else {
+				er1 = true;
+				first = null;
+			}
+			if (request.getParameter("second") != null && request.getParameter("second") != ""
+					&& request.getParameter("first").matches(pattern)) {
+				second = Double.parseDouble(request.getParameter("second"));
+			} else {
+				er2 = true;
+				second = null;
+			}
+			result = null;
+			if (request.getParameter("action") == null) {
+				act = "+";
+			} else {
+				act = request.getParameter("action");
+			}
 		} else {
-			er1 = true;
-			first = null;
+			if(firstString.matches(pattern)) {
+				first = Double.parseDouble(firstString);
+			} else {
+				first =null;
+			}
+			if (secondString.matches(pattern)) {
+				second = Double.parseDouble(secondString);
+			} else {
+				second = null;
+			}
 		}
-		if (request.getParameter("second") != null && request.getParameter("second") != ""
-				&& request.getParameter("first").matches(pattern)) {
-			second = Double.parseDouble(request.getParameter("second"));
-		} else {
-			er2 = true;
-			second = null;
-		}
-		result = null;
-		if (request.getParameter("action") == null) {
-			act = "+";
-		} else {
-			act = request.getParameter("action");
-		}
-		
 
 		if (first != null && second != null) {
 			switch (act) {
@@ -95,28 +110,26 @@ public class CalcServlet extends HttpServlet {
 			out.println("<!DOCTYPE html>");
 			out.println("<html><head>");
 			out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-//			// Well, I tried to use ajax with JS.
-//			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
-//			out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
+			// // Well, I tried to use ajax with JS.
+			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
+			out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
 			//
 			out.println("<title>Calculator</title></head>");
 			out.println("<body style=\"width : 500px ; margin : 0 auto ; background-color : #FFFACD;\">");
 			out.println("<div id=\"mydiv\">");
-			out.println(
-					"<h1>Calculator Pro</h1>"); // Username : <input type=\"text\" style=\"width : 80px\" name=\"user\" value=\""
-						   // user
-						//	+ "\"> Password : <input type=\"text\" style=\"width : 80px\" name=\"password\" value=\""
-						//	+ AuthFilter.password + "\" />"); // says Hello
-			// Echo client's request information
+			out.println("<h1>Calculator Pro</h1>");
+			if(email!=null) {
+			out.println("<h2>You signed in as </h2>" + email);	
+			}
 			out.println("<form id=\"myform\">");
 			out.println(
-					"<p>First part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\""
+					"<p>First part</p><input id=\"first\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\""
 							+ first + "\"><em style=\"color:red;\"> " + (er1 ? error : "") + "</em>");
 			out.println(
-					"<p>Second part</p><input style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" "
+					"<p>Second part</p><input id = \"second\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" "
 							+ second + " \"> <em style=\"color:red;\">" + (er2 ? error : "") + "</em>");
 			out.println("<p>Action : <strong> " + act
-					+ "</strong> </p><select name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
+					+ "</strong> </p><select id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
 					+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
 			out.println(
 					"<button id=\"btn\" style=\"width : 170px; height : 35px; border-radius: 15px; border: 3px solid 	#228B22; \" type=\"submit\">Calculate</button><br/>");
@@ -131,13 +144,39 @@ public class CalcServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * I tried to catch exceptions from parsing JSON but try-catch can't catch RunTimeException 
+	 * So in doGet method  i made a check on right filling first part and second part
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+		if(data.isJsonNull()){
+			System.out.println("*****JSON is null!!");
+		} else {
+			System.out.println(data.toString());
+		}
+		try {
+			firstString = data.get("first").getAsString();
+		} catch (Exception e) {
+			er1 = true;
+			e.printStackTrace();
+		}
+		try {
+			secondString = data.get("second").getAsString();
+		} catch (Exception e) {
+			er2 = true;
+			e.printStackTrace();
+		}
+		try {
+			act = data.get("act").getAsString();
+		} catch (Exception e) {
+			act = "+";
+			e.printStackTrace();
+		}
+		isPOST = true;
 		doGet(request, response);
+
 	}
 
 }
