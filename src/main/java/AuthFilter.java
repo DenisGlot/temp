@@ -89,6 +89,8 @@ public class AuthFilter implements Filter {
 				System.out.println("*******Creating Table******");
 			    con.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
 			    con.createStatement().execute("insert into ACCESS values ('admin','admin')");
+			    con.createStatement().execute("insert into ACCESS values ('iliya','123456')");
+			    con.createStatement().execute("insert into ACCESS values ('denis','123456')");
 		    } catch (SQLException e){
 			    e.printStackTrace();
 			} catch (ClassNotFoundException e) {
