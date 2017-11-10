@@ -10,14 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-/**
- * Servlet implementation class CalcServlet
- */
 @WebServlet("/calc")
 public class CalcServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static String email;
 
 	private Double result;
@@ -35,13 +32,54 @@ public class CalcServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+             doHtml(request, response);
+	}
+
+	/**
+	 * I tried to catch exceptions from parsing JSON but try-catch can't catch
+	 * RunTimeException So in doGet method i made a check on right filling first
+	 * part and second part
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+		if (data.isJsonNull()) {
+			System.out.println("*****JSON is null!!");
+		} else {
+			System.out.println(data.toString());
+		}
+		try {
+			firstString = data.get("first").getAsString();
+		} catch (Exception e) {
+			er1 = true;
+			e.printStackTrace();
+		}
+		try {
+			secondString = data.get("second").getAsString();
+		} catch (Exception e) {
+			er2 = true;
+			e.printStackTrace();
+		}
+		try {
+			act = data.get("act").getAsString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("******First= " + firstString + ";Second= " + secondString + ";Action= " + act);
+		isPOST = true;
+		doHtml(request, response);
+	}
+	private void doHtml(HttpServletRequest request, HttpServletResponse response) {
+		
+		System.out.println("**** Starting doHtml ******");
+		
 
 		// Logic below
 		String pattern = "[-+]?\\d+?[.]?[0-9]*?";
 		String error = "Please, write correct number. Example -12.34";
-        email = request.getParameter("email"); 
-        er1=false;
-        er2=false;
+		email = request.getParameter("email");
+		er1 = false;
+		er2 = false;
 		if (!isPOST) {
 			if (request.getParameter("first") != null && request.getParameter("first") != ""
 					&& request.getParameter("first").matches(pattern)) {
@@ -64,15 +102,18 @@ public class CalcServlet extends HttpServlet {
 				act = request.getParameter("action");
 			}
 		} else {
-			if(firstString.matches(pattern)) {
+			if (firstString.matches(pattern)) {
 				first = Double.parseDouble(firstString);
 			} else {
-				first =null;
+				first = null;
 			}
 			if (secondString.matches(pattern)) {
 				second = Double.parseDouble(secondString);
 			} else {
 				second = null;
+			}
+			if(act==null) {
+				act = "+";
 			}
 		}
 
@@ -96,6 +137,8 @@ public class CalcServlet extends HttpServlet {
 			case "sqrt second":
 				result = Math.sqrt(second);
 				break;
+			default:
+				System.out.println("I've just made a culculation!");	
 			}
 		}
 
@@ -103,23 +146,27 @@ public class CalcServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		// Allocate a output writer to write the response message into the network
 		// socket
-		PrintWriter out = response.getWriter();
-
-		// Write the response message, in an HTML page
+		PrintWriter out=null;
 		try {
-			out.println("<!DOCTYPE html>");
-			out.println("<html><head>");
-			out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-			// // Well, I tried to use ajax with JS.
-			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
-			out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
+			out = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// Sending html
+		try {
+				out.println("<!DOCTYPE html>");
+				out.println("<html><head>");
+				out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
+				// // Well, I tried to use ajax with JS.
+				out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
+				out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
 			//
 			out.println("<title>Calculator</title></head>");
 			out.println("<body style=\"width : 500px ; margin : 0 auto ; background-color : #FFFACD;\">");
 			out.println("<div id=\"mydiv\">");
 			out.println("<h1>Calculator Pro</h1>");
-			if(email!=null) {
-			out.println("<h2>You signed in as </h2>" + email);	
+			if (email != null) {
+				out.println("<h2>You signed in as </h2>" + email);
 			}
 			out.println("<form id=\"myform\">");
 			out.println(
@@ -141,42 +188,7 @@ public class CalcServlet extends HttpServlet {
 		} finally {
 			out.close(); // Always close the output writer
 		}
+		System.out.println("*****Done!");
+		
 	}
-
-	/**
-	 * I tried to catch exceptions from parsing JSON but try-catch can't catch RunTimeException 
-	 * So in doGet method  i made a check on right filling first part and second part
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-		if(data.isJsonNull()){
-			System.out.println("*****JSON is null!!");
-		} else {
-			System.out.println(data.toString());
-		}
-		try {
-			firstString = data.get("first").getAsString();
-		} catch (Exception e) {
-			er1 = true;
-			e.printStackTrace();
-		}
-		try {
-			secondString = data.get("second").getAsString();
-		} catch (Exception e) {
-			er2 = true;
-			e.printStackTrace();
-		}
-		try {
-			act = data.get("act").getAsString();
-		} catch (Exception e) {
-			act = "+";
-			e.printStackTrace();
-		}
-		isPOST = true;
-		doGet(request, response);
-
-	}
-
 }

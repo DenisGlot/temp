@@ -42,17 +42,20 @@ public class AuthFilter implements Filter {
 			throws IOException, ServletException {
 		
 		  HttpSession session = ((HttpServletRequest) request).getSession();
+		  System.out.println("*******Session Atribute!! " + session.getAttribute("login"));
 		  if(session.getAttribute("login")!=null && session.getAttribute("login").equals("LOGIN")) {
+			  System.out.println("I'm in first chain.doFilter()");
 			  chain.doFilter(request, response);
 		  }
 	    String email = null;
 	    String password = null;
 		PrintWriter out = response.getWriter();
 		try {
-			email = request.getParameter("username");
+			email = request.getParameter("email");
 			password = request.getParameter("password");
 			if (email!=null && password!=null && checkInDB(email,password)) {
 				  session.setAttribute("login", "LOGIN");
+				  System.out.println("I'm in second chain.doFilter()");
 				  chain.doFilter(request, response);
 			} else {
 				out.println("<!DOCTYPE html>");
@@ -140,7 +143,6 @@ public class AuthFilter implements Filter {
 					e.printStackTrace();
 				}
 		}
-
 		return false;
 	}
 

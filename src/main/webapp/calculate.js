@@ -15,11 +15,17 @@ $(document).ready(function(){
                     url: post_url, 
                     contentType: "application/json",
                     data: JSON.stringify(post_data),
+                    async: true,
                     success: function(msg) {
                         $(form).fadeOut(100, function(){
                             form.html(msg).fadeIn();
-
                         });
+                    },
+                    error: function(message) {
+                    	 $(form).fadeOut(100, function(){
+                             form.html(message).fadeIn();
+
+                         });
                     }
                 });
             });
