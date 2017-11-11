@@ -32,6 +32,7 @@ public class CalcServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("I'm in doGet()");
              doHtml(request, response);
 	}
 
@@ -42,32 +43,35 @@ public class CalcServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-		if (data.isJsonNull()) {
-			System.out.println("*****JSON is null!!");
-		} else {
-			System.out.println(data.toString());
-		}
-		try {
-			firstString = data.get("first").getAsString();
-		} catch (Exception e) {
-			er1 = true;
-			e.printStackTrace();
-		}
-		try {
-			secondString = data.get("second").getAsString();
-		} catch (Exception e) {
-			er2 = true;
-			e.printStackTrace();
-		}
-		try {
-			act = data.get("act").getAsString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("******First= " + firstString + ";Second= " + secondString + ";Action= " + act);
-		isPOST = true;
-		doHtml(request, response);
+		System.out.println("I'm in doPost()");
+			JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+			
+			if (data.isJsonNull()) {
+				System.out.println("*****JSON is null!!");
+			} else {
+				System.out.println(data.toString());
+			}
+			try {
+				firstString = data.get("first").getAsString();
+			} catch (Exception e) {
+				er1 = true;
+				e.printStackTrace();
+			}
+			try {
+				secondString = data.get("second").getAsString();
+			} catch (Exception e) {
+				er2 = true;
+				e.printStackTrace();
+			}
+			try {
+				act = data.get("act").getAsString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("******First= " + firstString + ";Second= " + secondString + ";Action= " + act);
+			
+			isPOST = true;
+			doHtml(request, response);
 	}
 	private void doHtml(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -77,7 +81,9 @@ public class CalcServlet extends HttpServlet {
 		// Logic below
 		String pattern = "[-+]?\\d+?[.]?[0-9]*?";
 		String error = "Please, write correct number. Example -12.34";
+		if(request.getParameter("email")!=null) {
 		email = request.getParameter("email");
+		}
 		er1 = false;
 		er2 = false;
 		if (!isPOST) {
@@ -106,10 +112,12 @@ public class CalcServlet extends HttpServlet {
 				first = Double.parseDouble(firstString);
 			} else {
 				first = null;
+				er1=true;
 			}
 			if (secondString.matches(pattern)) {
 				second = Double.parseDouble(secondString);
 			} else {
+				er2=true;
 				second = null;
 			}
 			if(act==null) {
@@ -166,15 +174,16 @@ public class CalcServlet extends HttpServlet {
 			out.println("<div id=\"mydiv\">");
 			out.println("<h1>Calculator Pro</h1>");
 			if (email != null) {
-				out.println("<h2>You signed in as </h2>" + email);
+				out.println("<h2>You signed in as " + email +"</h2>");
 			}
 			out.println("<form id=\"myform\">");
 			out.println(
 					"<p>First part</p><input id=\"first\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\""
-							+ first + "\"><em style=\"color:red;\"> " + (er1 ? error : "") + "</em>");
+							+ (er1?firstString:first) + "\"><em style=\"color:red;\"> " + (er1 ? error : "") + "</em>");
+			System.out.println("The second is = "+second);
 			out.println(
 					"<p>Second part</p><input id = \"second\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" "
-							+ second + " \"> <em style=\"color:red;\">" + (er2 ? error : "") + "</em>");
+							+ (er2?secondString:second) + " \"> <em style=\"color:red;\">" + (er2 ? error : "") + "</em>");
 			out.println("<p>Action : <strong> " + act
 					+ "</strong> </p><select id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
 					+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
@@ -188,6 +197,7 @@ public class CalcServlet extends HttpServlet {
 		} finally {
 			out.close(); // Always close the output writer
 		}
+		isPOST=false;
 		System.out.println("*****Done!");
 		
 	}

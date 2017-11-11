@@ -42,7 +42,7 @@ public class AuthFilter implements Filter {
 			throws IOException, ServletException {
 		
 		  HttpSession session = ((HttpServletRequest) request).getSession();
-		  System.out.println("*******Session Atribute!! " + session.getAttribute("login"));
+		  System.out.println("*******Session Atribute!! = " + session.getAttribute("login"));
 		  if(session.getAttribute("login")!=null && session.getAttribute("login").equals("LOGIN")) {
 			  System.out.println("I'm in first chain.doFilter()");
 			  chain.doFilter(request, response);
@@ -84,21 +84,21 @@ public class AuthFilter implements Filter {
 			prop.load(input);
 			driver = prop.getProperty("driver_derby");
 			jdbc_url = prop.getProperty("jdbc_url");
-			// Because i don't know how to check on existing tables. So i wrote down a try catch
-		    // It will work only once on deployment
-			try {
-				Class.forName(driver);
-				con = DriverManager.getConnection(jdbc_url);
-				System.out.println("*******Creating Table******");
-			    con.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
-			    con.createStatement().execute("insert into ACCESS values ('admin','admin')");
-			    con.createStatement().execute("insert into ACCESS values ('iliya','123456')");
-			    con.createStatement().execute("insert into ACCESS values ('denis','123456')");
-		    } catch (SQLException e){
-			    e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+//			// Because i don't know how to check on existing tables. So i wrote down a try catch
+//		    // It will work only once on deployment
+//			try {
+//				Class.forName(driver);
+//				con = DriverManager.getConnection(jdbc_url);
+//				System.out.println("*******Creating Table******");
+//			    con.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
+//			    con.createStatement().execute("insert into ACCESS values ('admin','admin')");
+//			    con.createStatement().execute("insert into ACCESS values ('iliya','123456')");
+//			    con.createStatement().execute("insert into ACCESS values ('denis','123456')");
+//		    } catch (SQLException e){
+//			    e.printStackTrace();
+//			} catch (ClassNotFoundException e) {
+//				e.printStackTrace();
+//			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
