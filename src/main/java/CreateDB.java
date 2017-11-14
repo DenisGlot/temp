@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 /**
  * This class was for creating Derby DataBase myDB
  * @author Denis
@@ -13,11 +14,15 @@ public class CreateDB {
 
 	public static void main(String[] args) {
 		Connection connection = null;
+		Statement statement = null;
 		try {
 			Class.forName(DRIVER);
 			connection = DriverManager.getConnection(JDBC_URL);
-			connection.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
-			connection.createStatement().execute("insert into ACCESS values ('admin','admin')");
+			statement=connection.createStatement();
+			statement.execute("create table ACCESS (email varchar(45), password varchar(45))");
+			statement.execute("insert into ACCESS values ('admin','admin')");
+            statement.execute("insert into ACCESS values ('iliya','123456')");
+            statement.execute("insert into ACCESS values ('denis','123456')");
 		} catch (ClassNotFoundException e) {
 			System.err.println("Driver for derby not found!!!");
 			e.printStackTrace();

@@ -38,7 +38,12 @@
 	</security-role>
 -->
 	<!-- Uncomment this only in case that annotation WevService is commented 
-		<servlet> <servlet-name>MySer</servlet-name> <servlet-class>CalcServlet</servlet-class> 
-		</servlet> <servlet-mapping> <servlet-name>MySer</servlet-name> <url-pattern>/calc</url-pattern> 
+		<servlet>
+		   <servlet-name>MySer</servlet-name> 
+		    <servlet-class>CalcServlet</servlet-class> 
+		</servlet> 
+		<servlet-mapping>
+		 <servlet-name>MySer</servlet-name>
+		  <url-pattern>/calc</url-pattern> 
 		</servlet-mapping> -->
 </web-app>
