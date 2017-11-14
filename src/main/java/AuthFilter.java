@@ -19,6 +19,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 /**
  * This class is for authentication.
  * 
@@ -26,6 +28,9 @@ import javax.servlet.http.HttpSession;
  *
  */
 public class AuthFilter implements Filter {
+	
+    final Logger logger = Logger.getLogger(AuthFilter.class);
+	
 	private Properties prop = null;
 	private InputStream input = null;
 	private String driver = null;
@@ -45,8 +50,14 @@ public class AuthFilter implements Filter {
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		System.out.println("*******Session Atribute!! = " + session.getAttribute("login"));
+		if(logger.isDebugEnabled()) {
+			logger.debug("Session Atribute!! = " + session.getAttribute("login"));
+		}
 		if (session.getAttribute("login") != null && session.getAttribute("login").equals("LOGIN")) {
 			System.out.println("I'm in first chain.doFilter()");
+			if(logger.isDebugEnabled()) {
+				logger.debug("The filter did log in without email and password");
+			}
 			chain.doFilter(request, response);
 		}
 		String email = null;
@@ -58,6 +69,9 @@ public class AuthFilter implements Filter {
 			if (email != null && password != null && checkInDB(email, password)) {
 				session.setAttribute("login", "LOGIN");
 				System.out.println("I'm in second chain.doFilter()");
+				if(logger.isDebugEnabled()) {
+					logger.debug("The filter did log in with email and password");
+				}
 				chain.doFilter(request, response);
 			} else {
 				out.println("<!DOCTYPE html>");
@@ -96,6 +110,9 @@ public class AuthFilter implements Filter {
 					con = DriverManager.getConnection(jdbc_url);
 					System.out.println("*******Creating Table******");
 					con.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
+					if(logger.isDebugEnabled()) {
+						logger.debug("table ACCESS was created");
+					}
 					con.createStatement().execute("insert into ACCESS values ('admin','admin')");
 					con.createStatement().execute("insert into ACCESS values ('iliya','123456')");
 					con.createStatement().execute("insert into ACCESS values ('denis','123456')");
@@ -104,15 +121,18 @@ public class AuthFilter implements Filter {
 					e.printStackTrace();
 					if(e.getMessage().equals("Table/View 'ACCESS' already exists in Schema 'APP'")) {
 						tableIsCreated=true;
+						logger.warn("Table/View 'ACCESS' already exists in Schema 'APP'");
+					} else {
+						logger.error(e.getMessage());
 					}
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -138,10 +158,9 @@ public class AuthFilter implements Filter {
 					return true;
 				}
 			}
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			try {
 				if (rs != null)
@@ -152,6 +171,7 @@ public class AuthFilter implements Filter {
 					con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		return false;

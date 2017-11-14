@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -15,6 +17,8 @@ import com.google.gson.JsonObject;
 public class CalcServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	
+	final Logger logger = Logger.getLogger(CalcServlet.class);
 
 	private String email;
 
@@ -69,6 +73,9 @@ public class CalcServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if(logger.isDebugEnabled()) {
+			logger.debug("First= " + firstString + ";Second= " + secondString + ";Action= " + act);
+		}
 		System.out.println("******First= " + firstString + ";Second= " + secondString + ";Action= " + act);
 
 		isPOST = true;
@@ -88,6 +95,9 @@ public class CalcServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		if (request.getParameter("email") != null) {
 			email = request.getParameter("email");
+			if(logger.isDebugEnabled()) {
+				logger.debug(email + " was authenticated");
+			}
 		}
 		er1 = false;
 		er2 = false;

@@ -7,6 +7,13 @@
 	<packaging>war</packaging>
 
 	<dependencies>
+		<!-- For logger -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
 		<!-- For converting gotten JSON to integer -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -18,7 +25,7 @@
 			<artifactId>json</artifactId>
 			<version>20170516</version>
 		</dependency>
-		<!--  -->
+		<!-- -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -26,7 +33,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Hope it's the jar for derby -->
+		<!-- Hope it's the jar for derby (Yeah, It is))) -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
