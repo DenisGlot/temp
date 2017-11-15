@@ -53,7 +53,7 @@ public class AuthFilter implements Filter {
 		if(logger.isDebugEnabled()) {
 			logger.debug("Session Atribute!! = " + session.getAttribute("login"));
 		}
-		if (session.getAttribute("login") != null && session.getAttribute("login").equals("LOGIN")) {
+		if (session.getAttribute("login") != null && session.getAttribute("login").equals("LOGIN") && request.getParameter("email")==null) {
 			System.out.println("I'm in first chain.doFilter()");
 			if(logger.isDebugEnabled()) {
 				logger.debug("The filter did log in without email and password");
