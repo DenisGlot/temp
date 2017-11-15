@@ -192,8 +192,8 @@ public class CalcServlet extends HttpServlet {
 								+ "</em>");
 				System.out.println("The second is = " + second);
 				out.println(
-						"<p>Second part</p><input id = \"second\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \" "
-								+ (er2 ? secondString : second) + " \"> <em style=\"color:red;\">" + (er2 ? error : "")
+						"<p>Second part</p><input id = \"second\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \""
+								+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\">" + (er2 ? error : "")
 								+ "</em>");
 				out.println("<p>Action : <strong> " + act
 						+ "</strong> </p><select id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
