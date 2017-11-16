@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -19,8 +20,6 @@ public class CalcServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	final Logger logger = Logger.getLogger(CalcServlet.class);
-
-	private String email;
 
 	private Double result;
 	private Double first;
@@ -86,15 +85,16 @@ public class CalcServlet extends HttpServlet {
 
 		System.out.println("**** Starting doHtml ******");
 
+		HttpSession session = request.getSession();
+		String email = (String) session.getAttribute("email");
 		// Logic below
 		String pattern = "[-+]?\\d+?[.]?[0-9]*?";
-		String error = "Please, write correct number. Example -12.34 without spaces. ";
+		String error = "Example -12.34 without spaces. ";
 		// Set the response message's MIME type
 		response.setContentType("text/html;charset=UTF-8");
 
 		PrintWriter out = response.getWriter();
 		if (request.getParameter("email") != null) {
-			email = request.getParameter("email");
 			if (logger.isDebugEnabled()) {
 				logger.debug(email + " was authenticated");
 			}
@@ -178,29 +178,30 @@ public class CalcServlet extends HttpServlet {
 				out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
 				out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
 				//
+				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
 				out.println("<title>Calculator</title></head>");
-				out.println("<body style=\"width : 500px ; margin : 0 auto ; background-color : #FFFACD;\">");
-				out.println("<div id=\"mydiv\">");
+				out.println("<body>");
+				out.println("<div id=\"mydiv\" class=\"box\">");
 				out.println("<h1>Calculator Pro</h1>");
 				if (email != null) {
 					out.println("<h2>You signed in as " + email + "</h2>");
 				}
 				out.println("<form id=\"myform\">");
 				out.println(
-						"<p>First part</p><input id=\"first\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"first\" type=\"text\" value=\""
-								+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"> " + (er1 ? error : "")
-								+ "</em>");
+						"<strong>First part</strong><input id=\"first\" class=\"email\" name=\"first\" type=\"text\" value=\""
+								+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"><br/> " + (er1 ? error : "")
+								+ "</em><br/>");
 				System.out.println("The second is = " + second);
 				out.println(
-						"<p>Second part</p><input id = \"second\" style=\"border-radius: 6px; border: 1px solid #ccc;\" name=\"second\" type=\"text\" value = \""
-								+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\">" + (er2 ? error : "")
-								+ "</em>");
-				out.println("<p>Action : <strong> " + act
-						+ "</strong> </p><select id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
+						"<strong>Second part</strong><input id = \"second\" class=\"email\" name=\"second\" type=\"text\" value = \""
+								+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\"><br/>" + (er2 ? error : "")
+								+ "</em><br/>");
+				out.println("<strong>Action : " + act
+						+ "</strong><br/><select class=\"email\" id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
 						+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
 				out.println(
-						"<button id=\"btn\" style=\"width : 170px; height : 35px; border-radius: 15px; border: 3px solid 	#228B22; \" type=\"submit\">Calculate</button><br/>");
-				out.println("<div id=\"result\"><strong> Your result is : <h2>" + result + "</h2></strong></div>");
+						"<input type=\"submit\" value=\"Calculate\" id=\"btn2\"/><br/><br/><br/><br/>");
+				out.println("<h1>" + result + "</h1>");
 				out.println("</form>");
 				out.println("</div>");
 				out.println("</body>");

@@ -68,6 +68,7 @@ public class AuthFilter implements Filter {
 			password = request.getParameter("password");
 			if (email != null && password != null && checkInDB(email, password)) {
 				session.setAttribute("login", "LOGIN");
+				session.setAttribute("email", email);
 				System.out.println("I'm in second chain.doFilter()");
 				if(logger.isDebugEnabled()) {
 					logger.debug("The filter did log in with email and password");
