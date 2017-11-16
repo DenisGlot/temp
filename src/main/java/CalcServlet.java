@@ -169,7 +169,7 @@ public class CalcServlet extends HttpServlet {
 				}
 			}
 
-			// Sending html
+			//Sending html
 			try {
 				out.println("<!DOCTYPE html>");
 				out.println("<html><head>");

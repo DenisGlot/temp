@@ -20,7 +20,7 @@ $(document).ready(function(){
                       second : $('#second').val(),
                       act : $('#act option:selected').val()
                 };
-                $('#mydiv', form).html('Please wait...');
+                $('#mydiv', form).html('Please wait....');
                 $.ajax({
                     type: 'POST',
                     url: post_url, 

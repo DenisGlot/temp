@@ -41,7 +41,7 @@ public class AuthFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		System.out.println("***destroy AuthFilter");
+		System.out.println("****destroy AuthFilter");
 	}
 
 	@Override
