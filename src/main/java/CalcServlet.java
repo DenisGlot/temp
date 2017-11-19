@@ -174,7 +174,7 @@ public class CalcServlet extends HttpServlet {
 				out.println("<!DOCTYPE html>");
 				out.println("<html><head>");
 				out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-				// // Well, I tried to use ajax with JS.
+				// // I use ajax here.
 				out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
 				out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
 				//

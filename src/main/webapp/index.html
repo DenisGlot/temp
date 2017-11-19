@@ -5,33 +5,7 @@
 <title>Authorization</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
-<script type="text/javascript">
-function field_focus(field, email)
-{
-  if(field.value == email)
-  {
-    field.value = '';
-  }
-}
-
-function field_blur(field, email)
-{
-  if(field.value == '')
-  {
-    field.value = email;
-  }
-}
-
-//Fade in dashboard box
-$(document).ready(function(){
-  $('.box').hide().fadeIn(1000);
-  });
-
-//Stop click event
-$('a').click(function(event){
-  event.preventDefault(); 
-	});
-</script>
+<script type="text/javascript" src="sign.js"></script>
 </head>
 <body>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600'
