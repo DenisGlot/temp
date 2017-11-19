@@ -196,9 +196,7 @@ public class CalcServlet extends HttpServlet {
 						"<strong>Second part</strong><input id = \"second\" class=\"email\" name=\"second\" type=\"text\" value = \""
 								+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\"><br/>" + (er2 ? error : "")
 								+ "</em><br/>");
-				out.println("<strong>Action : " + act
-						+ "</strong><br/><select class=\"email\" id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>"
-						+ "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>");
+				out.println(selectShowPreviousOption(act));
 				out.println(
 						"<input type=\"submit\" value=\"Calculate\" id=\"btn2\"/><br/><br/><br/><br/>");
 				out.println("<h1>" + result + "</h1>");
@@ -212,5 +210,44 @@ public class CalcServlet extends HttpServlet {
 			isPOST = false;
 		}
 		System.out.println("*****Done!");
+	}
+	/**
+	 * For showing previous action in web page
+	 * @param act
+	 * @return
+	 */
+	private String selectShowPreviousOption(String act) {
+		switch (act) {
+		case "+":
+			return insert(54);
+		case "-":
+			return insert(85);
+		case "*":
+			return insert(117);
+		case ":":
+			return insert(152);
+		case "sqrt first":
+			return insert(185);
+		case "sqrt second":
+			return insert(239);
+		default:
+			System.err.println("I haven't made a selection!");
+		}
+		return "<select class=\"email\" id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>" + 
+		        "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>";
+	}
+	
+	/**
+	 * Inserting in tag html select of mine 
+	 * @param index
+	 * @return
+	 */
+	private String insert(int index) {
+		String selected = " selected=\"selected\"";
+		String select = "<select class=\"email\" id = \"act\" name=\"action\"><option value=\"+\">Plus</option><option value=\"-\">Minus</option><option value=\"*\">Multiply</option>" + 
+		        "<option value=\":\">Divide</option><option value=\"sqrt first\">Sqrt of First part</option><option value=\"sqrt second\">Sqrt of Second part</option></select> <br/><br/>";
+	    String selectBegin = select.substring(0,index);
+	    String selectEnd = select.substring(index);
+	    return selectBegin + selected + selectEnd;
 	}
 }
