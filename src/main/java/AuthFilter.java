@@ -28,9 +28,9 @@ import org.apache.log4j.Logger;
  *
  */
 public class AuthFilter implements Filter {
-	
-    final Logger logger = Logger.getLogger(AuthFilter.class);
-	
+
+	final Logger logger = Logger.getLogger(AuthFilter.class);
+
 	private Properties prop = null;
 	private InputStream input = null;
 	private String driver = null;
@@ -49,45 +49,45 @@ public class AuthFilter implements Filter {
 			throws IOException, ServletException {
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
+		String email = null;
+		String password = null;
 		System.out.println("*******Session Atribute!! = " + session.getAttribute("login"));
-		if(logger.isDebugEnabled()) {
+		if (logger.isDebugEnabled()) {
 			logger.debug("Session Atribute!! = " + session.getAttribute("login"));
 		}
-		if (session.getAttribute("login") != null && session.getAttribute("login").equals("LOGIN") && request.getParameter("email")==null) {
+		if (session.getAttribute("login") != null && session.getAttribute("login").equals("LOGIN")
+				&& request.getParameter("email") == null) {
 			System.out.println("I'm in first chain.doFilter()");
-			if(logger.isDebugEnabled()) {
+			if (logger.isDebugEnabled()) {
 				logger.debug("The filter did log in without email and password");
 			}
 			chain.doFilter(request, response);
-		}
-		String email = null;
-		String password = null;
-		PrintWriter out = response.getWriter();
-		try {
-			email = request.getParameter("email");
-			password = request.getParameter("password");
-			if (email != null && password != null && checkInDB(email, password)) {
-				session.setAttribute("login", "LOGIN");
-				session.setAttribute("email", email);
-				System.out.println("I'm in second chain.doFilter()");
-				if(logger.isDebugEnabled()) {
-					logger.debug("The filter did log in with email and password");
+		} else {
+			
+			try(PrintWriter out = response.getWriter();) {
+				email = request.getParameter("email");
+				password = request.getParameter("password");
+				if (email != null && password != null && checkInDB(email, password)) {
+					session.setAttribute("login", "LOGIN");
+					session.setAttribute("email", email);
+					System.out.println("I'm in second chain.doFilter()");
+					if (logger.isDebugEnabled()) {
+						logger.debug("The filter did log in with email and password");
+					}
+					chain.doFilter(request, response);
+				} else {
+					out.println("<!DOCTYPE html>");
+					out.println("<html><head>");
+					out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
+					out.println("<title>Error</title></head>");
+					out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
+					out.println("</head>");
+					out.println("<body>");
+					out.println("<h1>username or password is not correct</h1>");
+					out.println("<a href=\"/\">Try again?</a>");
+					out.println("</body></html>");
 				}
-				chain.doFilter(request, response);
-			} else {
-				out.println("<!DOCTYPE html>");
-				out.println("<html><head>");
-				out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-				out.println("<title>Error</title></head>");
-				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
-				out.println("</head>");
-				out.println("<body>");
-				out.println("<h1>username or password is not correct</h1>");
-				out.println("<a href=\"/\">Try again?</a>");
-				out.println("</body></html>");
-			}
-		} finally {
-			out.close();
+			} 
 		}
 	}
 
@@ -111,17 +111,17 @@ public class AuthFilter implements Filter {
 					con = DriverManager.getConnection(jdbc_url);
 					System.out.println("*******Creating Table******");
 					con.createStatement().execute("create table ACCESS (email varchar(45), password varchar(45))");
-					if(logger.isDebugEnabled()) {
+					if (logger.isDebugEnabled()) {
 						logger.debug("table ACCESS was created");
 					}
 					con.createStatement().execute("insert into ACCESS values ('admin','admin')");
 					con.createStatement().execute("insert into ACCESS values ('iliya','123456')");
 					con.createStatement().execute("insert into ACCESS values ('denis','123456')");
-					tableIsCreated=true;
+					tableIsCreated = true;
 				} catch (SQLException e) {
 					e.printStackTrace();
-					if(e.getMessage().equals("Table/View 'ACCESS' already exists in Schema 'APP'")) {
-						tableIsCreated=true;
+					if (e.getMessage().equals("Table/View 'ACCESS' already exists in Schema 'APP'")) {
+						tableIsCreated = true;
 						logger.warn("Table/View 'ACCESS' already exists in Schema 'APP'");
 					} else {
 						logger.error(e.getMessage());

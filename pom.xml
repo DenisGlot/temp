@@ -7,6 +7,25 @@
 	<packaging>war</packaging>
 
 	<dependencies>
+		<!-- For creating a random password -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!-- For mail Session -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<!-- For EJB -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.ejb</groupId>
+			<artifactId>jboss-ejb-api_3.1_spec</artifactId>
+			<version>1.0.2.Final</version>
+		</dependency>
+
 		<!-- For logger -->
 		<dependency>
 			<groupId>log4j</groupId>
