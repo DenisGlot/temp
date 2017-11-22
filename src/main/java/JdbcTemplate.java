@@ -16,6 +16,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.log4j.Logger;
 
+import hash.Hashing;
 import mail.ejb.MailEJB;
 
 public class JdbcTemplate {
@@ -78,7 +79,6 @@ public class JdbcTemplate {
 		}
 		driver = prop.getProperty("driver_derby");
 		jdbc_url = prop.getProperty("jdbc_url");
-		createTableACCESS();
 		initResultSetHandler();
 		
 	}
@@ -116,19 +116,25 @@ public class JdbcTemplate {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
+		createTableACCESS();
 	}
+	/**
+	 * It's table where stored passwords and emails 
+	 */
 	private void createTableACCESS() {
 		// Because i don't know how to check on existing tables. So i wrote down a try
 					// catch
 					// It will work only once on deployment
 					if (!tableIsCreated) {
-	                        executeDDL("create table ACCESS (email varchar(45), password varchar(45))");						
+	                        executeDDL("create table ACCESS (email varchar(64), password varchar(64))");						
 							if (logger.isDebugEnabled()) {
 								logger.debug("table ACCESS was created");
 							}
-							executeDDL("insert into ACCESS values ('admin','admin')");
-							executeDDL("insert into ACCESS values ('iliya','123456')");
-							executeDDL("insert into ACCESS values ('denis','123456')");
+							String admin = Hashing.sha1("admin");
+							String iliya = Hashing.sha1("123456");
+							executeDDL("insert into ACCESS values ('admin','" + admin + "')");
+							executeDDL("insert into ACCESS values ('iliya','" + iliya + "')");
+							executeDDL("insert into ACCESS values ('denis','" + iliya + "')");
 							tableIsCreated = true;
 					}
 	}
@@ -140,7 +146,7 @@ public class JdbcTemplate {
 	 */
 	public void saveInDataBase(String email, String password) {
 		  try {
-			statement.execute("insert into ACCESS values ('" + email + "','" + password + "')");
+			statement.execute("insert into ACCESS values ('" + email + "','" + Hashing.sha1(password) + "')");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
@@ -152,12 +158,13 @@ public class JdbcTemplate {
 	 * @param password
 	 */
 	public boolean checkInDataBase(String email,String password) {
+		String password2 = Hashing.sha1(password);
 		PreparedStatement ps;
 		ResultSet rs;
 		try {
 			ps = con.prepareStatement(FIND_WHERE);
 			ps.setString(1, email);
-			ps.setString(2, password);
+			ps.setString(2, password2);
 			rs = ps.executeQuery();
 			if(rs.next()==false) {
 				return false;

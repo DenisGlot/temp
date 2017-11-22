@@ -20,7 +20,7 @@ $(document).ready(function(){
                       second : $('#second').val(),
                       act : $('#act option:selected').val()
                 };
-                $('#mydiv', form).html('Please wait....');
+                $('#mydiv', form).fadeOut(1000);
                 $.ajax({
                     type: 'POST',
                     url: post_url, 
@@ -28,7 +28,7 @@ $(document).ready(function(){
                     data: JSON.stringify(post_data),
                     async: true,
                     success: function(msg) {
-                        $('body').html(msg);
+                        $('body').html(msg).fadeIn(1000);
                         isSubmitting=false;
                     },
                     error: function(message) {
