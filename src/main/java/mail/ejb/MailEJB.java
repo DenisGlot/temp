@@ -9,11 +9,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 
 
-@Stateless
 public class MailEJB {
 	
 	final Logger logger = Logger.getLogger(MailEJB.class);

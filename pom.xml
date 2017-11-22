@@ -7,6 +7,12 @@
 	<packaging>war</packaging>
 
 	<dependencies>
+		<!-- For a ResultSetHandler -->
+		<dependency>
+			<groupId>commons-dbutils</groupId>
+			<artifactId>commons-dbutils</artifactId>
+			<version>1.5</version>
+		</dependency>
 		<!-- For creating a random password -->
 		<dependency>
 			<groupId>commons-lang</groupId>

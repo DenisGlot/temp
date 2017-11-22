@@ -31,7 +31,6 @@ public class MailServlet extends HttpServlet {
 
 	private final Logger logger = Logger.getLogger(MailServlet.class);
 
-	@EJB
 	private MailEJB mailEJB;
 
 	public MailServlet() {
@@ -48,6 +47,7 @@ public class MailServlet extends HttpServlet {
 		String passwordForClient = RandomStringUtils.randomAlphanumeric(4);
 		boolean validation = EmailValidation.validate(toEmail==null?"":toEmail);
 		if (validation) {
+			mailEJB=new MailEJB();
 			mailEJB.sendEmail(fromEmail, username, password, toEmail, passwordForClient);
 			saveInDataBase(toEmail, passwordForClient);
 		}
