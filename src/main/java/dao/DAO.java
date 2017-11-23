@@ -14,6 +14,6 @@ public interface DAO<E,K> {
     E findById(K id);
     E update(E entity);
     E findByCriteria();
-    void save(E entity);
+    boolean save(E entity);
     E create(E entity); 
 }

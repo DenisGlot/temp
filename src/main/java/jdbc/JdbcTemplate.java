@@ -54,7 +54,7 @@ public class JdbcTemplate {
 	 * @param string
 	 * @return
 	 */
-	public Object[] executeSelect(String myQuery) {
+	public Object[][] executeSelect(String myQuery) {
 		QueryRunner run = new QueryRunner();
 		try {
 		return	run.query(con, myQuery, h);
@@ -160,8 +160,8 @@ public class JdbcTemplate {
 	 */
 	public boolean checkInDataBase(String email,String password) {
 		String password2 = Hashing.sha1(password);
-		PreparedStatement ps;
-		ResultSet rs;
+		PreparedStatement ps= null;
+		ResultSet rs= null;
 		try {
 			ps = con.prepareStatement(FIND_WHERE);
 			ps.setString(1, email);
@@ -177,8 +177,26 @@ public class JdbcTemplate {
 				return false;
 			}
 		} catch (SQLException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+				rs.close();
+			} catch (SQLException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		return false;
+	}
+	public void close() {
+		try {
+			con.close();
+			statement.close();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

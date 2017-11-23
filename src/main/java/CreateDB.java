@@ -21,10 +21,10 @@ public class CreateDB {
 			Class.forName(DRIVER);
 			connection = DriverManager.getConnection(JDBC_URL);
 			statement=connection.createStatement();
-			statement.execute("create table ACCESS (email varchar(64), password varchar(64))");
-			statement.execute("insert into ACCESS values ('admin','" + Hashing.sha1("admin") + "')");
-            statement.execute("insert into ACCESS values ('iliya','" + Hashing.sha1("123456") + "')");
-            statement.execute("insert into ACCESS values ('denis','123456')");
+			statement.execute("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64), password varchar(64), CONSTRAINT primary_key PRIMARY KEY (id))");
+			statement.execute("insert into ACCESS(email,password) values ('admin','" + Hashing.sha1("admin") + "')");
+            statement.execute("insert into ACCESS(email,password) values ('iliya','" + Hashing.sha1("123456") + "')");
+            statement.execute("insert into ACCESS(email,password) values ('denis','" + Hashing.sha1("123456") + "')");
 		} catch (ClassNotFoundException e) {
 			System.err.println("Driver for derby not found!!!");
 			e.printStackTrace();
