@@ -1,14 +1,7 @@
 package mail;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -17,8 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.log4j.Logger;
 
+import dao.UserController;
+import dao.entity.User;
 import hash.Hashing;
 import jdbc.JdbcTemplate;
 import mail.ejb.MailEJB;
@@ -31,16 +25,14 @@ import mail.validation.EmailValidation;
 public class MailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final Logger logger = Logger.getLogger(MailServlet.class);
-	
-	private JdbcTemplate jt = null;
+	private UserController uc = null;
 
     @EJB
 	private MailEJB mailEJB;
 
 	public MailServlet() {
 		super();
-		jt = new JdbcTemplate();
+		uc = new UserController();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,7 +46,7 @@ public class MailServlet extends HttpServlet {
 		boolean validation = EmailValidation.validate(toEmail==null?"":toEmail);
 		if (validation) {
 			mailEJB.sendEmail(fromEmail, username, password, toEmail, passwordForClient);
-			saveInDataBase(toEmail, passwordForClient);
+			saveInDataBase(toEmail, Hashing.sha1(passwordForClient));
 		}
 		try (PrintWriter out = response.getWriter()) {
 			out.println("<!DOCTYPE html>");
@@ -91,7 +83,10 @@ public class MailServlet extends HttpServlet {
 	}
 
 	private void saveInDataBase(String email, String password) {
-		jt.saveInDataBase(email, Hashing.sha1(password));
+		if(email == null || password == null) {
+			throw new IllegalArgumentException("email and password cannot be null!");
+		}
+		uc.save(new User(email,password));
 	}
 	
 }

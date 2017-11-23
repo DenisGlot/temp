@@ -1,4 +1,5 @@
 package jdbc;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -8,66 +9,82 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Properties;
 
-import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.log4j.Logger;
 
 import hash.Hashing;
-import mail.ejb.MailEJB;
 
 public class JdbcTemplate {
-	//Specific query for calculator
+	// Specific query for calculator
 	private static final String FIND_WHERE = "select 'OK' from ACCESS where email = ? and password = ?";
-	
+
 	final Logger logger = Logger.getLogger(JdbcTemplate.class);
-	
+
 	private String driver = null;
 	private String jdbc_url = null;
-	
+
 	private Connection con = null;
-	private Statement statement=null;
-    private ResultSetHandler<Object[][]> h;
-    
-    private static boolean tableIsCreated;
-    
+	private Statement statement = null;
+	private ResultSetHandler<Object[][]> h;
+
+	private static boolean tableIsCreated;
+
 	public JdbcTemplate() {
 		init();
 		connectToDataBase();
 	}
 
 	public boolean executeDDL(String myQuery) {
-	 	 try {
+		try {
 			return statement.execute(myQuery);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
-	 	 return false;
+		return false;
 	}
+
 	/**
-	 * This method returns first line yet
+	 * This method returns array of arrays 
+	 * 
 	 * @param string
 	 * @return
 	 */
 	public Object[][] executeSelect(String myQuery) {
 		QueryRunner run = new QueryRunner();
 		try {
-		return	run.query(con, myQuery, h);
+			return run.query(con, myQuery, h);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
 	/**
-	 * Declaring String parameteres jdbc_url
-	 * and driver from Property 
+	 * It executes query with bind parameters
+	 * @param myQuery
+	 * @param param
+	 * @return
+	 */
+	public Object[][] executePreparedSelect(String myQuery, Object ... param ) {
+		QueryRunner run = new QueryRunner();
+		try {
+			return run.query(con, myQuery, h, param);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	/**
+	 * Declaring String parameteres jdbc_url and driver from Property
 	 */
 	private void init() {
 		Properties prop = new Properties();
@@ -81,97 +98,132 @@ public class JdbcTemplate {
 		driver = prop.getProperty("driver_derby");
 		jdbc_url = prop.getProperty("jdbc_url");
 		initResultSetHandler();
-		
+
 	}
+
 	/**
-	 * Create a ResultSetHandler implementation to convert the first row into an Object[].
-	 * I don't know how to count rows so used 100
+	 * Create a ResultSetHandler implementation to convert the first row into an
+	 * Object[]. I don't know how to count rows so I used 100
 	 */
 	private void initResultSetHandler() {
 		h = new ResultSetHandler<Object[][]>() {
-		    public Object[][] handle(ResultSet rs) throws SQLException {
-		        ResultSetMetaData meta = rs.getMetaData();
-		        int cols = meta.getColumnCount();
-		        //Here
-		        Object[][] result = new Object[cols][100];
-		        //
-                for(int i = 0;rs.next();i++) {
-                	for(int j = 0;j<cols; j++) {
-                		result[j][i]=rs.getObject(j+1);
-                }
-		    }
-                return result;
-		}
-	};
+			public Object[][] handle(ResultSet rs) throws SQLException {
+				ResultSetMetaData meta = rs.getMetaData();
+				int cols = meta.getColumnCount();
+				// Here
+				Object[][] result = new Object[100][cols];
+				//
+				for (int i = 0; rs.next(); i++) {
+					for (int j = 0; j < cols; j++) {
+						result[i][j] = rs.getObject(j + 1);
+					}
+				}
+				return result;
+			}
+		};
 	}
-    /**
-     * Making a working statement in constructor	
-     * @return
-     */
+	/**
+	 * Counting the number of Rows in ResultSet
+	 * @param resultSet
+	 * @return
+	 */
+	private int getRowCount(ResultSet resultSet) {
+	    if (resultSet == null) {
+	        return 0;
+	    }
+	    try {
+	        resultSet.last();
+	        return resultSet.getRow();
+	    } catch (SQLException exp) {
+	        exp.printStackTrace();
+	    } finally {
+	        try {
+	            resultSet.beforeFirst();
+	        } catch (SQLException exp) {
+	            exp.printStackTrace();
+	        }
+	    }
+	    return 0;
+	}
+
+	/**
+	 * Making a working statement in constructor
+	 * 
+	 * @return
+	 */
 	private void connectToDataBase() {
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(jdbc_url);
-			statement=con.createStatement();
+			statement = con.createStatement();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
+		//TODO uncomment 
 		createTableACCESS();
 	}
+
 	/**
-	 * It's table where stored passwords and emails 
+	 * It's table where stored passwords and emails
 	 */
 	private void createTableACCESS() {
 		// Because i don't know how to check on existing tables. So i wrote down a try
-					// catch
-					// It will work only once on deployment
-					if (!tableIsCreated) {
-	                        executeDDL("create table ACCESS (email varchar(64), password varchar(64))");						
-							if (logger.isDebugEnabled()) {
-								logger.debug("table ACCESS was created");
-							}
-							String admin = Hashing.sha1("admin");
-							String iliya = Hashing.sha1("123456");
-							executeDDL("insert into ACCESS values ('admin','" + admin + "')");
-							executeDDL("insert into ACCESS values ('iliya','" + iliya + "')");
-							executeDDL("insert into ACCESS values ('denis','" + iliya + "')");
-							tableIsCreated = true;
-					}
+		// catch
+		// It will work only once on deployment
+		if (!tableIsCreated) {
+			executeDDL(
+					"create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64), password varchar(64), CONSTRAINT primary_key PRIMARY KEY (id))");
+			if (logger.isDebugEnabled()) {
+				logger.debug("table ACCESS was created");
+			}
+			String admin = Hashing.sha1("admin");
+			String iliya = Hashing.sha1("123456");
+			executeDDL("insert into ACCESS(email,password) values ('admin','" + admin + "')");
+			executeDDL("insert into ACCESS(email,password) values ('iliya','" + iliya + "')");
+			executeDDL("insert into ACCESS(email,password) values ('denis','" + iliya + "')");
+			tableIsCreated = true;
+		}
 	}
-	
+
 	/**
 	 * specific method for calculator
+	 * 
 	 * @param email
 	 * @param password
 	 */
-	public void saveInDataBase(String email, String password) {
-		  try {
-			statement.execute("insert into ACCESS values ('" + email + "','" + Hashing.sha1(password) + "')");
+	public boolean saveInDataBase(String email, String password) {
+		try {
+			statement.execute(
+					"insert into ACCESS(email,password) values ('" + email + "','" + Hashing.sha1(password) + "')");
+			return true;
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-	} 
+		return false;
+	}
+
 	/**
 	 * specific method for calculator
+	 * 
 	 * @param email
 	 * @param password
 	 */
-	public boolean checkInDataBase(String email,String password) {
+	public boolean checkInDataBase(String email, String password) {
 		String password2 = Hashing.sha1(password);
-		PreparedStatement ps= null;
-		ResultSet rs= null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			ps = con.prepareStatement(FIND_WHERE);
 			ps.setString(1, email);
 			ps.setString(2, password2);
 			rs = ps.executeQuery();
-			if(rs.next()==false) {
+			if (rs.next() == false) {
 				return false;
 			}
 			String result = rs.getString(1);
-			if(result!=null && result.equals("OK")) {
+			if (result != null && result.equals("OK")) {
 				return true;
 			} else {
 				return false;
@@ -190,6 +242,7 @@ public class JdbcTemplate {
 		}
 		return false;
 	}
+
 	public void close() {
 		try {
 			con.close();

@@ -1,9 +1,11 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import dao.entity.User;
+import hash.Hashing;
 import jdbc.JdbcTemplate;
 
 public class UserController implements DAO<User,Integer> {
@@ -26,33 +28,31 @@ public class UserController implements DAO<User,Integer> {
 
 	@Override
 	public User findById(Integer id) {
-		Object[][] obs = jt.executeSelect("sleect * from ACCESS where id ="+ id); 
+		Object[][] obs = jt.executeSelect("select * from ACCESS where id ="+ id); 
 		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
 	}
 
 	@Override
-	public User update(User entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean update(User entity) {
+		return jt.executeDDL("update ACCESS set email = '" + entity.getEmail() + "',password ='" + Hashing.sha1(entity.getPassword()) + "' where id =" + entity.getId()); 
+	}
+	
+	@Override
+	public boolean delete(User entity) {
+		return jt.executeDDL("delete from ACCESS where id =" + entity.getId());
 	}
 
 	@Override
-	public User findByCriteria() {
-		// TODO Auto-generated method stub
-		return null;
+	public User findByCriteria(String name,String like) {
+		Object[][] obs = jt.executePreparedSelect("select * from ACCESS where " + name + " = ?", like);
+		User user = new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
+		System.out.println(user);
+		return user;
 	}
 
 	@Override
 	public boolean save(User entity) {
-		// TODO Auto-generated method stub
-		return false;
-		
-	}
-
-	@Override
-	public User create(User entity) {
-		// TODO Auto-generated method stub
-		return null;
+	    return jt.executeDDL("insert into ACCESS(email,password) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "')");
 	}
 
 }

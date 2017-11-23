@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
-
+@Stateless
 public class MailEJB {
 	
 	final Logger logger = Logger.getLogger(MailEJB.class);

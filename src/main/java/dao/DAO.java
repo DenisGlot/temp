@@ -12,8 +12,8 @@ import java.util.List;
 public interface DAO<E,K> {
     List<E> getALl();
     E findById(K id);
-    E update(E entity);
-    E findByCriteria();
+    boolean update(E entity);
+    boolean delete(E entity);
+    E findByCriteria(String name,String like);
     boolean save(E entity);
-    E create(E entity); 
 }

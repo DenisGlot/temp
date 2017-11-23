@@ -12,6 +12,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import dao.UserController;
+import dao.entity.User;
+import hash.Hashing;
 import jdbc.JdbcTemplate;
 
 /**
@@ -24,7 +27,7 @@ public class AuthFilter implements Filter {
 
 	final Logger logger = Logger.getLogger(AuthFilter.class);
  
-    JdbcTemplate jt;
+    UserController uc;
  
 
 	@Override
@@ -52,7 +55,7 @@ public class AuthFilter implements Filter {
 				email = request.getParameter("email");
 				password = request.getParameter("password");
 				// if email and password is correct then we are going to page with calculator
-				if (email != null && password != null && jt.checkInDataBase(email, password)) {
+				if (email != null && password != null && checkInDataBase(email, password)) {
 					session.setAttribute("login", "LOGIN");
 					session.setAttribute("email", email);
 					if (logger.isDebugEnabled()) {
@@ -78,14 +81,27 @@ public class AuthFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		System.out.println("***intit AuthFilter");
-		jt = new JdbcTemplate();
+		if (logger.isDebugEnabled()) {
+			logger.debug("***initialize AuthFilter");
+		}
+		uc = new UserController();
 	}
 	
 	@Override
 	public void destroy() {
-		System.out.println("***destroy AuthFilter");
-		jt.close();
+		if (logger.isDebugEnabled()) {
+			logger.debug("***destroy AuthFilter");
+		}
+	}
+	private boolean checkInDataBase(String email, String password) {
+		User user = uc.findByCriteria("email", email);
+		if(user == null) {
+			return false;
+		} 
+		if(user.getEmail().equals(email) && user.getPassword().equals(Hashing.sha1(password))) {
+			return true;
+		}
+		return false;
 	}
 
 }
