@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 
+import hash.Hashing;
+import jdbc.JdbcTemplate;
 import mail.ejb.MailEJB;
 import mail.validation.EmailValidation;
 
@@ -30,11 +32,15 @@ public class MailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final Logger logger = Logger.getLogger(MailServlet.class);
+	
+	private JdbcTemplate jt = null;
 
+    @EJB
 	private MailEJB mailEJB;
 
 	public MailServlet() {
 		super();
+		jt = new JdbcTemplate();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,7 +53,6 @@ public class MailServlet extends HttpServlet {
 		String passwordForClient = RandomStringUtils.randomAlphanumeric(4);
 		boolean validation = EmailValidation.validate(toEmail==null?"":toEmail);
 		if (validation) {
-			mailEJB=new MailEJB();
 			mailEJB.sendEmail(fromEmail, username, password, toEmail, passwordForClient);
 			saveInDataBase(toEmail, passwordForClient);
 		}
@@ -86,32 +91,7 @@ public class MailServlet extends HttpServlet {
 	}
 
 	private void saveInDataBase(String email, String password) {
-		Properties prop = new Properties();
-		InputStream input = null;
-		String driver;
-		String jdbc_url;
-		Connection con = null;
-		try {
-			input = getClass().getResourceAsStream("/file.properties");
-			prop.load(input);
-			driver = prop.getProperty("driver_derby");
-			jdbc_url = prop.getProperty("jdbc_url");
-			try {
-				Class.forName(driver);
-				System.out.println(jdbc_url);
-				con = DriverManager.getConnection(jdbc_url);
-				con.createStatement().execute("insert into ACCESS values ('" + email + "','" + password + "')");
-			} catch (SQLException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
+		jt.saveInDataBase(email, Hashing.sha1(password));
 	}
 	
 }

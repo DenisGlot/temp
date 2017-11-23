@@ -1,14 +1,5 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -20,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+
+import jdbc.JdbcTemplate;
 
 /**
  * This class is for authentication.
@@ -33,10 +26,6 @@ public class AuthFilter implements Filter {
  
     JdbcTemplate jt;
  
-	@Override
-	public void destroy() {
-		System.out.println("***destroy AuthFilter");
-	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -45,31 +34,33 @@ public class AuthFilter implements Filter {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		String email = null;
 		String password = null;
-		System.out.println("*******Session Atribute!! = " + session.getAttribute("login"));
 		if (logger.isDebugEnabled()) {
-			logger.debug("Session Atribute!! = " + session.getAttribute("login"));
+			logger.debug("Session Atribute = " + session.getAttribute("login"));
 		}
-		if (session.getAttribute("login") != null && session.getAttribute("login").equals("LOGIN")
+		// Logic begins
+		// if session has attribute login equals 'LOGIN' than user don't need to authorize
+		if (session.getAttribute("login") != null 
+				&& session.getAttribute("login").equals("LOGIN")
 				&& request.getParameter("email") == null) {
-			System.out.println("I'm in first chain.doFilter()");
 			if (logger.isDebugEnabled()) {
 				logger.debug("The filter did log in without email and password");
 			}
 			chain.doFilter(request, response);
 		} else {
-			
+	    //Otherwise this logic checking in database email and password
 			try(PrintWriter out = response.getWriter();) {
 				email = request.getParameter("email");
 				password = request.getParameter("password");
+				// if email and password is correct then we are going to page with calculator
 				if (email != null && password != null && jt.checkInDataBase(email, password)) {
 					session.setAttribute("login", "LOGIN");
 					session.setAttribute("email", email);
-					System.out.println("I'm in second chain.doFilter()");
 					if (logger.isDebugEnabled()) {
 						logger.debug("The filter did log in with email and password");
 					}
 					chain.doFilter(request, response);
 				} else {
+					// Or else we will see page with 'try again'
 					out.println("<!DOCTYPE html>");
 					out.println("<html><head>");
 					out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
@@ -89,6 +80,11 @@ public class AuthFilter implements Filter {
 	public void init(FilterConfig arg0) throws ServletException {
 		System.out.println("***intit AuthFilter");
 		jt = new JdbcTemplate();
+	}
+	
+	@Override
+	public void destroy() {
+		System.out.println("***destroy AuthFilter");
 	}
 
 }
