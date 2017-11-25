@@ -39,8 +39,8 @@ public class MailServlet extends HttpServlet {
 		if (validation) {
 			if(uc.findByCriteria("email", toEmail)==null) {
 				checkOnUnique=true;
-				saveInDataBase(toEmail, passwordForClient);
 				Sender.send(toEmail, passwordForClient);
+				saveInDataBase(toEmail, passwordForClient);
 			}
 		}
 
