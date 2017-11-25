@@ -40,8 +40,6 @@ public class MailServlet extends HttpServlet {
 			if(uc.findByCriteria("email", toEmail)==null) {
 				checkOnUnique=true;
 				saveInDataBase(toEmail, passwordForClient);
-			}
-			if (checkOnUnique) {
 				Sender.send(toEmail, passwordForClient);
 			}
 		}
@@ -79,8 +77,8 @@ public class MailServlet extends HttpServlet {
 				out.println("<input value =\"" + toEmail + "\" type=\"text\" name=\"mail\""
 						+ "onFocus=\"field_focus(this, 'email');\""
 						+ "onblur=\"field_blur(this, 'email');\" class=\"email\" />"
-						+ (validation ? "" : "<br/><em style=\"color:red;\">Please, write a valid email</em>")
-						+ (checkOnUnique ? "" : "<br/><em style=\"color:red;\">This email already exists</em>"));
+						+ (validation ? (checkOnUnique ? "" : "<br/><em style=\"color:red;\">This email already exists</em>") 
+								                       : "<br/><em style=\"color:red;\">Please, write a valid email</em>"));
 				out.println("<input type=\"submit\" value=\"Send\" id=\"btn2\"/>");
 			} else {
 				out.println("<h1>Message with password was sent on your email!</h1> <br/>");
