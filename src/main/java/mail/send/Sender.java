@@ -14,8 +14,8 @@ public class Sender {
 	
 	public static void send(String toEmail, String passwordForClient) {
 
-		final String username = "denisglotov98";
-		final String password = "strongdweeb2307";
+		final String username = "denisglotov.1911@gmail.com";
+		final String password = "123456asdzxcv";
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -33,7 +33,7 @@ public class Sender {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(username + "@gmail.com"));
+			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(toEmail));
 			message.setSubject("Registration");
