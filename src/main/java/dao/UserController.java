@@ -29,7 +29,7 @@ public class UserController implements DAO<User,Integer> {
 	@Override
 	public User findById(Integer id) {
 		Object[][] obs = jt.executeSelect("select * from ACCESS where id ="+ id); 
-		if(obs[0][0]==null || obs[0][1]==null || obs[0][2]==null) {
+		if(obs==null) {
 			return null;
 		}
 		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
@@ -37,24 +37,33 @@ public class UserController implements DAO<User,Integer> {
 
 	@Override
 	public boolean update(User entity) {
-		return jt.executeDDL("update ACCESS set email = '" + entity.getEmail() + "',password ='" + Hashing.sha1(entity.getPassword()) + "' where id =" + entity.getId()); 
+		if(findById(entity.getId())==null) {
+			return false;
+		} else {
+		    return jt.executeDDL("update ACCESS set email = '" + entity.getEmail() + "',password ='" + Hashing.sha1(entity.getPassword()) + "' where id =" + entity.getId());
+		}
 	}
 	
 	@Override
 	public boolean delete(User entity) {
-		return jt.executeDDL("delete from ACCESS where id =" + entity.getId());
+		if(findById(entity.getId())==null) {
+			return false;
+		} else {
+		   return jt.executeDDL("delete from ACCESS where id =" + entity.getId());
+		}
 	}
 
 	@Override
 	public User findByCriteria(String name,String like) {
 		Object[][] obs = jt.executePreparedSelect("select * from ACCESS where " + name + " = ?", like);
-		if(obs == null) {
+		if(obs==null) {
 			return null;
 		}
-		if(obs!=null && obs.length==3 && obs[0].length>0) {
-		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
+		if(obs[0][0] ==null || obs[0][1]==null || obs[0][2] == null) {
+			return null;
 		}
-		return null;
+		User user = new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
+		return user;
 	}
 
 	@Override

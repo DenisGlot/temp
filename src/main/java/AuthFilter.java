@@ -40,6 +40,7 @@ public class AuthFilter implements Filter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Session Atribute = " + session.getAttribute("login"));
 		}
+
 		// Logic begins
 		// if session has attribute login equals 'LOGIN' than user don't need to authorize
 		if (session.getAttribute("login") != null 
@@ -95,7 +96,6 @@ public class AuthFilter implements Filter {
 	}
 	private boolean checkInDataBase(String email, String password) {
 		User user = uc.findByCriteria("email", email);
-		System.out.println(user);
 		if(user == null) {
 			return false;
 		} 

@@ -41,7 +41,7 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		createTableACCESS();
+//		createTableACCESS();
 	}
 	
 	/**
@@ -150,6 +150,13 @@ public class JdbcTemplate {
 				for (int i = 0; rs.next(); i++) {
 					for (int j = 0; j < cols; j++) {
 						result[i][j] = rs.getObject(j + 1);
+						// If first element equals null then whole array is null
+						if(i==0 && (j==0 || j == 1 || j==2) ) {
+							if(result[i][j]==null) {
+								return null;
+							}
+						}
+						
 					}
 				}
 				return result;
@@ -168,9 +175,6 @@ public class JdbcTemplate {
 		if (!tableIsCreated) {
 			executeDDL(
 					"create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64), password varchar(64), CONSTRAINT primary_key PRIMARY KEY (id))");
-			if (logger.isDebugEnabled()) {
-				logger.debug("table ACCESS was created");
-			}
 			String admin = Hashing.sha1("admin");
 			String iliya = Hashing.sha1("123456");
 			executeDDL("insert into ACCESS(email,password) values ('admin','" + admin + "')");
