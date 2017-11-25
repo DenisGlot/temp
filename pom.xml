@@ -25,6 +25,13 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
+		<!-- To send an email -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>smtp</artifactId>
+			<version>1.5.5</version>
+		</dependency>
+
 		<!-- For EJB -->
 		<dependency>
 			<groupId>org.jboss.spec.javax.ejb</groupId>

@@ -15,7 +15,7 @@ import dao.UserController;
 import dao.entity.User;
 import hash.Hashing;
 import jdbc.JdbcTemplate;
-import mail.ejb.MailEJB;
+import mail.send.Sender;
 import mail.validation.EmailValidation;
 
 /**
@@ -27,9 +27,6 @@ public class MailServlet extends HttpServlet {
 
 	private UserController uc = null;
 
-    @EJB
-	private MailEJB mailEJB;
-
 	public MailServlet() {
 		super();
 		uc = new UserController();
@@ -39,13 +36,10 @@ public class MailServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		String toEmail = request.getParameter("mail");
-		String fromEmail = "denisglotov98@gmail.com";
-		String username = "denisglotov98";
-		String password = "strongdweeb2307";
-		String passwordForClient = RandomStringUtils.randomAlphanumeric(4);
+		String passwordForClient = RandomStringUtils.randomAlphanumeric(6);
 		boolean validation = EmailValidation.validate(toEmail==null?"":toEmail);
 		if (validation) {
-			mailEJB.sendEmail(fromEmail, username, password, toEmail, passwordForClient);
+			Sender.send(toEmail, passwordForClient);
 			saveInDataBase(toEmail, Hashing.sha1(passwordForClient));
 		}
 		try (PrintWriter out = response.getWriter()) {

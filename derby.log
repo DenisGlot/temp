@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Thu Nov 23 23:03:17 MSK 2017:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-015f-ea7a-309c-000004643838 
-on database directory C:\Users\Denis\git\calculator\myDB with class loader WebAppClassLoader=calculator@4784013e 
+Sat Nov 25 14:38:28 MSK 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-015f-f2f8-bd3c-000002f584d0 
+on database directory C:\Users\Denis\git\calculator\myDB with class loader WebAppClassLoader=calculator@6d4a65c6 
 Loaded from file:/C:/Users/Denis/.m2/repository/org/apache/derby/derby/10.14.1.0/derby-10.14.1.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_144-b01

@@ -46,13 +46,16 @@ public class UserController implements DAO<User,Integer> {
 	public User findByCriteria(String name,String like) {
 		Object[][] obs = jt.executePreparedSelect("select * from ACCESS where " + name + " = ?", like);
 		User user = new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
-		System.out.println(user);
 		return user;
 	}
 
 	@Override
 	public boolean save(User entity) {
 	    return jt.executeDDL("insert into ACCESS(email,password) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "')");
+	}
+	
+	public void close() {
+		jt.close();
 	}
 
 }

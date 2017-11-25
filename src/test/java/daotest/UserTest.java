@@ -2,6 +2,8 @@ package daotest;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +23,8 @@ public class UserTest {
 	@Test
 	
 	public void test() {
+		 List<User> list  = uc.getALl();
+		 System.out.println(list);
 		 User newUser = new User(666,"delete","remove");
 		 User check = new User(1,"admin",Hashing.sha1("admin"));
          User user = uc.findById(1);

@@ -122,7 +122,6 @@ public class CalcServlet extends HttpServlet {
 						"<strong>First part</strong><input id=\"first\" class=\"email\" name=\"first\" type=\"text\" value=\""
 								+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"><br/> "
 								+ (er1 ? error : "") + "</em><br/>");
-				System.out.println("The second is = " + second);
 				out.println(
 						"<strong>Second part</strong><input id = \"second\" class=\"email\" name=\"second\" type=\"text\" value = \""
 								+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\"><br/>"

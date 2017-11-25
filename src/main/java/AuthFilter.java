@@ -92,6 +92,7 @@ public class AuthFilter implements Filter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("***destroy AuthFilter");
 		}
+		uc.close();
 	}
 	private boolean checkInDataBase(String email, String password) {
 		User user = uc.findByCriteria("email", email);

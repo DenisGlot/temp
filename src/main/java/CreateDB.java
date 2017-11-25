@@ -6,6 +6,7 @@ import java.sql.Statement;
 import hash.Hashing;
 /**
  * This class was for creating Derby DataBase myDB
+ * Currently, Application doesn't need it
  * @author Denis
  *
  */
@@ -35,6 +36,7 @@ public class CreateDB {
 			if (connection != null) {
 				try {
 					connection.close();
+					statement.close();
 				} catch (SQLException e) {
 					System.err.println("Could not close the connection!");
 					e.printStackTrace();

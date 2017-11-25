@@ -28,18 +28,19 @@ public class JdbcTemplate {
 	private String jdbc_url = null;
 
 	private Connection con = null;
-	private Statement statement = null;
 	private ResultSetHandler<Object[][]> h;
 
 	private static boolean tableIsCreated;
 
 	public JdbcTemplate() {
-		init();
+		initFields();
+		initResultSetHandler();
 		connectToDataBase();
+		//createTableACCESS();
 	}
 
 	public boolean executeDDL(String myQuery) {
-		try {
+		try(Statement statement = con.createStatement()) {
 			return statement.execute(myQuery);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,12 +85,11 @@ public class JdbcTemplate {
 	}
 
 	/**
-	 * Declaring String parameteres jdbc_url and driver from Property
+	 * Declaring String parameters jdbc_url and driver from Property
 	 */
-	private void init() {
+	private void initFields() {
 		Properties prop = new Properties();
-		InputStream input = getClass().getResourceAsStream("/file.properties");
-		try {
+		try(InputStream input = getClass().getResourceAsStream("/file.properties");) {
 			prop.load(input);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -97,8 +97,6 @@ public class JdbcTemplate {
 		}
 		driver = prop.getProperty("driver_derby");
 		jdbc_url = prop.getProperty("jdbc_url");
-		initResultSetHandler();
-
 	}
 
 	/**
@@ -122,29 +120,6 @@ public class JdbcTemplate {
 			}
 		};
 	}
-	/**
-	 * Counting the number of Rows in ResultSet
-	 * @param resultSet
-	 * @return
-	 */
-	private int getRowCount(ResultSet resultSet) {
-	    if (resultSet == null) {
-	        return 0;
-	    }
-	    try {
-	        resultSet.last();
-	        return resultSet.getRow();
-	    } catch (SQLException exp) {
-	        exp.printStackTrace();
-	    } finally {
-	        try {
-	            resultSet.beforeFirst();
-	        } catch (SQLException exp) {
-	            exp.printStackTrace();
-	        }
-	    }
-	    return 0;
-	}
 
 	/**
 	 * Making a working statement in constructor
@@ -155,13 +130,10 @@ public class JdbcTemplate {
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(jdbc_url);
-			statement = con.createStatement();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
-		//TODO uncomment 
-		createTableACCESS();
 	}
 
 	/**
@@ -186,6 +158,21 @@ public class JdbcTemplate {
 		}
 	}
 
+	
+
+	public void close() {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	// ********These methods below i don't use since DAO********
+	
+	
 	/**
 	 * specific method for calculator
 	 * 
@@ -193,7 +180,7 @@ public class JdbcTemplate {
 	 * @param password
 	 */
 	public boolean saveInDataBase(String email, String password) {
-		try {
+		try(Statement statement = con.createStatement()) {
 			statement.execute(
 					"insert into ACCESS(email,password) values ('" + email + "','" + Hashing.sha1(password) + "')");
 			return true;
@@ -241,15 +228,5 @@ public class JdbcTemplate {
 			}
 		}
 		return false;
-	}
-
-	public void close() {
-		try {
-			con.close();
-			statement.close();
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		}
 	}
 }
