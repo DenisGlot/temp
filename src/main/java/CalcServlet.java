@@ -115,7 +115,7 @@ public class CalcServlet extends HttpServlet {
 				out.println("<div id=\"mydiv\" class=\"box\">");
 				out.println("<h1>Calculator Pro</h1>");
 				if (email != null) {
-					out.println("<h2>You signed in as " + email + "</h2>");
+					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")) + "</h2>");
 				}
 				out.println("<form id=\"myform\">");
 				out.println(

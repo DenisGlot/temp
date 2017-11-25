@@ -23,6 +23,8 @@ public class UserTest {
 	@Test
 	
 	public void test() {
+		 User userNull = uc.findByCriteria("email", "nieufhiewa");
+		 assertEquals(null, userNull);
 		 List<User> list  = uc.getALl();
 		 System.out.println(list);
 		 User newUser = new User(666,"delete","remove");

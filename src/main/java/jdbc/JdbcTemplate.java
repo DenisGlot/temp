@@ -35,16 +35,46 @@ public class JdbcTemplate {
 	public JdbcTemplate() {
 		initFields();
 		initResultSetHandler();
-		connectToDataBase();
-		//createTableACCESS();
+		try {
+			Class.forName(driver);
+		} catch (ClassNotFoundException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		createTableACCESS();
+	}
+	
+	/**
+	 * Declares connection
+	 * 
+	 * @return
+	 */
+	private void connectToDataBase() {
+		try {
+			con = DriverManager.getConnection(jdbc_url);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+	}
+	private void closeConnection() {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	public boolean executeDDL(String myQuery) {
+		connectToDataBase();
 		try(Statement statement = con.createStatement()) {
 			return statement.execute(myQuery);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
+		} finally {
+			closeConnection();
 		}
 		return false;
 	}
@@ -56,12 +86,15 @@ public class JdbcTemplate {
 	 * @return
 	 */
 	public Object[][] executeSelect(String myQuery) {
+		connectToDataBase();
 		QueryRunner run = new QueryRunner();
 		try {
 			return run.query(con, myQuery, h);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return null;
 
@@ -73,12 +106,15 @@ public class JdbcTemplate {
 	 * @return
 	 */
 	public Object[][] executePreparedSelect(String myQuery, Object ... param ) {
+		connectToDataBase();
 		QueryRunner run = new QueryRunner();
 		try {
 			return run.query(con, myQuery, h, param);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return null;
 
@@ -121,20 +157,6 @@ public class JdbcTemplate {
 		};
 	}
 
-	/**
-	 * Making a working statement in constructor
-	 * 
-	 * @return
-	 */
-	private void connectToDataBase() {
-		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(jdbc_url);
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-	}
 
 	/**
 	 * It's table where stored passwords and emails
@@ -157,17 +179,6 @@ public class JdbcTemplate {
 			tableIsCreated = true;
 		}
 	}
-
-	
-
-	public void close() {
-		try {
-			con.close();
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		}
-	}
 	
 	
 	// ********These methods below i don't use since DAO********
@@ -180,6 +191,7 @@ public class JdbcTemplate {
 	 * @param password
 	 */
 	public boolean saveInDataBase(String email, String password) {
+        connectToDataBase();
 		try(Statement statement = con.createStatement()) {
 			statement.execute(
 					"insert into ACCESS(email,password) values ('" + email + "','" + Hashing.sha1(password) + "')");
@@ -187,6 +199,13 @@ public class JdbcTemplate {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -198,6 +217,7 @@ public class JdbcTemplate {
 	 * @param password
 	 */
 	public boolean checkInDataBase(String email, String password) {
+        connectToDataBase();
 		String password2 = Hashing.sha1(password);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -220,6 +240,7 @@ public class JdbcTemplate {
 			e.printStackTrace();
 		} finally {
 			try {
+				con.close();
 				ps.close();
 				rs.close();
 			} catch (SQLException e) {

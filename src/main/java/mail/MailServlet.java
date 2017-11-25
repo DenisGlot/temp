@@ -3,7 +3,6 @@ package mail;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +12,6 @@ import org.apache.commons.lang.RandomStringUtils;
 
 import dao.UserController;
 import dao.entity.User;
-import hash.Hashing;
-import jdbc.JdbcTemplate;
 import mail.send.Sender;
 import mail.validation.EmailValidation;
 
@@ -37,11 +34,30 @@ public class MailServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		String toEmail = request.getParameter("mail");
 		String passwordForClient = RandomStringUtils.randomAlphanumeric(6);
-		boolean validation = EmailValidation.validate(toEmail==null?"":toEmail);
+		boolean validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
+		boolean checkOnUnique = true;
 		if (validation) {
-			Sender.send(toEmail, passwordForClient);
-			saveInDataBase(toEmail, Hashing.sha1(passwordForClient));
+			checkOnUnique = saveInDataBase(toEmail, passwordForClient);
+			if (checkOnUnique) {
+				Sender.send(toEmail, passwordForClient);
+			}
 		}
+
+		doHtml(request, response, toEmail, validation, checkOnUnique);
+		
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+	private boolean saveInDataBase(String email, String password) {
+		return uc.save(new User(email, password));
+	}
+
+	private void doHtml(HttpServletRequest request, HttpServletResponse response, String toEmail, boolean validation,
+			boolean checkOnUnique) throws IOException {
 		try (PrintWriter out = response.getWriter()) {
 			out.println("<!DOCTYPE html>");
 			out.println("<html><head>");
@@ -55,10 +71,13 @@ public class MailServlet extends HttpServlet {
 			out.println("<body>");
 			out.println("<div class=\"box\">");
 			out.println("<form method=\"GET\">");
-			if (!validation) {
+			if (!validation || !checkOnUnique) {
 				out.println("<h1>On this email will be sent the password</h1>");
-				out.println("<input type=\"text\" name=\"mail\"" + "onFocus=\"field_focus(this, 'email');\"" 
-						+ "onblur=\"field_blur(this, 'email');\" class=\"email\" />" + (validation ? "" : "<br/><em style=\"color:red;\">Please, write a valid email</em>"));
+				out.println("<input value =\"" + toEmail + "\" type=\"text\" name=\"mail\""
+						+ "onFocus=\"field_focus(this, 'email');\""
+						+ "onblur=\"field_blur(this, 'email');\" class=\"email\" />"
+						+ (validation ? "" : "<br/><em style=\"color:red;\">Please, write a valid email</em>")
+						+ (checkOnUnique ? "" : "<br/><em style=\"color:red;\">This email already exists</em>"));
 				out.println("<input type=\"submit\" value=\"Send\" id=\"btn2\"/>");
 			} else {
 				out.println("<h1>Message with password was sent on your email!</h1> <br/>");
@@ -71,16 +90,4 @@ public class MailServlet extends HttpServlet {
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
-
-	private void saveInDataBase(String email, String password) {
-		if(email == null || password == null) {
-			throw new IllegalArgumentException("email and password cannot be null!");
-		}
-		uc.save(new User(email,password));
-	}
-	
 }

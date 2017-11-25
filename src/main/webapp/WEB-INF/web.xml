@@ -14,7 +14,6 @@
     <filter-name>AuthFilt</filter-name>
     <url-pattern>/calc</url-pattern>
   </filter-mapping>
-  <!-- Servlets -->
   <servlet>
     <description></description>
     <display-name>MailServlet</display-name>
@@ -26,6 +25,7 @@
     <servlet-name>MailServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
+  
   <!-- Uncomment this only in case that annotation WevService is commented 
 		<servlet>
 		   <servlet-name>MySer</servlet-name> 

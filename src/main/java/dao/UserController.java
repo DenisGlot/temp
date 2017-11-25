@@ -29,6 +29,9 @@ public class UserController implements DAO<User,Integer> {
 	@Override
 	public User findById(Integer id) {
 		Object[][] obs = jt.executeSelect("select * from ACCESS where id ="+ id); 
+		if(obs[0][0]==null || obs[0][1]==null || obs[0][2]==null) {
+			return null;
+		}
 		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
 	}
 
@@ -45,17 +48,21 @@ public class UserController implements DAO<User,Integer> {
 	@Override
 	public User findByCriteria(String name,String like) {
 		Object[][] obs = jt.executePreparedSelect("select * from ACCESS where " + name + " = ?", like);
-		User user = new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
-		return user;
+		if(obs == null) {
+			return null;
+		}
+		if(obs!=null && obs.length==3 && obs[0].length>0) {
+		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
+		}
+		return null;
 	}
 
 	@Override
 	public boolean save(User entity) {
-	    return jt.executeDDL("insert into ACCESS(email,password) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "')");
+		if(findByCriteria("email",entity.getEmail())==null) {
+	       return jt.executeDDL("insert into ACCESS(email,password) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "')");
+		}
+		return false;
 	}
 	
-	public void close() {
-		jt.close();
-	}
-
 }
