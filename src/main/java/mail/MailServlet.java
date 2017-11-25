@@ -35,10 +35,10 @@ public class MailServlet extends HttpServlet {
 		String toEmail = request.getParameter("mail");
 		String passwordForClient = RandomStringUtils.randomAlphanumeric(6);
 		boolean validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
-		boolean checkOnUnique = true;
+		boolean checkOnUnique = false;
 		if (validation) {
 			if(uc.findByCriteria("email", toEmail)==null) {
-				checkOnUnique=false;
+				checkOnUnique=true;
 				saveInDataBase(toEmail, passwordForClient);
 			}
 			if (checkOnUnique) {
