@@ -76,10 +76,10 @@ public class CalcServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
         // If current http request has email parameter then 
 		// page redirects to new one without parameters at all
-		//I wrote session.getAttribute("email") again 
+		//I wrote request.getAttribute("email") again 
 		// because email could be something,
 		// it would be endless cycle
-		if (request.getAttribute("email") != null) {
+		if (request.getParameter("email")!= null) {
 				logger.debug(email + " was authenticated");
 			// It redirects to new page with calculator without parametres email and
 			// password which more safety
@@ -110,7 +110,7 @@ public class CalcServlet extends HttpServlet {
 				out.println("<div id=\"mydiv\" class=\"box\">");
 				out.println("<h1>Calculator Pro</h1>");
 				if (email != null) {
-					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")==-1?email.length()-1:email.indexOf("@")) + "</h2>");
+					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")==-1?email.length():email.indexOf("@")) + "</h2>");
 				}
 				out.println("<form id=\"myform\">");
 				out.println(
