@@ -37,18 +37,12 @@ public class AuthFilter implements Filter {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		String email = null;
 		String password = null;
-		if (logger.isDebugEnabled()) {
 			logger.debug("Session Atribute = " + session.getAttribute("login"));
-		}
 
 		// Logic begins
 		// if session has attribute login equals 'LOGIN' than user don't need to authorize
-		if (session.getAttribute("login") != null 
-				&& session.getAttribute("login").equals("LOGIN")
-				&& request.getParameter("email") == null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("The filter did log in without email and password");
-			}
+		if (session.getAttribute("login") != null) {
+			logger.debug("The filter did log in without email and password");
 			chain.doFilter(request, response);
 		} else {
 	    //Otherwise this logic checking in database email and password
@@ -59,9 +53,7 @@ public class AuthFilter implements Filter {
 				if (email != null && password != null && checkInDataBase(email, password)) {
 					session.setAttribute("login", "LOGIN");
 					session.setAttribute("email", email);
-					if (logger.isDebugEnabled()) {
-						logger.debug("The filter did log in with email and password");
-					}
+					logger.debug("The filter did log in with email and password");
 					chain.doFilter(request, response);
 				} else {
 					// Or else we will see page with 'try again'
@@ -82,17 +74,13 @@ public class AuthFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		if (logger.isDebugEnabled()) {
 			logger.debug("***initialize AuthFilter");
-		}
 		uc = new UserController();
 	}
 	
 	@Override
 	public void destroy() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("***destroy AuthFilter");
-		}
 	}
 	private boolean checkInDataBase(String email, String password) {
 		User user = uc.findByCriteria("email", email);

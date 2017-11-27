@@ -40,10 +40,8 @@ public class CalcServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (logger.isDebugEnabled()) {
 			logger.debug("I'm in doGet()");
-		}
-		doHtml(request, response);
+		sendHtmlToBrowser(request, response);
 	}
 
 	/**
@@ -53,9 +51,7 @@ public class CalcServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (logger.isDebugEnabled()) {
 			logger.debug("I'm in doPost()");
-		}
 		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		// Getting parameters from JSON 
 		firstString = data.get("first").getAsString();
@@ -67,14 +63,12 @@ public class CalcServlet extends HttpServlet {
 		}
 
 		isPOST = true;
-		doHtml(request, response);
+		sendHtmlToBrowser(request, response);
 	}
 
-	private void doHtml(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void sendHtmlToBrowser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("**** Starting doHtml ******");
-		}
+			logger.debug("**** Starting sendHtmlToBrowser ******");
 
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
@@ -82,20 +76,18 @@ public class CalcServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
         // If current http request has email parameter then 
 		// page redirects to new one without parameters at all
-		if (request.getParameter("email") != null) {
-			if (logger.isDebugEnabled()) {
+		if (email != null) {
 				logger.debug(email + " was authenticated");
-			}
 			// It redirects to new page with calculator without parametres email and
 			// password which more safety
 			response.sendRedirect("calc");
 		} else {
 			er1 = false;
 			er2 = false;
-			if (!isPOST) {
-				fillPartsWithParameters(request);
-			} else {
+			if (isPOST) {
 				fillPartsInPost(request);
+			} else {
+				fillPartsWithParameters(request);
 			}
 			
 			calculateResult();
@@ -115,7 +107,7 @@ public class CalcServlet extends HttpServlet {
 				out.println("<div id=\"mydiv\" class=\"box\">");
 				out.println("<h1>Calculator Pro</h1>");
 				if (email != null) {
-					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")) + "</h2>");
+					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")==-1?email.length()-1:email.indexOf("@")) + "</h2>");
 				}
 				out.println("<form id=\"myform\">");
 				out.println(
@@ -136,9 +128,7 @@ public class CalcServlet extends HttpServlet {
 			} 
 			isPOST = false;
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("*****Done with doHtml!");
-		}
+			logger.debug("*****Done with sendHtmlToBrowser!");
 	}
 	
 	private void calculateResult() {
@@ -164,7 +154,7 @@ public class CalcServlet extends HttpServlet {
 				result = Math.sqrt(second);
 				break;
 			default:
-				System.out.println("I've just made a culculation!");
+				logger.warn("There was not proper calculation");
 			}
 		}
 
@@ -218,7 +208,11 @@ public class CalcServlet extends HttpServlet {
 	}
 
 	/**
-	 * For showing previous action in web page
+	 * I used ajax request for a whole form in calculator page
+	 * It means the select tag will update every time with new ajax request
+	 * Therefore select will show the option "Plus" every time after updating
+	 * The method "insert"  inserts parameter selected="selected" in tag option
+	 * And it inserts in place that depends on action of calculation
 	 * 
 	 * @param act
 	 * @return
