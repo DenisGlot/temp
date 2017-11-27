@@ -76,7 +76,10 @@ public class CalcServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
         // If current http request has email parameter then 
 		// page redirects to new one without parameters at all
-		if (email != null) {
+		//I wrote session.getAttribute("email") again 
+		// because email could be something,
+		// it would be endless cycle
+		if (session.getAttribute("email") != null) {
 				logger.debug(email + " was authenticated");
 			// It redirects to new page with calculator without parametres email and
 			// password which more safety
