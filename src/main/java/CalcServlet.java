@@ -79,7 +79,7 @@ public class CalcServlet extends HttpServlet {
 		//I wrote session.getAttribute("email") again 
 		// because email could be something,
 		// it would be endless cycle
-		if (session.getAttribute("email") != null) {
+		if (request.getAttribute("email") != null) {
 				logger.debug(email + " was authenticated");
 			// It redirects to new page with calculator without parametres email and
 			// password which more safety
