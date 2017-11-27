@@ -41,7 +41,9 @@ public class AuthFilter implements Filter {
 
 		// Logic begins
 		// if session has attribute login equals 'LOGIN' than user don't need to authorize
-		if (session.getAttribute("login") != null) {
+		if (session.getAttribute("login") != null
+				// It gives opportunity to sign in as another user
+				&& request.getParameter("email") == null) {
 			logger.debug("The filter did log in without email and password");
 			chain.doFilter(request, response);
 		} else {
