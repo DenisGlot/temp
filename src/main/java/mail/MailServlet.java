@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-import dao.UserController;
+import dao.controller.UserController;
 import dao.entity.User;
 import mail.send.Sender;
 import mail.validation.EmailValidation;

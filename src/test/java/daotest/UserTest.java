@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.UserController;
+import dao.controller.UserController;
 import dao.entity.User;
 import hash.Hashing;
 

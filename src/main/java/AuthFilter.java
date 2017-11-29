@@ -12,10 +12,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import dao.UserController;
+import dao.controller.UserController;
 import dao.entity.User;
 import hash.Hashing;
-import jdbc.JdbcTemplate;
 
 /**
  * This class is for authentication.

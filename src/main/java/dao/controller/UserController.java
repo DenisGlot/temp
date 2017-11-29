@@ -1,9 +1,9 @@
-package dao;
+package dao.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import dao.DAO;
 import dao.entity.User;
 import hash.Hashing;
 import jdbc.JdbcTemplate;

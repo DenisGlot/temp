@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -69,7 +68,8 @@ public class JdbcTemplate {
 	public boolean executeDDL(String myQuery) {
 		connectToDataBase();
 		try(Statement statement = con.createStatement()) {
-			return statement.execute(myQuery);
+		     statement.execute(myQuery);
+		     return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
