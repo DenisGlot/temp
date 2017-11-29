@@ -7,17 +7,18 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.DAOImpl;
 import dao.controller.UserController;
 import dao.entity.User;
 import hash.Hashing;
 
 public class UserTest {
 	
-	UserController uc = null;
+	DAOImpl<User, Integer> uc = null;
 	
 	@Before
 	public void init() {
-		uc = new UserController();
+		uc = new DAOImpl<>(User.class);
 	}
 
 	@Test

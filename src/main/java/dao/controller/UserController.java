@@ -8,6 +8,12 @@ import dao.entity.User;
 import hash.Hashing;
 import jdbc.JdbcTemplate;
 
+/**
+ * This class is deprecated 
+ * The new one to use is DAOImpl 
+ * @author Denis
+ *
+ */
 public class UserController implements DAO<User,Integer> {
 
 	JdbcTemplate jt;

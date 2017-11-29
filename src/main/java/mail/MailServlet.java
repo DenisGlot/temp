@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
+import dao.DAOImpl;
 import dao.controller.UserController;
 import dao.entity.User;
 import mail.send.Sender;
@@ -22,11 +23,11 @@ import mail.validation.EmailValidation;
 public class MailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private UserController uc = null;
+	private DAOImpl<User, Integer> dao = null;
 
 	public MailServlet() {
 		super();
-		uc = new UserController();
+		dao = new DAOImpl<>(User.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,7 +38,7 @@ public class MailServlet extends HttpServlet {
 		boolean validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
 		boolean checkOnUnique = false;
 		if (validation) {
-			if(uc.findByCriteria("email", toEmail)==null) {
+			if(dao.findByCriteria("email", toEmail)==null) {
 				checkOnUnique=true;
 				Sender.send(toEmail, passwordForClient);
 				saveInDataBase(toEmail, passwordForClient);
@@ -54,7 +55,7 @@ public class MailServlet extends HttpServlet {
 	}
 
 	private boolean saveInDataBase(String email, String password) {
-		return uc.save(new User(email, password));
+		return dao.save(new User(email, password));
 	}
 
 	private void doHtml(HttpServletRequest request, HttpServletResponse response, String toEmail, boolean validation,

@@ -9,21 +9,20 @@ import jdbc.JdbcTemplate;
 
 public class DAOImpl<E, K> implements DAO<E, K> {
 
-	JdbcTemplate jt;
+	private JdbcTemplate jt;
 
-	String nameOfTable;
+	private Class<E> type;
 
-	public DAOImpl() {
+	public DAOImpl(Class<E> type) {
 		jt = new JdbcTemplate();
+		this.type = type; 
 	}
 
 	@Override
 	public List<E> getALl() {
-		Class<E> type = null;
-		if (type.isInstance(User.class)) {
+		if (type.isAssignableFrom(User.class)) {
 			List<User> list = new ArrayList<User>();
-			nameOfTable = "ACCESS";
-			Object[][] obs = jt.executeSelect("select * from " + nameOfTable);
+			Object[][] obs = jt.executeSelect("select * from ACCESS");
 			for (int i = 0; i < obs[0].length; i++) {
 				list.add(new User((Integer) obs[i][0], (String) obs[i][1], (String) obs[i][2]));
 			}
@@ -35,8 +34,7 @@ public class DAOImpl<E, K> implements DAO<E, K> {
 
 	@Override
 	public E findById(K id) {
-		Class<E> type = null;
-		if (type.isInstance(User.class)) {
+		if (type.isAssignableFrom(User.class)) {
 			Object[][] obs = jt.executeSelect("select * from ACCESS where id =" + id);
 			if (obs == null) {
 				return null;
@@ -49,8 +47,7 @@ public class DAOImpl<E, K> implements DAO<E, K> {
 
 	@Override
 	public boolean update(E entity) {
-		Class<E> type = null;
-		if (type.isInstance(User.class)) {
+		if (type.isAssignableFrom(User.class)) {
 			return jt.executeDDL("update ACCESS set email = '" + ((User) entity).getId() + "',password ='"
 					+ Hashing.sha1(((User) entity).getPassword()) + "' where id =" + ((User) entity).getId());
 		} else {
@@ -60,8 +57,7 @@ public class DAOImpl<E, K> implements DAO<E, K> {
 
 	@Override
 	public boolean delete(E entity) {
-		Class<E> type = null;
-		if (type.isInstance(User.class)) {
+		if (type.isAssignableFrom(User.class)) {
 			return jt.executeDDL("delete from ACCESS where id =" + ((User) entity).getId());
 		} else {
 			throw new IllegalArgumentException("Type of entity doesn't exists");
@@ -70,8 +66,7 @@ public class DAOImpl<E, K> implements DAO<E, K> {
 
 	@Override
 	public E findByCriteria(String name, String like) {
-		Class<E> type = null;
-		if (type.isInstance(User.class)) {
+		if (type.isAssignableFrom(User.class)) {
 			Object[][] obs = jt.executePreparedSelect("select * from ACCESS where " + name + " = ?", like);
 			if (obs == null) {
 				return null;
@@ -88,8 +83,7 @@ public class DAOImpl<E, K> implements DAO<E, K> {
 
 	@Override
 	public boolean save(E entity) {
-		Class<E> type = null;
-		if (type.isInstance(User.class)) {
+		if (type.isAssignableFrom(User.class)) {
 			return jt.executeDDL("insert into ACCESS(email,password) values ('" + ((User) entity).getEmail() + "','"
 					+ Hashing.sha1(((User) entity).getPassword()) + "')");
 		} else {

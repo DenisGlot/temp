@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import dao.DAOImpl;
 import dao.controller.UserController;
 import dao.entity.User;
 import hash.Hashing;
@@ -26,7 +27,7 @@ public class AuthFilter implements Filter {
 
 	final Logger logger = Logger.getLogger(AuthFilter.class);
  
-    UserController uc;
+    private DAOImpl<User,Integer> dao;
  
 
 	@Override
@@ -76,7 +77,7 @@ public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 			logger.debug("***initialize AuthFilter");
-		uc = new UserController();
+		dao = new DAOImpl<>(User.class);
 	}
 	
 	@Override
@@ -84,7 +85,7 @@ public class AuthFilter implements Filter {
 			logger.debug("***destroy AuthFilter");
 	}
 	private boolean checkInDataBase(String email, String password) {
-		User user = uc.findByCriteria("email", email);
+		User user = dao.findByCriteria("email", email);
 		if(user == null) {
 			return false;
 		} 
