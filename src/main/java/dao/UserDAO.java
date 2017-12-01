@@ -39,6 +39,10 @@ public class UserDAO extends AbstractDAO<User, Integer>{
 
 	@Override
 	public User parseObjectsToEntity(Object[][] obs) {
+		System.out.println(obs);
+        System.out.println(obs[0][0]);
+        System.out.println(obs[0][1]);
+        System.out.println(obs[0][2]);
 		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
 	}
 
