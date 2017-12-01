@@ -88,6 +88,9 @@ public abstract class AbstractDAO<E,K> implements DAO<E,K> {
     	String sql = getSelectQuery();
         sql += " WHERE " + name +" = ?";
         Object[][] obs = jt.executePreparedSelect(sql,like);
+        if(obs == null) {
+        	return null;
+        }
         E entity = parseObjectsToEntity(obs);
         return entity;
     }
