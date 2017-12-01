@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-import dao.DAOImpl;
-import dao.controller.UserController;
+import dao.DAO;
+import dao.UserDAO;
 import dao.entity.User;
+import dao.factory.DAOFactory;
+import dao.factory.EntityName;
+import deprecated.DAOImpl;
+import deprecated.UserController;
 import mail.send.Sender;
 import mail.validation.EmailValidation;
 
@@ -23,11 +27,11 @@ import mail.validation.EmailValidation;
 public class MailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private DAOImpl<User, Integer> dao = null;
+	private DAO<User, Integer> dao = null;
 
 	public MailServlet() {
 		super();
-		dao = new DAOImpl<>(User.class);
+		dao = new DAOFactory().getDAO(EntityName.USER);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -12,9 +12,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import dao.DAOImpl;
-import dao.controller.UserController;
+import dao.DAO;
 import dao.entity.User;
+import dao.factory.DAOFactory;
+import dao.factory.EntityName;
+import deprecated.DAOImpl;
+import deprecated.UserController;
 import hash.Hashing;
 
 /**
@@ -27,7 +30,7 @@ public class AuthFilter implements Filter {
 
 	final Logger logger = Logger.getLogger(AuthFilter.class);
  
-    private DAOImpl<User,Integer> dao;
+    private DAO<User,Integer> dao;
  
 
 	@Override
@@ -77,7 +80,7 @@ public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 			logger.debug("***initialize AuthFilter");
-		dao = new DAOImpl<>(User.class);
+		dao = new DAOFactory().getDAO(EntityName.USER);
 	}
 	
 	@Override

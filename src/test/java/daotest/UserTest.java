@@ -7,9 +7,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.DAOImpl;
-import dao.controller.UserController;
 import dao.entity.User;
+import deprecated.DAOImpl;
+import deprecated.UserController;
 import hash.Hashing;
 
 public class UserTest {

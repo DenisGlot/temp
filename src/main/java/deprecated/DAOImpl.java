@@ -1,12 +1,19 @@
-package dao;
+package deprecated;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.DAO;
 import dao.entity.User;
 import hash.Hashing;
 import jdbc.JdbcTemplate;
-
+/**
+ * It was replaced by Factory method pattern
+ * @author Denis
+ *
+ * @param <E>
+ * @param <K>
+ */
 public class DAOImpl<E, K> implements DAO<E, K> {
 
 	private JdbcTemplate jt;
