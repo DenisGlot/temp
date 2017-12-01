@@ -13,30 +13,27 @@ public abstract class AbstractDAO<E,K> implements DAO<E,K> {
     }
 
 	/**
-     * ¬озвращает sql запрос дл€ получени€ всех записей.
+     * Returns the sql query to retrieve all rows
      * <p/>
      * SELECT * FROM [Table]
      */
     public abstract String getSelectQuery();
     
     /**
-     * ¬озвращает sql запрос дл€ дл€ обновлени€ записи.
-     * <p/>
-     * SELECT * FROM [Table]
+     *  Returns the sql query to update a entity in database
+     * 
      */
     public abstract String getUpdateQuery(E entity);
     
     /**
-     * ¬озвращает sql запрос дл€ удалени€ записи.
-     * <p/>
-     * SELECT * FROM [Table]
+     *  Returns the sql query to delete a entity in database
+    
      */
     public abstract String getDeleteQuery(E entity);
     
     /**
-     * ¬озвращает sql запрос дл€ вставки новой записи в базу данных.
-     * <p/>
-     * SELECT * FROM [Table]
+     *  Returns the sql query to insert a entity in database
+    
      */
     public abstract String getInsertQuery(E entity);
     
