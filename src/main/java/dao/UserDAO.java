@@ -25,7 +25,7 @@ public class UserDAO extends AbstractDAO<User, Integer>{
 
 	@Override
 	public String getInsertQuery(User entity) {
-		return "insert into ACCESS(email,password,groupid) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "', groupid = " + entity.getGroupid() + ")";
+		return "insert into ACCESS(email,password,groupid) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "'," + entity.getGroupid()+")";
 	}
 
 	@Override

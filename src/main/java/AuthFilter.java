@@ -20,6 +20,7 @@ import dao.factory.EntityName;
 import deprecated.DAOImpl;
 import deprecated.UserController;
 import hash.Hashing;
+import jdbc.JdbcTemplate;
 
 /**
  * This class is for authentication.
@@ -34,7 +35,7 @@ public class AuthFilter implements Filter {
 	private DAO<User, Integer> userDAO;
 	
 	private DAO<Role,Integer> roleDAO;
-
+	
 	private String role = null;
 
 	@Override
@@ -45,7 +46,6 @@ public class AuthFilter implements Filter {
 		String email = null;
 		String password = null;
 		logger.debug("Session Atribute = " + session.getAttribute("login"));
-
 		// Logic begins
 		// if session has attribute login equals 'LOGIN' than user don't need to
 		// authorize

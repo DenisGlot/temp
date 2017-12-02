@@ -29,7 +29,7 @@ public class JdbcTemplate {
 	protected Connection con = null;
 	private ResultSetHandler<Object[][]> h;
 
-	private static boolean tableIsCreated;
+	private static boolean tableIsNotCreated = true;
 
 	public JdbcTemplate() {
 		initFields();
@@ -165,15 +165,15 @@ public class JdbcTemplate {
 		// Because i don't know how to check on existing tables. So i wrote down a try
 		// catch
 		// It will work only once on deployment
-		if (!tableIsCreated) {
-			executeDDL("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64) not null, password varchar(64) not null, groupid integer not null, CONSTRAINT primary_key PRIMARY KEY (id))");
+		if (tableIsNotCreated) {
+			executeDDL("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64) not null, password varchar(64) not null, groupid integer default 2 not null, CONSTRAINT primary_key PRIMARY KEY (id))");
 			executeDDL("insert into ACCESS(email,password,groupid) values ('admin','" + Hashing.sha1("admin") + "',1)");
             executeDDL("insert into ACCESS(email,password,groupid) values ('iliya','" + Hashing.sha1("123456") + "',1)");
             executeDDL("insert into ACCESS(email,password,groupid) values ('denis','" + Hashing.sha1("123456") + "',1)");
             executeDDL("create table ROLES (id integer not null, role varchar(64) not null)");
             executeDDL("insert into ROLES(id, role) values (1,'admin')");
             executeDDL("insert into ROLES(id, role) values (2,'user')");
-			tableIsCreated = true;
+			tableIsNotCreated = false;
 		}
 	}
 	
