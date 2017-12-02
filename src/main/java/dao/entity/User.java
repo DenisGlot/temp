@@ -7,6 +7,8 @@ public class User {
 	private String email;
 	
 	private String password;
+	
+	private int groupid;
 
 	public User() {
 		
@@ -21,6 +23,20 @@ public class User {
 		this.id = id;
 		this.email = email;
 		this.password = password;
+	}
+	
+	public User(String email, String password, int groupid) {
+		this.email = email;
+		this.password = password;
+		this.groupid = groupid;
+	}
+
+	public User(int id, String email, String password, int groupid) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.groupid = groupid;
 	}
 
 	public int getId() {
@@ -45,6 +61,16 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	
+
+	public int getGroupid() {
+		return groupid;
+	}
+
+	public void setGroupid(int groupid) {
+		this.groupid = groupid;
 	}
 
 	@Override

@@ -22,10 +22,13 @@ public class CreateDB {
 			Class.forName(DRIVER);
 			connection = DriverManager.getConnection(JDBC_URL);
 			statement=connection.createStatement();
-			statement.execute("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64), password varchar(64), CONSTRAINT primary_key PRIMARY KEY (id))");
-			statement.execute("insert into ACCESS(email,password) values ('admin','" + Hashing.sha1("admin") + "')");
-            statement.execute("insert into ACCESS(email,password) values ('iliya','" + Hashing.sha1("123456") + "')");
-            statement.execute("insert into ACCESS(email,password) values ('denis','" + Hashing.sha1("123456") + "')");
+			statement.execute("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),email varchar(64) not null, password varchar(64) not null, groupid integer not null, CONSTRAINT primary_key PRIMARY KEY (id))");
+			statement.execute("insert into ACCESS(email,password,groupid) values ('admin','" + Hashing.sha1("admin") + "',1)");
+            statement.execute("insert into ACCESS(email,password,groupid) values ('iliya','" + Hashing.sha1("123456") + "',1)");
+            statement.execute("insert into ACCESS(email,password,groupid) values ('denis','" + Hashing.sha1("123456") + "',1)");
+            statement.execute("create table ROLES (id integer not null, role varchar(64) not null)");
+            statement.execute("insert into ROLES(id, role) values (1,'admin')");
+            statement.execute("insert into ROLES(id, role) values (2,'user')");
 		} catch (ClassNotFoundException e) {
 			System.err.println("Driver for derby not found!!!");
 			e.printStackTrace();

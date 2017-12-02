@@ -15,7 +15,7 @@ public class UserDAO extends AbstractDAO<User, Integer>{
 
 	@Override
 	public String getUpdateQuery(User entity) {
-		return "update ACCESS set email = '" + entity.getEmail() + "',password ='" + Hashing.sha1(entity.getPassword()) + "' where id =" + entity.getId();
+		return "update ACCESS set email = '" + entity.getEmail() + "',password ='" + Hashing.sha1(entity.getPassword()) + "', groupid = " + entity.getGroupid() + " where id =" + entity.getId();
 	}
 
 	@Override
@@ -25,25 +25,21 @@ public class UserDAO extends AbstractDAO<User, Integer>{
 
 	@Override
 	public String getInsertQuery(User entity) {
-		return "insert into ACCESS(email,password) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "')";
+		return "insert into ACCESS(email,password,groupid) values ('" + entity.getEmail() + "','" + Hashing.sha1(entity.getPassword()) + "', groupid = " + entity.getGroupid() + ")";
 	}
 
 	@Override
 	public List<User> parseObjectsToList(Object[][] obs) {
 		List<User> list = new ArrayList<>();
 		for(int i =0 ; i< obs[0].length;i++) {
-			list.add(new User((Integer)obs[i][0],(String) obs[i][1],(String) obs[i][2]));
+			list.add(new User((Integer)obs[i][0],(String) obs[i][1],(String) obs[i][2],(Integer) obs[i][3]));
 		}
 		return list;
 	}
 
 	@Override
 	public User parseObjectsToEntity(Object[][] obs) {
-		System.out.println(obs);
-        System.out.println(obs[0][0]);
-        System.out.println(obs[0][1]);
-        System.out.println(obs[0][2]);
-		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2]);
+		return new User((Integer)obs[0][0],(String)obs[0][1],(String)obs[0][2],(Integer) obs[0][3]);
 	}
 
 	

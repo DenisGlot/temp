@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import dao.DAO;
+import dao.entity.Role;
 import dao.entity.User;
 import dao.factory.DAOFactory;
 import dao.factory.EntityName;
@@ -29,9 +30,12 @@ import hash.Hashing;
 public class AuthFilter implements Filter {
 
 	final Logger logger = Logger.getLogger(AuthFilter.class);
- 
-    private DAO<User,Integer> dao;
- 
+
+	private DAO<User, Integer> userDAO;
+	
+	private DAO<Role,Integer> roleDAO;
+
+	private String role = null;
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -40,24 +44,26 @@ public class AuthFilter implements Filter {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		String email = null;
 		String password = null;
-			logger.debug("Session Atribute = " + session.getAttribute("login"));
+		logger.debug("Session Atribute = " + session.getAttribute("login"));
 
 		// Logic begins
-		// if session has attribute login equals 'LOGIN' than user don't need to authorize
+		// if session has attribute login equals 'LOGIN' than user don't need to
+		// authorize
 		if (session.getAttribute("login") != null
 				// It gives opportunity to sign in as another user
 				&& request.getParameter("email") == null) {
 			logger.debug("The filter did log in without email and password");
 			chain.doFilter(request, response);
 		} else {
-	    //Otherwise this logic checking in database email and password
-			try(PrintWriter out = response.getWriter();) {
+			// Otherwise this logic checking in database email and password
+			try (PrintWriter out = response.getWriter();) {
 				email = request.getParameter("email");
 				password = request.getParameter("password");
 				// if email and password is correct then we are going to page with calculator
 				if (email != null && password != null && checkInDataBase(email, password)) {
 					session.setAttribute("login", "LOGIN");
 					session.setAttribute("email", email);
+					session.setAttribute("role", role);
 					logger.debug("The filter did log in with email and password");
 					chain.doFilter(request, response);
 				} else {
@@ -73,29 +79,46 @@ public class AuthFilter implements Filter {
 					out.println("<a href=\"/\">Try again?</a>");
 					out.println("</body></html>");
 				}
-			} 
+			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-			logger.debug("***initialize AuthFilter");
-		dao = new DAOFactory().getDAO(EntityName.USER);
+		logger.debug("***initialize AuthFilter");
+		userDAO = new DAOFactory().getDAO(EntityName.USER);
+		roleDAO = new DAOFactory().getDAO(EntityName.ROLE);
 	}
-	
+
 	@Override
 	public void destroy() {
-			logger.debug("***destroy AuthFilter");
+		logger.debug("***destroy AuthFilter");
 	}
+    /**
+     * Checks in database on presence of user
+     * @param email
+     * @param password
+     * @return
+     */
 	private boolean checkInDataBase(String email, String password) {
-		User user = dao.findByCriteria("email", email);
-		if(user == null) {
+		User user = userDAO.findByCriteria("email", email);
+		if (user == null) {
 			return false;
-		} 
-		if(user.getEmail().equals(email) && user.getPassword().equals(Hashing.sha1(password))) {
+		}
+		if (user.getEmail().equals(email) && user.getPassword().equals(Hashing.sha1(password))) {
+            declareRoleOfUser(user);
 			return true;
 		}
 		return false;
+	}
+    /**
+     * Declares field role 
+     * @param user
+     */
+	private void declareRoleOfUser(User user) {
+         Role role = roleDAO.findById(user.getGroupid());
+         this.role = role.getRole();
 	}
 
 }

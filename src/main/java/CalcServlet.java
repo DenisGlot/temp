@@ -72,6 +72,7 @@ public class CalcServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
+		String role = (String) session.getAttribute("role");
 		// Set the response message's MIME type
 		response.setContentType("text/html;charset=UTF-8");
         // If current http request has email parameter then 
@@ -109,7 +110,10 @@ public class CalcServlet extends HttpServlet {
 				out.println("<body>");
 				out.println("<div id=\"mydiv\" class=\"box\">");
 				out.println("<h1>Calculator Pro</h1>");
-				if (email != null) {
+				if(role!=null && role.equals("admin")) {
+					out.println("<h2>Welcome, sir!</h2>");
+				} 
+				else if (email != null) {
 					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")==-1?email.length():email.indexOf("@")) + "</h2>");
 				}
 				out.println("<form id=\"myform\">");

@@ -59,7 +59,7 @@ public class MailServlet extends HttpServlet {
 	}
 
 	private boolean saveInDataBase(String email, String password) {
-		return dao.save(new User(email, password));
+		return dao.save(new User(email, password,1));
 	}
 
 	private void doHtml(HttpServletRequest request, HttpServletResponse response, String toEmail, boolean validation,
