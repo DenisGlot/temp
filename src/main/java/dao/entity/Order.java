@@ -11,6 +11,18 @@ public class Order {
 	private int userid;
 	
 	private Date orderDate;
+	
+	private Date shipperedDate;
+
+	public Order() {}
+	
+	public Order(int productid, int userid, Date orderDate, Date shipperedDate) {
+		super();
+		this.productid = productid;
+		this.userid = userid;
+		this.orderDate = orderDate;
+		this.shipperedDate = shipperedDate;
+	}
 
 	public int getOrderid() {
 		return orderid;
@@ -42,7 +54,13 @@ public class Order {
 
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
+	}
+
+	public Date getShipperedDate() {
+		return shipperedDate;
+	}
+
+	public void setShipperedDate(Date shipperedDate) {
+		this.shipperedDate = shipperedDate;
 	}  
-	
-	
 }

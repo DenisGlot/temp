@@ -3,8 +3,8 @@ package deprecated;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DAO;
 import dao.entity.User;
+import dao.superb.DAO;
 import hash.Hashing;
 import jdbc.JdbcTemplate;
 

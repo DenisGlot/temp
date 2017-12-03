@@ -12,11 +12,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import dao.DAO;
 import dao.entity.Role;
 import dao.entity.User;
 import dao.factory.DAOFactory;
 import dao.factory.EntityName;
+import dao.superb.DAO;
 import deprecated.DAOImpl;
 import deprecated.UserController;
 import hash.Hashing;

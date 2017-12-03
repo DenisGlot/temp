@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.entity.User;
+import dao.superb.AbstractDAO;
 import hash.Hashing;
 
 public class UserDAO extends AbstractDAO<User, Integer>{

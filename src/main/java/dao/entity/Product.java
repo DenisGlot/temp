@@ -18,14 +18,13 @@ public class Product {
 	
 	public Product() {}
 
-	public Product(Integer productid, int manufacturerid, String name, String description, long price, int quantity) {
-		super();
-		this.productid = productid;
-		this.suplierid = manufacturerid;
-		this.name = name;
-		this.description = description;
+	public Product(Integer categoryid, int suplierid,long price, int quantity, String name, String description ) {
+		this.categoryid = categoryid;
+		this.suplierid = suplierid;
 		this.price = price;
 		this.quantity = quantity;
+		this.name = name;
+		this.description = description;
 	}
 
 	public Integer getProductid() {

@@ -8,11 +8,21 @@ public class OrderDetails {
     
     private int userid;
     
-    private int price;
+    private long price;
     
     private int quantity;
     
-    private int discount;
+    private float discount;
+
+    public OrderDetails() {}        
+    
+	public OrderDetails(int orderid, int userid, long price, int quantity, float discount) {
+		this.orderid = orderid;
+		this.userid = userid;
+		this.price = price;
+		this.quantity = quantity;
+		this.discount = discount;
+	}
 
 	public int getOrderdetailsid() {
 		return orderdetailsid;
@@ -38,7 +48,7 @@ public class OrderDetails {
 		this.userid = userid;
 	}
 
-	public int getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
@@ -54,7 +64,7 @@ public class OrderDetails {
 		this.quantity = quantity;
 	}
 
-	public int getDiscount() {
+	public float getDiscount() {
 		return discount;
 	}
 

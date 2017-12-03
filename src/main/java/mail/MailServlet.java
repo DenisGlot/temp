@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-import dao.DAO;
 import dao.UserDAO;
 import dao.entity.User;
 import dao.factory.DAOFactory;
 import dao.factory.EntityName;
+import dao.superb.DAO;
 import deprecated.DAOImpl;
 import deprecated.UserController;
 import mail.send.Sender;

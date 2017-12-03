@@ -5,6 +5,7 @@ import java.util.List;
 
 import dao.entity.Role;
 import dao.entity.User;
+import dao.superb.AbstractDAO;
 import hash.Hashing;
 
 public class RoleDAO extends AbstractDAO<Role, Integer>{

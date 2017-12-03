@@ -7,6 +7,14 @@ public class Suplier {
 	private String name;
 	
 	private String description;
+	
+	public Suplier() {}
+
+	public Suplier(String name, String description) {
+		super();
+		this.name = name;
+		this.description = description;
+	}
 
 	public int getSuplierid() {
 		return suplierid;

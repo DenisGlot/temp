@@ -1,5 +1,5 @@
 package dao.factory;
 
 public enum EntityName {
-USER,ROLE
+USER,ROLE,ORDER,PRODUCT,ORDERDETAIL,CATEGORY,SUPLIER
 }
