@@ -1,24 +1,21 @@
 package dao.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Order {
 
 	private int orderid;
 	
-	private int productid;
-	
 	private int userid;
 	
-	private Date orderDate;
+	private Timestamp orderDate;
 	
-	private Date shipperedDate;
+	private Timestamp shipperedDate;
 
 	public Order() {}
 	
-	public Order(int productid, int userid, Date orderDate, Date shipperedDate) {
-		super();
-		this.productid = productid;
+	public Order(int userid, Timestamp orderDate, Timestamp shipperedDate) {
 		this.userid = userid;
 		this.orderDate = orderDate;
 		this.shipperedDate = shipperedDate;
@@ -32,14 +29,6 @@ public class Order {
 		this.orderid = orderid;
 	}
 
-	public int getProductid() {
-		return productid;
-	}
-
-	public void setProductid(int productid) {
-		this.productid = productid;
-	}
-
 	public int getUserid() {
 		return userid;
 	}
@@ -48,19 +37,19 @@ public class Order {
 		this.userid = userid;
 	}
 
-	public Date getOrderDate() {
+	public Timestamp getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(Timestamp orderDate) {
 		this.orderDate = orderDate;
 	}
 
-	public Date getShipperedDate() {
+	public Timestamp getShipperedDate() {
 		return shipperedDate;
 	}
 
-	public void setShipperedDate(Date shipperedDate) {
+	public void setShipperedDate(Timestamp shipperedDate) {
 		this.shipperedDate = shipperedDate;
 	}  
 }

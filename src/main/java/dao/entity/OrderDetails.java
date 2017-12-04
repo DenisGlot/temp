@@ -6,7 +6,7 @@ public class OrderDetails {
     
     private int orderid;
     
-    private int userid;
+    private int productid;
     
     private long price;
     
@@ -16,9 +16,9 @@ public class OrderDetails {
 
     public OrderDetails() {}        
     
-	public OrderDetails(int orderid, int userid, long price, int quantity, float discount) {
+	public OrderDetails(int orderid, int productid, long price, int quantity, float discount) {
 		this.orderid = orderid;
-		this.userid = userid;
+		this.productid = productid;
 		this.price = price;
 		this.quantity = quantity;
 		this.discount = discount;
@@ -40,16 +40,26 @@ public class OrderDetails {
 		this.orderid = orderid;
 	}
 
-	public int getUserid() {
-		return userid;
+	
+
+	public int getProductid() {
+		return productid;
 	}
 
-	public void setUserid(int userid) {
-		this.userid = userid;
+	public void setProductid(int productid) {
+		this.productid = productid;
 	}
 
 	public long getPrice() {
 		return price;
+	}
+
+	public void setPrice(long price) {
+		this.price = price;
+	}
+
+	public void setDiscount(float discount) {
+		this.discount = discount;
 	}
 
 	public void setPrice(int price) {

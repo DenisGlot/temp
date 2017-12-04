@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class OrderDAO extends AbstractDAO<Order, Integer>{
 
 	@Override
 	public String getUpdateQuery(Order entity) {
-		return "update ACCESS set orderid = '" + entity.getOrderid() + "',productid ='" + entity.getProductid() + "', userid = " + entity.getUserid() + ", orderdate = '" + entity.getOrderDate() + "', shippereddate = '" + entity.getShipperedDate() + "' where id =" + entity.getOrderid();
+		return "update ACCESS set userid = " + entity.getUserid() + ", orderdate = '" + entity.getOrderDate() + "', shippereddate = '" + entity.getShipperedDate() + "' where id =" + entity.getOrderid();
 	}
 
 	@Override
@@ -28,21 +29,21 @@ public class OrderDAO extends AbstractDAO<Order, Integer>{
 
 	@Override
 	public String getInsertQuery(Order entity) {
-		return "insert into ORDERS(productid, userid, orderdate,shippereddate) values(" + entity.getProductid() +", " + entity.getUserid() + ", " + entity.getOrderDate() + ", + " + entity.getShipperedDate() + ") ";
+		return "insert into ORDERS(userid, orderdate,shippereddate) values(" + entity.getUserid() + ", " + entity.getOrderDate() + ", + " + entity.getShipperedDate() + ") ";
 	}
 
 	@Override
 	public List<Order> parseObjectsToList(Object[][] obs) {
 		List<Order> list = new ArrayList<>();
 		for(int i =0 ; i< obs[0].length;i++) {
-			list.add(new Order((Integer)obs[i][0],(Integer) obs[i][1],(Date) obs[i][2],(Date) obs[i][3]));
+			list.add(new Order((Integer) obs[i][0],(Timestamp) obs[i][1],(Timestamp) obs[i][2]));
 		}
 		return list;
 	}
 
 	@Override
 	public Order parseObjectsToEntity(Object[][] obs) {
-		return new Order((Integer)obs[0][0],(Integer) obs[0][1],(Date) obs[0][2],(Date) obs[0][3]);
+		return new Order((Integer) obs[0][0],(Timestamp) obs[0][1],(Timestamp) obs[0][2]);
 	}
       
 }

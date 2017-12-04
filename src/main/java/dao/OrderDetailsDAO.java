@@ -16,7 +16,7 @@ public class OrderDetailsDAO extends AbstractDAO<OrderDetails, Integer>{
 
 	@Override
 	public String getUpdateQuery(OrderDetails entity) {
-		return "update ORDERDETAILS set orderid =" + entity.getOrderid() + ", userid = " + entity.getUserid() + " , price = " + entity.getPrice() + " , quantity = " + entity.getQuantity() + "discount = " + entity.getDiscount() + " where orderdetailsid = " + entity.getOrderdetailsid();
+		return "update ORDERDETAILS set orderid =" + entity.getOrderid() + ", userid = " + entity.getProductid() + " , price = " + entity.getPrice() + " , quantity = " + entity.getQuantity() + "discount = " + entity.getDiscount() + " where orderdetailsid = " + entity.getOrderdetailsid();
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class OrderDetailsDAO extends AbstractDAO<OrderDetails, Integer>{
 
 	@Override
 	public String getInsertQuery(OrderDetails entity) {
-		return "insert into orderdetailsid(orderid, userid , price , quantity , discount) values(" + entity.getOrderid() + "," + entity.getUserid() + ", " + entity.getPrice() + "," + entity.getQuantity() + "," + entity.getDiscount() + ")";
+		return "insert into orderdetailsid(orderid, userid , price , quantity , discount) values(" + entity.getOrderid() + "," + entity.getProductid() + ", " + entity.getPrice() + "," + entity.getQuantity() + "," + entity.getDiscount() + ")";
 	}
 
 	@Override
