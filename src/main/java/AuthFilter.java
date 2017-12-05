@@ -14,13 +14,10 @@ import org.apache.log4j.Logger;
 
 import dao.entity.Role;
 import dao.entity.User;
-import dao.factory.DAOFactory;
-import dao.factory.EntityName;
 import dao.superb.DAO;
-import deprecated.DAOImpl;
-import deprecated.UserController;
+import deprecated.deprecated_part2.dao.factory.DAOFactory;
+import deprecated.deprecated_part2.dao.factory.EntityName;
 import hash.Hashing;
-import jdbc.JdbcTemplate;
 
 /**
  * This class is for authentication.

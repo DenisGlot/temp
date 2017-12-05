@@ -2,22 +2,34 @@ package dao.entity;
 
 import java.sql.Timestamp;
 
+import dao.annotation.MyColumn;
+import dao.annotation.MyEntity;
+
+@MyEntity(tableName = "ACCESS")
 public class User {
 	
+	@MyColumn(columnName = "id",clazz = Integer.class)
 	private int id;
 	
+	@MyColumn(columnName = "firstname",clazz = String.class)
 	private String firstName;
 	
+	@MyColumn(columnName = "lastname",clazz = String.class)
 	private String lastName;
 	
+	@MyColumn(columnName = "dateofbirth",clazz = Timestamp.class)
 	private Timestamp dateOfBirth;
 	
+	@MyColumn(columnName = "address",clazz = String.class)
 	private String address;
 
+	@MyColumn(columnName = "email",clazz = String.class)
 	private String email;
 	
+	@MyColumn(columnName = "password",clazz = String.class)
 	private String password;
 	
+	@MyColumn(columnName = "groupid",clazz = Integer.class)
 	private int groupid;
 
 	public User() {

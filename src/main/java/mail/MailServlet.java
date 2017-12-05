@@ -10,13 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-import dao.UserDAO;
 import dao.entity.User;
-import dao.factory.DAOFactory;
-import dao.factory.EntityName;
 import dao.superb.DAO;
-import deprecated.DAOImpl;
-import deprecated.UserController;
+import deprecated.deprecated_part2.dao.UserDAO;
+import deprecated.deprecated_part2.dao.factory.DAOFactory;
+import deprecated.deprecated_part2.dao.factory.EntityName;
 import mail.send.Sender;
 import mail.validation.EmailValidation;
 

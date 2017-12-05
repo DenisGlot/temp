@@ -169,11 +169,11 @@ public class JdbcTemplate {
 		// catch
 		// It will work only once on deployment
 		if (tablesAreNotCreated) {
-            //ACCESS for Users
-			executeDDL("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),firstname varchar(45), lastname varchar(45), dateofbirth timestamp, address varchar(45), email varchar(64) not null, password varchar(64) not null, groupid integer not null, CONSTRAINT primary_key PRIMARY KEY (id))");
-			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('admin','adminof','" + new Timestamp(12312325325l) + "','Street','admin','" + Hashing.sha1("admin") + "',1)");
-			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Iliya','hash','" + new Timestamp(123123253252342342l) + "','Net','iliya','" + Hashing.sha1("123456") + "',1)");
-			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Denis','hash','" + new Timestamp(12312325325234l) + "','Street','denis','" + Hashing.sha1("123456") + "',1)");
+//            //ACCESS for Users
+//			executeDDL("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),firstname varchar(45), lastname varchar(45), dateofbirth timestamp, address varchar(45), email varchar(64) not null, password varchar(64) not null, groupid integer not null, CONSTRAINT primary_key PRIMARY KEY (id))");
+//			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('admin','adminof','" + new Timestamp(12312325325l) + "','Street','admin','" + Hashing.sha1("admin") + "',1)");
+//			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Iliya','hash','" + new Timestamp(123123253252342342l) + "','Net','iliya','" + Hashing.sha1("123456") + "',1)");
+//			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Denis','hash','" + new Timestamp(12312325325234l) + "','Street','denis','" + Hashing.sha1("123456") + "',1)");
 //            //ROLES
 //            executeDDL("create table ROLES (id integer not null, role varchar(64) not null)");
 //            executeDDL("insert into ROLES(id, role) values (1,'admin')");
