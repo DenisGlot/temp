@@ -29,6 +29,7 @@ public class JdbcTemplate {
 	private String jdbc_url = null;
 
 	protected Connection con = null;
+	
 	private ResultSetHandler<Object[][]> h;
 
 	private static boolean tablesAreNotCreated = true;
