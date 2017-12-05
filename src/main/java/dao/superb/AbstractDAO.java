@@ -87,8 +87,11 @@ public abstract class AbstractDAO<E,K> implements DAO<E,K> {
 	public E findByCriteria(String name, String like) {
     	String sql = getSelectQuery();
         sql += " WHERE " + name +" = ?";
+        System.out.println(sql);
         Object[][] obs = jt.executePreparedSelect(sql,like);
         if(obs == null || obs[0][0] == null) {
+        	
+        	System.out.println("Returns null");
         	return null;
         }
         

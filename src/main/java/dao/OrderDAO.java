@@ -36,14 +36,14 @@ public class OrderDAO extends AbstractDAO<Order, Integer>{
 	public List<Order> parseObjectsToList(Object[][] obs) {
 		List<Order> list = new ArrayList<>();
 		for(int i =0 ; i< obs[0].length;i++) {
-			list.add(new Order((Integer) obs[i][0],(Timestamp) obs[i][1],(Timestamp) obs[i][2]));
+			list.add(new Order((int) obs[i][0],(Timestamp) obs[i][1],(Timestamp) obs[i][2]));
 		}
 		return list;
 	}
 
 	@Override
 	public Order parseObjectsToEntity(Object[][] obs) {
-		return new Order((Integer) obs[0][0],(Timestamp) obs[0][1],(Timestamp) obs[0][2]);
+		return new Order((int) obs[0][0],(Timestamp) obs[0][1],(Timestamp) obs[0][2]);
 	}
       
 }

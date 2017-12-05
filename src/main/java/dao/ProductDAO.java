@@ -1,10 +1,8 @@
 package dao;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.entity.Order;
 import dao.entity.Product;
 import dao.superb.AbstractDAO;
 
@@ -34,14 +32,14 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
 	public List<Product> parseObjectsToList(Object[][] obs) {
 		List<Product> list = new ArrayList<>();
 		for(int i =0 ; i< obs[0].length;i++) {
-			list.add(new Product((Integer)obs[0][0],(Integer) obs[0][1],(Long) obs[0][2],(Integer) obs[0][3],(String) obs[0][4],(String) obs[0][5]));
+			list.add(new Product((int)obs[0][0],(int) obs[0][1],(long) obs[0][2],(int) obs[0][3],(String) obs[0][4],(String) obs[0][5]));
 		}
 		return list;
 	}
 
 	@Override
 	public Product parseObjectsToEntity(Object[][] obs) {
-		return new Product((Integer)obs[0][0],(Integer) obs[0][1],(Long) obs[0][2],(Integer) obs[0][3],(String) obs[0][4],(String) obs[0][5]);
+		return new Product((int)obs[0][0],(int) obs[0][1],(long) obs[0][2],(int) obs[0][3],(String) obs[0][4],(String) obs[0][5]);
 	}
 
 }

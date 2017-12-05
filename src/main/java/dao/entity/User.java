@@ -1,8 +1,18 @@
 package dao.entity;
 
+import java.sql.Timestamp;
+
 public class User {
 	
 	private int id;
+	
+	private String firstName;
+	
+	private String lastName;
+	
+	private Timestamp dateOfBirth;
+	
+	private String address;
 
 	private String email;
 	
@@ -30,10 +40,25 @@ public class User {
 		this.password = password;
 		this.groupid = groupid;
 	}
-
-	public User(int id, String email, String password, int groupid) {
-		super();
+	
+	public User(String firstname, String lastname, Timestamp dateOfBirth, String address, String email, String password,
+			int groupid) {
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
+		this.email = email;
+		this.password = password;
+		this.groupid = groupid;
+	}
+	
+	public User(int id, String firstname, String lastname, Timestamp dateOfBirth, String address, String email,
+			String password, int groupid) {
 		this.id = id;
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
 		this.email = email;
 		this.password = password;
 		this.groupid = groupid;
@@ -45,6 +70,38 @@ public class User {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstname) {
+		this.firstName = firstname;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastname) {
+		this.lastName = lastname;
+	}
+
+	public Timestamp getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Timestamp dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getEmail() {

@@ -18,7 +18,7 @@ public class Product {
 	
 	public Product() {}
 
-	public Product(Integer categoryid, int suplierid,long price, int quantity, String name, String description ) {
+	public Product(int categoryid, int suplierid,long price, int quantity, String name, String description ) {
 		this.categoryid = categoryid;
 		this.suplierid = suplierid;
 		this.price = price;

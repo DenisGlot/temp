@@ -11,7 +11,6 @@ public class Suplier {
 	public Suplier() {}
 
 	public Suplier(String name, String description) {
-		super();
 		this.name = name;
 		this.description = description;
 	}

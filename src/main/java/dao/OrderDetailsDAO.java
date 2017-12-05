@@ -33,15 +33,14 @@ public class OrderDetailsDAO extends AbstractDAO<OrderDetails, Integer>{
 	public List<OrderDetails> parseObjectsToList(Object[][] obs) {
 		List<OrderDetails> list = new ArrayList<>();
 		for(int i =0 ; i< obs[0].length;i++) {
-			list.add(new OrderDetails((Integer)obs[0][0],(Integer) obs[0][1],(Long) obs[0][2],(Integer) obs[0][3],(Float) obs[0][4]));
+			list.add(new OrderDetails((int)obs[0][0],(int) obs[0][1],(long) obs[0][2],(int) obs[0][3],(float) obs[0][4]));
 		}
 		return list;
 	}
 
 	@Override
 	public OrderDetails parseObjectsToEntity(Object[][] obs) {
-		// TODO Auto-generated method stub
-		return null;
+		return new OrderDetails((int)obs[0][0],(int) obs[0][1],(long) obs[0][2],(int) obs[0][3],(float) obs[0][4]);
 	}
 
 	

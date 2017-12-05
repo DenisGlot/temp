@@ -103,6 +103,7 @@ public class AuthFilter implements Filter {
      */
 	private boolean checkInDataBase(String email, String password) {
 		User user = userDAO.findByCriteria("email", email);
+		logger.debug(user);
 		if (user == null) {
 			return false;
 		}
