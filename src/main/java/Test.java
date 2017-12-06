@@ -6,11 +6,9 @@ public class Test {
 
 	public static void main(String[] args) {
 		MyDAO<User, Integer> dao  = new MyDAO<>(User.class);
-		dao.getALl();
+		System.out.println(dao.getALl());
+		System.out.println(dao.findById(1));
+		System.out.println(dao.findByCriteria("email", "denis"));
 	}
 
-}
-class Testic{
-	@MyColumn(columnName="field" , clazz = String.class)
-	public String field;
 }

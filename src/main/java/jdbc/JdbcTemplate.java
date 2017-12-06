@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -43,7 +44,7 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		createTables();
+//		createTables();
 	}
 	
 	/**
@@ -80,6 +81,22 @@ public class JdbcTemplate {
 			closeConnection();
 		}
 		return false;
+	}
+	
+	public boolean executePreparedDDLwithTimestamp(String myQuery,Timestamp time ) {
+		connectToDataBase();
+		try(PreparedStatement ps = con.prepareStatement(myQuery)){
+		      	ps.setObject(1, time);
+		      	ps.executeUpdate();
+		      	return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return false;
+		} finally {
+			closeConnection();
+		}
+		
 	}
 
 	/**
@@ -169,11 +186,11 @@ public class JdbcTemplate {
 		// catch
 		// It will work only once on deployment
 		if (tablesAreNotCreated) {
-//            //ACCESS for Users
-//			executeDDL("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),firstname varchar(45), lastname varchar(45), dateofbirth timestamp, address varchar(45), email varchar(64) not null, password varchar(64) not null, groupid integer not null, CONSTRAINT primary_key PRIMARY KEY (id))");
-//			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('admin','adminof','" + new Timestamp(12312325325l) + "','Street','admin','" + Hashing.sha1("admin") + "',1)");
-//			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Iliya','hash','" + new Timestamp(123123253252342342l) + "','Net','iliya','" + Hashing.sha1("123456") + "',1)");
-//			executeDDL("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Denis','hash','" + new Timestamp(12312325325234l) + "','Street','denis','" + Hashing.sha1("123456") + "',1)");
+            //ACCESS for Users
+			executeDDL("create table ACCESS (id integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),firstname varchar(45), lastname varchar(45), dateofbirth timestamp, address varchar(45), email varchar(64) not null, password varchar(64) not null, groupid integer not null, CONSTRAINT primary_key PRIMARY KEY (id))");
+			executePreparedDDLwithTimestamp("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('admin','adminof',?,'Street','admin','" + Hashing.sha1("admin") + "',1)",new Timestamp(123213412l));
+			executePreparedDDLwithTimestamp("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Iliya','hash',?,'Net','iliya','" + Hashing.sha1("123456") + "',1)",new Timestamp(123213412l));
+			executePreparedDDLwithTimestamp("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Denis','hash',?,'Street','denis','" + Hashing.sha1("123456") + "',1)",new Timestamp(123213412l));
 //            //ROLES
 //            executeDDL("create table ROLES (id integer not null, role varchar(64) not null)");
 //            executeDDL("insert into ROLES(id, role) values (1,'admin')");

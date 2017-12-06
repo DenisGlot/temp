@@ -5,20 +5,20 @@ import java.sql.Timestamp;
 import dao.annotation.MyColumn;
 import dao.annotation.MyEntity;
 
-@MyEntity(tableName = "ACCESS")
+@MyEntity(tableName = "ACCESS",id = "id")
 public class User {
 	
-	@MyColumn(columnName = "id",clazz = Integer.class)
-	private int id;
+	@MyColumn(columnName="id",clazz = Integer.class)
+	private Integer id;
 	
 	@MyColumn(columnName = "firstname",clazz = String.class)
-	private String firstName;
+	private String firstname;
 	
 	@MyColumn(columnName = "lastname",clazz = String.class)
-	private String lastName;
+	private String lastname;
 	
 	@MyColumn(columnName = "dateofbirth",clazz = Timestamp.class)
-	private Timestamp dateOfBirth;
+	private Timestamp dateofbirth;
 	
 	@MyColumn(columnName = "address",clazz = String.class)
 	private String address;
@@ -30,7 +30,7 @@ public class User {
 	private String password;
 	
 	@MyColumn(columnName = "groupid",clazz = Integer.class)
-	private int groupid;
+	private Integer groupid;
 
 	public User() {
 		
@@ -55,57 +55,57 @@ public class User {
 	
 	public User(String firstname, String lastname, Timestamp dateOfBirth, String address, String email, String password,
 			int groupid) {
-		this.firstName = firstname;
-		this.lastName = lastname;
-		this.dateOfBirth = dateOfBirth;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.dateofbirth = dateOfBirth;
 		this.address = address;
 		this.email = email;
 		this.password = password;
 		this.groupid = groupid;
 	}
 	
-	public User(int id, String firstname, String lastname, Timestamp dateOfBirth, String address, String email,
-			String password, int groupid) {
+	public User(Integer id, String firstname, String lastname, Timestamp dateOfBirth, String address, String email,
+			String password, Integer groupid) {
 		this.id = id;
-		this.firstName = firstname;
-		this.lastName = lastname;
-		this.dateOfBirth = dateOfBirth;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.dateofbirth = dateOfBirth;
 		this.address = address;
 		this.email = email;
 		this.password = password;
 		this.groupid = groupid;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return firstname;
 	}
 
 	public void setFirstName(String firstname) {
-		this.firstName = firstname;
+		this.firstname = firstname;
 	}
 
 	public String getLastName() {
-		return lastName;
+		return lastname;
 	}
 
 	public void setLastName(String lastname) {
-		this.lastName = lastname;
+		this.lastname = lastname;
 	}
 
 	public Timestamp getDateOfBirth() {
-		return dateOfBirth;
+		return dateofbirth;
 	}
 
 	public void setDateOfBirth(Timestamp dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+		this.dateofbirth = dateOfBirth;
 	}
 
 	public String getAddress() {
@@ -134,11 +134,11 @@ public class User {
 	
 	
 
-	public int getGroupid() {
+	public Integer getGroupid() {
 		return groupid;
 	}
 
-	public void setGroupid(int groupid) {
+	public void setGroupid(Integer groupid) {
 		this.groupid = groupid;
 	}
 
