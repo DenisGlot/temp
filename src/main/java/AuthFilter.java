@@ -15,8 +15,6 @@ import org.apache.log4j.Logger;
 import dao.entity.Role;
 import dao.entity.User;
 import dao.superb.DAO;
-import deprecated.deprecated_part2.dao.factory.DAOFactory;
-import deprecated.deprecated_part2.dao.factory.EntityName;
 import hash.Hashing;
 
 /**
@@ -84,8 +82,8 @@ public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		logger.debug("***initialize AuthFilter");
-		userDAO = new DAOFactory().getDAO(EntityName.USER);
-		roleDAO = new DAOFactory().getDAO(EntityName.ROLE);
+//		userDAO = new DAOFactory().getDAO(EntityName.USER);
+//		roleDAO = new DAOFactory().getDAO(EntityName.ROLE);
 	}
 
 	@Override

@@ -92,8 +92,8 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	}
 	
 	@Override
-	public E findByCriteria(String name, String like) {
-		Object[][] obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?",like);
+	public E findByCriteria(String name, Object like) {
+		Object[][] obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?",like.toString());
 		Object[] obsForInstance = new Object[obs[0].length];
 		for(int j = 0; j < obs[0].length;j++) {
 			obsForInstance[j] = obs[0][j];

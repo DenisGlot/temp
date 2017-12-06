@@ -14,6 +14,6 @@ public interface DAO<E,K> {
     E findById(K id);
     boolean update(E entity);
     boolean delete(E entity);
-    E findByCriteria(String name,String like);
+    E findByCriteria(String name,Object like);
     boolean save(E entity);
 }

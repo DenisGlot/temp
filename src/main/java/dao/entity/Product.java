@@ -1,24 +1,38 @@
 package dao.entity;
 
-public class Product {
-	
-	private Integer productid;
-	
-	private int suplierid;
-	
-	private int categoryid;
-	
-	private String name;
-	
-	private String description;
-	
-	private long price;
-	
-	private int quantity;
-	
-	public Product() {}
+import dao.annotation.MyColumn;
+import dao.annotation.MyEntity;
 
-	public Product(int categoryid, int suplierid,long price, int quantity, String name, String description ) {
+@MyEntity(id = "productid", tableName = "PRODUCTS")
+public class Product {
+
+	@MyColumn(clazz = Integer.class, columnName = "productid")
+	private Integer productid;
+
+	@MyColumn(clazz = Integer.class, columnName = "suplierid")
+	private Integer suplierid;
+
+	@MyColumn(clazz = Integer.class, columnName = "categoryid")
+	private Integer categoryid;
+
+	@MyColumn(clazz = Long.class, columnName = "price")
+	private Long price;
+
+	@MyColumn(clazz = Integer.class, columnName = "quantity")
+	private Integer quantity;
+
+	@MyColumn(clazz = String.class, columnName = "name")
+	private String name;
+
+	@MyColumn(clazz = String.class, columnName = "description")
+	private String description;
+
+	public Product() {
+	}
+
+	public Product(Integer productid,Integer categoryid, Integer suplierid, Long price, Integer quantity, String name,
+			String description) {
+		this.productid = productid;
 		this.categoryid = categoryid;
 		this.suplierid = suplierid;
 		this.price = price;
@@ -35,20 +49,19 @@ public class Product {
 		this.productid = productid;
 	}
 
-	public int getSuplierid() {
+	public Integer getSuplierid() {
 		return suplierid;
 	}
 
-	public void setSuplierid(int suplierid) {
+	public void setSuplierid(Integer suplierid) {
 		this.suplierid = suplierid;
 	}
-	
 
-	public int getCategoryid() {
+	public Integer getCategoryid() {
 		return categoryid;
 	}
 
-	public void setCategoryid(int categoryid) {
+	public void setCategoryid(Integer categoryid) {
 		this.categoryid = categoryid;
 	}
 
@@ -68,22 +81,53 @@ public class Product {
 		this.description = description;
 	}
 
-	public long getPrice() {
+	public Long getPrice() {
 		return price;
 	}
 
-	public void setPrice(long price) {
+	public void setPrice(Long price) {
 		this.price = price;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	
+
+	//Counts just name and productid
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((productid == null) ? 0 : productid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (productid == null) {
+			if (other.productid != null)
+				return false;
+		} else if (!productid.equals(other.productid))
+			return false;
+		return true;
+	}
 	
 	
 

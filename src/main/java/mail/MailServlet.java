@@ -12,9 +12,6 @@ import org.apache.commons.lang.RandomStringUtils;
 
 import dao.entity.User;
 import dao.superb.DAO;
-import deprecated.deprecated_part2.dao.UserDAO;
-import deprecated.deprecated_part2.dao.factory.DAOFactory;
-import deprecated.deprecated_part2.dao.factory.EntityName;
 import mail.send.Sender;
 import mail.validation.EmailValidation;
 
@@ -29,7 +26,7 @@ public class MailServlet extends HttpServlet {
 
 	public MailServlet() {
 		super();
-		dao = new DAOFactory().getDAO(EntityName.USER);
+//		dao = new DAOFactory().getDAO(EntityName.USER);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

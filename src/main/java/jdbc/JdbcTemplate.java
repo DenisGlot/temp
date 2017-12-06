@@ -191,13 +191,13 @@ public class JdbcTemplate {
 			executePreparedDDLwithTimestamp("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('admin','adminof',?,'Street','admin','" + Hashing.sha1("admin") + "',1)",new Timestamp(123213412l));
 			executePreparedDDLwithTimestamp("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Iliya','hash',?,'Net','iliya','" + Hashing.sha1("123456") + "',1)",new Timestamp(123213412l));
 			executePreparedDDLwithTimestamp("insert into ACCESS(firstname,lastname,dateofbirth,address,email,password,groupid) values ('Denis','hash',?,'Street','denis','" + Hashing.sha1("123456") + "',1)",new Timestamp(123213412l));
-//            //ROLES
-//            executeDDL("create table ROLES (id integer not null, role varchar(64) not null)");
-//            executeDDL("insert into ROLES(id, role) values (1,'admin')");
-//            executeDDL("insert into ROLES(id, role) values (2,'user')");
-//            //PRODUCTS
-//            executeDDL("create table PRODUCTS (productid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), categoryid integer, suplierid integer not null, price bigint, quantity integer, name varchar(45) not null, description varchar(255))");
-//            executeDDL("insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description) values(1,1,100500,1,'machine','makes super clean house')");
+            //ROLES
+            executeDDL("create table ROLES (id integer not null, role varchar(64) not null)");
+            executeDDL("insert into ROLES(id, role) values (1,'admin')");
+            executeDDL("insert into ROLES(id, role) values (2,'user')");
+            //PRODUCTS
+            executeDDL("create table PRODUCTS (productid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), categoryid integer, suplierid integer not null, price bigint, quantity integer, name varchar(45) not null, description varchar(255))");
+            executeDDL("insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description) values(1,1,100500,1,'machine','makes super clean house')");
 //            //ORDERS
 //            executeDDL("create table ORDERS (orderid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid integer, orderdate timestamp, shippereddate timestamp)");
 //            executeDDL("insert into ORDERS(userid,orderdate,shippereddate) values(1,'" + new Timestamp(1200000000l) + "', '" + new Timestamp(435346453324l) + "')");
