@@ -55,7 +55,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		List<E> list = new ArrayList<>();
 		Object[][] obs = jt.executeSelect("select * from " + tableName);
 		Object[] obsForInstance = new Object[obs[0].length];
-		
+		if(obs[0][0]==null) {
+			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
+			return null;
+		}
 		for (int i = 0; i < obs.length; i++) {
 			for(int j = 0; j < obs[0].length;j++) {
 				obsForInstance[j] = obs[i][j];
@@ -65,7 +68,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 					e.printStackTrace();
-					logger.error(e.getMessage());
+					logger.error(e.getMessage()+ " in " + type.getSimpleName());
 					return null;
 				}
 		}
@@ -76,8 +79,14 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	public E findById(K id) {
 		Object[][] obs = jt.executeSelect("select * from " + tableName + " where " + idName + " = " + id);
 		Object[] obsForInstance = new Object[obs[0].length];
+		if(obs[0][0]==null) {
+			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
+			return null;
+		}
 		for(int j = 0; j < obs[0].length;j++) {
 			obsForInstance[j] = obs[0][j];
+			if(tableName.equals("ORDERDETAILS"))
+			logger.debug(obs[0][j].toString() + obs[0][j].getClass().getSimpleName());
 		}
 		try {
 			Constructor<E> con = type.getConstructor(cArgs);
@@ -85,7 +94,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return null;
 		}
 	
@@ -95,6 +104,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	public E findByCriteria(String name, Object like) {
 		Object[][] obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?",like.toString());
 		Object[] obsForInstance = new Object[obs[0].length];
+		if(obs[0][0]==null) {
+			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
+			return null;
+		}
 		for(int j = 0; j < obs[0].length;j++) {
 			obsForInstance[j] = obs[0][j];
 		}
@@ -103,6 +116,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return null;
 		}
 	}
@@ -119,7 +133,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 				}
 			} catch (NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
-				logger.error(e.getMessage());
+				logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			}
 			i++;
 		}
@@ -127,7 +141,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			sb.append("where " + idName + " = " + entity.getClass().getDeclaredField(idName));
 		} catch (NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
 		}
 		return jt.executeDDL(sb.toString());
@@ -141,7 +155,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			sb.append(" where " + idName + " = " + entity.getClass().getDeclaredField(idName));
 		} catch (NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
 		}
 		return jt.executeDDL(sb.toString());
@@ -165,7 +179,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 				sb.append("values(" + entity.getClass().getDeclaredField(str) + (i ==nameOfColumns.length?") ":", "));
 			} catch (NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
-				logger.error(e.getMessage());
+				logger.error(e.getMessage()+ " in " + type.getSimpleName());
 				return false;
 			}
 			i++;
@@ -174,7 +188,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			sb.append("where " + idName + " = " + entity.getClass().getDeclaredField(idName));
 		} catch (NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();
-			logger.error(e.getMessage());
+			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
 		}
 		return jt.executeDDL(sb.toString());

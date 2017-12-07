@@ -13,7 +13,15 @@ import java.lang.annotation.Target;
  *
  */
 public @interface MyEntity {
+	/**
+	 * Name of table of entity
+	 * @return
+	 */
     public String tableName();
     
+    /**
+     * Name of id column in named table
+     * @return
+     */
     public String id();
 }
