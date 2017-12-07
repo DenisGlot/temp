@@ -26,6 +26,8 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	private Field[] fields;
 	
+	private Field fieldId = null;
+	
 	private Class[] cArgs;
 	
 	private String[] nameOfColumns;
@@ -39,10 +41,18 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		tableName = annotation.tableName();
 		idName = annotation.id();
 		fields = type.getDeclaredFields();
+		try {
+			fieldId = type.getDeclaredField(idName);
+			fieldId.setAccessible(true);
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage() + " in " + type.getName());
+		}
 		cArgs = new Class[fields.length];
 		nameOfColumns = new String[fields.length];
 		int i = 0;
 		for (Field field : fields) {
+			field.setAccessible(true);
 			MyColumn column = field.getAnnotation(MyColumn.class);
 			cArgs[i] = column.clazz();
 			nameOfColumns[i] = column.columnName();
@@ -64,6 +74,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 				obsForInstance[j] = obs[i][j];
 			}
 				try {
+					if(obs[i][0]==null) { continue;}
 					list.add(type.getConstructor(cArgs).newInstance(obsForInstance));
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -85,8 +96,6 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		}
 		for(int j = 0; j < obs[0].length;j++) {
 			obsForInstance[j] = obs[0][j];
-			if(tableName.equals("ORDERDETAILS"))
-			logger.debug(obs[0][j].toString() + obs[0][j].getClass().getSimpleName());
 		}
 		try {
 			Constructor<E> con = type.getConstructor(cArgs);
@@ -124,22 +133,30 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	@Override
 	public boolean update(E entity) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("update " + tableName + "set ");
+		sb.append("update " + tableName + " set ");
 		int i = 1;
-		for(String str : nameOfColumns) {
+		for(Field field : fields) {
+			if(i==1) {
+				i++;
+				continue;
+			}
+			MyColumn column = field.getAnnotation(MyColumn.class);
+			String str= column.columnName();
 			try {
-				if(!idName.equals(str)) {
-       				sb.append(str + " = '" + entity.getClass().getDeclaredField(str) + (i == nameOfColumns.length?"' ":"', "));
+				if(Number.class.isAssignableFrom(field.getType())) {
+					sb.append(str + " = " + field.get(entity) + (i == fields.length?" ":", "));
+				} else {
+					sb.append(str + " = '" + field.get(entity) + (i == fields.length?"' ":"', "));
 				}
-			} catch (NoSuchFieldException | SecurityException e) {
+			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			}
 			i++;
 		}
-	    try {
-			sb.append("where " + idName + " = " + entity.getClass().getDeclaredField(idName));
-		} catch (NoSuchFieldException | SecurityException e) {
+		try {
+			sb.append("where " + idName + " = " + fieldId.get(entity));
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
@@ -152,8 +169,8 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		StringBuffer sb = new StringBuffer();
 		sb.append("delete from " + tableName);
 		try {
-			sb.append(" where " + idName + " = " + entity.getClass().getDeclaredField(idName));
-		} catch (NoSuchFieldException | SecurityException e) {
+			sb.append(" where " + idName + " = " + fieldId.get(entity));
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
@@ -173,25 +190,28 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			}
 			i++;
 		}
+		sb.append("values(");
 		i = 1;
-		for (String str : nameOfColumns) {
+		for (Field field : fields) {
+			if(i==1) {
+				i++;
+				continue;
+			}
 			try {
-				sb.append("values(" + entity.getClass().getDeclaredField(str) + (i ==nameOfColumns.length?") ":", "));
-			} catch (NoSuchFieldException | SecurityException e) {
+				if(Number.class.isAssignableFrom(field.getType())) {
+					sb.append(field.get(entity) + (i == fields.length?") ":", "));
+				} else {
+					sb.append("'" + field.get(entity) + (i == fields.length?"') ":"', "));
+				}
+				
+			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage()+ " in " + type.getSimpleName());
 				return false;
 			}
 			i++;
 		}
-		try {
-			sb.append("where " + idName + " = " + entity.getClass().getDeclaredField(idName));
-		} catch (NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage()+ " in " + type.getSimpleName());
-			return false;
-		}
 		return jt.executeDDL(sb.toString());
 	}
-
+	
 }

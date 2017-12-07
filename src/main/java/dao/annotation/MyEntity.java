@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 /**
  * It's really important that fields, parameters in constructor of entities would be in the same order as columns in table 
+ * Do not forget that the id must be your first field because of performance in MyDAO#save and others DDL
  * @author Denis
  *
  */

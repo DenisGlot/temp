@@ -14,7 +14,7 @@ public class OrderDetails {
 	@MyColumn(clazz = Integer.class, columnName = "orderid")
     private Integer orderid;
     
-	@MyColumn(clazz = Integer.class, columnName = "priductid")
+	@MyColumn(clazz = Integer.class, columnName = "productid")
     private Integer productid;
     
 	@MyColumn(clazz = Long.class, columnName = "price")
@@ -142,5 +142,14 @@ public class OrderDetails {
 			return false;
 		return true;
 	}
+
+
+	@Override
+	public String toString() {
+		return "OrderDetails [orderdetailsid=" + orderdetailsid + ", orderid=" + orderid + ", productid=" + productid
+				+ ", price=" + price + ", quantity=" + quantity + ", discount=" + discount + "]";
+	}
+	
+	
 
 }

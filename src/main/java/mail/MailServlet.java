@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
+import dao.MyDAO;
 import dao.entity.User;
 import dao.superb.DAO;
 import mail.send.Sender;
@@ -26,7 +27,7 @@ public class MailServlet extends HttpServlet {
 
 	public MailServlet() {
 		super();
-//		dao = new DAOFactory().getDAO(EntityName.USER);
+		dao = new MyDAO<>(User.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,7 +45,7 @@ public class MailServlet extends HttpServlet {
 			}
 		}
 
-		doHtml(request, response, toEmail, validation, checkOnUnique);
+		sendHtmlToBrowser(request, response, toEmail, validation, checkOnUnique);
 		
 	}
 
@@ -52,17 +53,9 @@ public class MailServlet extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
-    /**
-     * Saves a user in database
-     * @param email
-     * @param password
-     * @return
-     */
-	private boolean saveInDataBase(String email, String password) {
-		return dao.save(new User(email, password,2));
-	}
+   
 
-	private void doHtml(HttpServletRequest request, HttpServletResponse response, String toEmail, boolean validation,
+	private void sendHtmlToBrowser(HttpServletRequest request, HttpServletResponse response, String toEmail, boolean validation,
 			boolean checkOnUnique) throws IOException {
 		try (PrintWriter out = response.getWriter()) {
 			out.println("<!DOCTYPE html>");
@@ -94,6 +87,16 @@ public class MailServlet extends HttpServlet {
 			out.println("</body>");
 			out.println("</html>");
 		}
+	}
+	
+	 /**
+     * Saves a user in database
+     * @param email
+     * @param password
+     * @return
+     */
+	private boolean saveInDataBase(String email, String password) {
+		return dao.save(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build());
 	}
 
 }

@@ -35,15 +35,6 @@ public class User {
 	public User() {
 		
 	}
-	//For right working MailServlet
-	public User(String email, String password, Integer groupid) {
-		super();
-		this.email = email;
-		this.password = password;
-		this.groupid = groupid;
-	}
-
-
 
 	public User(Integer id, String firstname, String lastname, Timestamp dateOfBirth, String address, String email,
 			String password, Integer groupid) {
@@ -164,6 +155,52 @@ public class User {
 
 	
 
+	//Builder
 	
+	public static Builder newBuilder() {
+        return new User().new Builder();
+    }
+	
+	public class Builder {
+
+        private Builder() {
+            // private constructor
+        }
+        
+        public Builder setId(Integer id) {
+            User.this.id = id;
+            return this;
+        }
+        
+        public Builder setFirstName(String firstname) {
+            User.this.firstname = firstname;
+            return this;
+        }
+        
+        public Builder setLastName(String lastname) {
+            User.this.lastname = lastname;
+            return this;
+        }
+        
+        public Builder setEmail(String email) {
+            User.this.email = email;
+            return this;
+        }
+        
+        public Builder setPassword(String password) {
+            User.this.password = password;
+            return this;
+        }
+        
+        public Builder setGruopId(Integer groupid) {
+            User.this.groupid = groupid;
+            return this;
+        }
+        
+        public User build() {
+            return User.this;
+        }
+        
+	}
 	
 }
