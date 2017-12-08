@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import cache.Cache;
 import dao.MyDAO;
 import dao.entity.Role;
 import dao.entity.User;
@@ -28,7 +29,9 @@ public class AuthFilter implements Filter {
 
 	final Logger logger = Logger.getLogger(AuthFilter.class);
 
-	private DAO<User, Integer> userDAO;
+	private MyDAO<User, Integer> userDAO;
+	
+	private Cache cache = null;
 	
 	private DAO<Role,Integer> roleDAO;
 	
@@ -85,6 +88,7 @@ public class AuthFilter implements Filter {
 		logger.debug("***initialize AuthFilter");
 		userDAO = new MyDAO<>(User.class);
 		roleDAO = new MyDAO<>(Role.class);
+		cache = new Cache();
 	}
 
 	@Override
@@ -98,7 +102,7 @@ public class AuthFilter implements Filter {
      * @return
      */
 	private boolean checkInDataBase(String email, String password) {
-		User user = userDAO.findByCriteria("email", email);
+		User user = cache.loadUser(email);
 		if (user == null) {
 			return false;
 		}

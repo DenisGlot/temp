@@ -20,6 +20,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.log4j.Logger;
 
+import exceptions.NotDeclaredConnection;
 import hash.Hashing;
 /**
  * Never forget that here i used the array with 100 rows in initResultSetHandler
@@ -54,20 +55,27 @@ public class JdbcTemplate {
 		createTables();
 	}
 	
+	public Connection getConnection() {
+		return con;
+	}
+	
 	/**
 	 * Declares connection
-	 * 
+	 * Be careful! Do not use it without method closeConnection
+	 * I made it public because i need it in class TransaqMaker
 	 * @return
 	 */
-	protected void connectToDataBase() {
+	public void connectToDataBase() {
 		try {
 			con = DriverManager.getConnection(jdbc_url);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
+			throw new NotDeclaredConnection();
 		}
 	}
-	private void closeConnection() {
+	
+	public void closeConnection() {
 		try {
 			con.close();
 		} catch (SQLException e) {
@@ -276,6 +284,7 @@ public class JdbcTemplate {
 		}
 
 	}
+	
 	
 	/**
 	 * Should be called just in createTables 
