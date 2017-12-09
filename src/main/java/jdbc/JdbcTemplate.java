@@ -64,6 +64,7 @@ public class JdbcTemplate {
 	 * Be careful! Do not use it without method closeConnection
 	 * I made it public because i need it in class TransaqMaker
 	 * @return
+	 * @throws RuneTime exception 
 	 */
 	public void connectToDataBase() {
 		try {

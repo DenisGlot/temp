@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import cache.Cache;
+import cache.realization.RoleCache;
+import cache.realization.UserCache;
 import dao.MyDAO;
 import dao.entity.Role;
 import dao.entity.User;
@@ -29,11 +31,10 @@ public class AuthFilter implements Filter {
 
 	final Logger logger = Logger.getLogger(AuthFilter.class);
 
-	private MyDAO<User, Integer> userDAO;
 	
-	private Cache cache = null;
+	private Cache<String, User> userCache;
 	
-	private DAO<Role,Integer> roleDAO;
+	private Cache<Integer, Role> roleCache;
 	
 	private String role = null;
 
@@ -86,9 +87,8 @@ public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		logger.debug("***initialize AuthFilter");
-		userDAO = new MyDAO<>(User.class);
-		roleDAO = new MyDAO<>(Role.class);
-		cache = new Cache();
+		userCache = new UserCache(User.class);
+		roleCache = new RoleCache(Role.class);
 	}
 
 	@Override
@@ -102,11 +102,11 @@ public class AuthFilter implements Filter {
      * @return
      */
 	private boolean checkInDataBase(String email, String password) {
-		User user = cache.loadUser(email);
+		User user = userCache.get(email);
 		if (user == null) {
 			return false;
 		}
-		if (user.getEmail().equals(email) && user.getPassword().equals(Hashing.sha1(password))) {
+		if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
             declareRoleOfUser(user);
 			return true;
 		}
@@ -117,8 +117,7 @@ public class AuthFilter implements Filter {
      * @param user
      */
 	private void declareRoleOfUser(User user) {
-         Role role = roleDAO.findById(user.getGroupid());
-         this.role = role.getRole();
+         this.role = roleCache.get(user.getGroupid()).getRole();
 	}
 
 }

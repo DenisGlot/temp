@@ -1,4 +1,4 @@
-package cache;
+package cache.wasNotUsed;
 
 public interface Transaction {
 

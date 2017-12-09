@@ -181,6 +181,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 
 	@Override
 	public boolean save(E entity) {
+		//Creating insert statement
         StringBuffer sb = new StringBuffer();
         sb.append("insert into " + tableName + "(");
         int i = 1;
@@ -198,7 +199,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 				continue;
 			}
 			try {
-				if(Number.class.isAssignableFrom(field.getType())) {
+				if(Number.class.isAssignableFrom(field.getType()) || field.get(entity)==null) {
 					sb.append(field.get(entity) + (i == fields.length?") ":", "));
 				} else {
 					sb.append("'" + field.get(entity) + (i == fields.length?"') ":"', "));
@@ -211,6 +212,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			}
 			i++;
 		}
+		logger.debug(sb.toString());
 		return jt.executeDDL(sb.toString());
 	}
 	

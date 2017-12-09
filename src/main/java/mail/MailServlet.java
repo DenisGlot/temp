@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
+import cache.Cache;
+import cache.realization.UserCache;
 import dao.MyDAO;
 import dao.entity.User;
 import dao.superb.DAO;
@@ -23,11 +25,11 @@ import mail.validation.EmailValidation;
 public class MailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private DAO<User, Integer> dao = null;
+	private Cache<String, User> userCache;
 
 	public MailServlet() {
 		super();
-		dao = new MyDAO<>(User.class);
+		userCache = new UserCache(User.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +40,7 @@ public class MailServlet extends HttpServlet {
 		boolean validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
 		boolean checkOnUnique = false;
 		if (validation) {
-			if(dao.findByCriteria("email", toEmail)==null) {
+			if(userCache.get(toEmail)==null) {
 				checkOnUnique=true;
 				Sender.send(toEmail, passwordForClient);
 				saveInDataBase(toEmail, passwordForClient);
@@ -96,7 +98,7 @@ public class MailServlet extends HttpServlet {
      * @return
      */
 	private boolean saveInDataBase(String email, String password) {
-		return dao.save(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build());
+		return userCache.save(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build());
 	}
 
 }
