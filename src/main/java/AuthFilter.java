@@ -15,10 +15,10 @@ import org.apache.log4j.Logger;
 import cache.Cache;
 import cache.realization.RoleCache;
 import cache.realization.UserCache;
+import dao.DAO;
 import dao.MyDAO;
 import dao.entity.Role;
 import dao.entity.User;
-import dao.superb.DAO;
 import hash.Hashing;
 
 /**

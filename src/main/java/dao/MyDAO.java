@@ -11,14 +11,16 @@ import org.apache.log4j.Logger;
 import dao.annotation.MyColumn;
 import dao.annotation.MyEntity;
 import dao.entity.User;
-import dao.superb.DAO;
 import jdbc.JdbcTemplate;
+import jdbc.SpecJdbcTemplate;
 
 public class MyDAO<E,K> implements DAO<E, K> {
 	
 	private final Logger logger = Logger.getLogger(MyDAO.class);
 	
 	private JdbcTemplate jt;
+	
+	public SpecJdbcTemplate sjt;
 	
 	private String tableName;
 	
@@ -36,6 +38,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	public MyDAO(Class<E> type) {
 		jt = new JdbcTemplate();
+		sjt = new SpecJdbcTemplate(jt);
 		this.type = type;
 		MyEntity annotation  = type.getAnnotation(MyEntity.class);
 		tableName = annotation.tableName();

@@ -71,8 +71,8 @@ public abstract class Cache<K, E> {
 				logger.debug(entity + "is not in database");
 				return null;
 			} else {
-				logger.debug(entity + "is in cach");
 				cache.put(id, entity);
+				logger.debug(entity + "is in cach");
 			}
 			
 		} 
@@ -114,13 +114,18 @@ public abstract class Cache<K, E> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param entity
+	 * @return True if it was saved in database.It does not depend on cache
+	 */
 	public boolean save(E entity) {
 		if (dao.save(entity)) {
 			try {
 				cache.put((K) fieldWithKey.get(entity), entity);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
-				logger.error(e.getMessage());
+				logger.error(e.getMessage() + type.getSimpleName() + " was saved in database, but was not saved in cache");
 			}
 			return true;
 		} else {

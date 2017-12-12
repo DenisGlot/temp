@@ -1,4 +1,4 @@
-package dao.superb;
+package dao;
 
 import java.util.List;
 

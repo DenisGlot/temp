@@ -3,84 +3,70 @@ package jdbc;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
+import dao.entity.User;
 import hash.Hashing;
 
 /**
- * Utility class
+ * This class is extension for JdbcTemplate,
+ * which consist the right method for authorization
  * @author Denis
  *
  */
-public class SpecJdbcTemplate extends JdbcTemplate {
+public class SpecJdbcTemplate {
+	
+	private final Logger logger = Logger.getLogger(JdbcTemplate.class);
+	
+	private JdbcTemplate jt;
 
-	public SpecJdbcTemplate() {
-		super();
+	public SpecJdbcTemplate(JdbcTemplate jt) {
+		this.jt = jt;
 	}
+
 	/**
-	 * specific method for calculator
+	 * Method for authorization.
+	 * It's thread-safe because  here is just one outer field
+	 * which is jt of class JdbcTemplate
 	 * 
 	 * @param email
 	 * @param password
 	 */
-	public boolean saveInDataBase(String email, String password) {
-        connectToDataBase();
-		try(Statement statement = con.createStatement()) {
-			statement.execute(
-					"insert into ACCESS(email,password) values ('" + email + "','" + Hashing.sha1(password) + "')");
-			return true;
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		} finally {
+	public boolean checkInDataBase(User user) {
+		synchronized (jt) {
+			jt.connectToDataBase();
+			String password2 = Hashing.sha1(user.getPassword());
+			PreparedStatement ps = null;
+			ResultSet rs = null;
 			try {
-				con.close();
+				ps = jt.con.prepareStatement(JdbcTemplate.FIND_WHERE);
+				ps.setString(1, user.getEmail());
+				ps.setString(2, password2);
+				rs = ps.executeQuery();
+				if (rs.next() == false) {
+					return false;
+				}
+				String result = rs.getString(1);
+				if (result != null && result.equals("OK")) {
+					return true;
+				} else {
+					return false;
+				}
 			} catch (SQLException e) {
 				logger.error(e.getMessage());
 				e.printStackTrace();
+			} finally {
+				try {
+					jt.con.close();
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					logger.error(e.getMessage());
+					e.printStackTrace();
+				}
 			}
+			return false;
 		}
-		return false;
-	}
-
-	/**
-	 * specific method for calculator
-	 * 
-	 * @param email
-	 * @param password
-	 */
-	public boolean checkInDataBase(String email, String password) {
-        connectToDataBase();
-		String password2 = Hashing.sha1(password);
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			ps = con.prepareStatement(FIND_WHERE);
-			ps.setString(1, email);
-			ps.setString(2, password2);
-			rs = ps.executeQuery();
-			if (rs.next() == false) {
-				return false;
-			}
-			String result = rs.getString(1);
-			if (result != null && result.equals("OK")) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		} finally {
-			try {
-				con.close();
-				ps.close();
-				rs.close();
-			} catch (SQLException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-		return false;
 	}
 }

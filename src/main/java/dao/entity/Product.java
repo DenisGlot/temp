@@ -19,6 +19,9 @@ public class Product {
 	private Long price;
 
 	@MyColumn(clazz = Integer.class, columnName = "quantity")
+	/**
+	 * It is amount of products that this e-shop has 
+	 */
 	private Integer quantity;
 
 	@MyColumn(clazz = String.class, columnName = "name")
@@ -127,6 +130,12 @@ public class Product {
 		} else if (!productid.equals(other.productid))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [productid=" + productid + ", suplierid=" + suplierid + ", categoryid=" + categoryid
+				+ ", price=" + price + ", quantity=" + quantity + ", name=" + name + "]";
 	}
 	
 	

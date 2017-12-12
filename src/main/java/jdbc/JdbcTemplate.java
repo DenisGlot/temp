@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import exceptions.NotDeclaredConnection;
 import hash.Hashing;
+import id_counter.OrderIdCounter;
 /**
  * Never forget that here i used the array with 100 rows in initResultSetHandler
  * So if database will grow you must increase the amount of rows
@@ -29,8 +30,9 @@ import hash.Hashing;
  *
  */
 public class JdbcTemplate {
-	// Specific query for calculator
-	protected static final String FIND_WHERE = "select 'OK' from ACCESS where email = ? and password = ?";
+	
+	//ACCESS is the table where stored all information about users
+	static final String FIND_WHERE = "select 'OK' from ACCESS where email = ? and password = ?";
 
 	final Logger logger = Logger.getLogger(JdbcTemplate.class);
 
@@ -256,6 +258,7 @@ public class JdbcTemplate {
 					"create table ORDERS (orderid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid integer, orderdate timestamp, shippereddate timestamp)");
 			executeDDL("insert into ORDERS(userid,orderdate,shippereddate) values(1,'" + new Timestamp(1200000000l)
 					+ "', '" + new Timestamp(435346453324l) + "')");
+			OrderIdCounter.orderid.incrementAndGet();
 			logger.debug("ORDERS was created");
 			}
 			

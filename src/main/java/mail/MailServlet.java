@@ -12,9 +12,9 @@ import org.apache.commons.lang.RandomStringUtils;
 
 import cache.Cache;
 import cache.realization.UserCache;
+import dao.DAO;
 import dao.MyDAO;
 import dao.entity.User;
-import dao.superb.DAO;
 import mail.send.Sender;
 import mail.validation.EmailValidation;
 
