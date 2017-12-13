@@ -1,11 +1,20 @@
 package scenario;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
 
 import cache.Cache;
 import cache.realization.UserCache;
 import cache.realization.simple.OrderCache;
+import cache.realization.simple.OrderDetailsCache;
+import cache.realization.simple.ProductCache;
+import dao.entity.Category;
 import dao.entity.Order;
 import dao.entity.OrderDetails;
 import dao.entity.Product;
@@ -22,13 +31,21 @@ import shopping_card.ShoppingCard;
  */
 public class Scenario {
 	
-	public UserCache userCache;
+	private final Logger logger = Logger.getLogger(Scenario.class);
 	
-	public OrderCache orderCache;
+	private UserCache userCache;
+	
+	private OrderCache orderCache;
+	
+	private OrderDetailsCache odCache;
+	
+	private ProductCache productCache;
 	
 	public Scenario() {
 		userCache = new UserCache(User.class);
 		orderCache = new OrderCache(Order.class);
+		odCache = new OrderDetailsCache(OrderDetails.class);
+		productCache = new ProductCache(Product.class);
 	}
 	
 	public boolean registerUser(User user) {
@@ -48,24 +65,50 @@ public class Scenario {
 		shoppingCard.addProduct(product, quantity);
 	}
 	
+	public void deleteFromBasket(ShoppingCard shoppingCard, Product product) {
+		shoppingCard.removeProduct(product);
+	}
+	
+	public void updateProductInBasket(ShoppingCard shoppingCard,Product product, Integer quantity) {
+		shoppingCard.setQuantityOfProducts(product, quantity);
+	}
+	
+	
 	/**
-	 * I use time to find the id from 
+	 * It works only with dao and cache yet
 	 * @param shoppingCard
-	 */
-	public void buyFromBasket(ShoppingCard shoppingCard) {
-		int orderid;
-		Timestamp time = new Timestamp(new Date().getTime());
+	 * @return true if order and orderDetails was saved in database
+ 	 */
+	public boolean buyFromBasket(ShoppingCard shoppingCard) {
+		int orderid = -1;
 		//The primary key will be created as new one in dao
-		Order order = new Order(1,shoppingCard.getUser().getId(),time,null);
+		Order order = new Order(1,shoppingCard.getUser().getId(),new Timestamp(new Date().getTime()),null);
 		
 		if(orderCache.save(order)) {
 			orderid=OrderIdCounter.orderid.incrementAndGet();
+			logger.debug(order + " was saved");
+		} else {
+			logger.error(order + "was not saved in database");
+	        return false;
 		}
-		//TODO I want to sleep zZZZZZZ
-//		for(Product product : shoppingCard.getProducts().)
-//		OrderDetails od = new OrderDetails(1, orderid, shoppingCard., price, quantity, discount)
+		for (Entry<Product, Integer> orderUnit : shoppingCard.getProducts().entrySet()) {
+			OrderDetails od = new OrderDetails(1, orderid, shoppingCard.getUser().getId(),
+					orderUnit.getKey().getPrice(), orderUnit.getValue(), (shoppingCard.getUser().getGroupid()==1?new BigDecimal(0.2):new BigDecimal(0)));
+			if(odCache.save(od)) {
+				logger.debug(od + "was saved in database");
+			} else {
+				logger.error(od + "was not saved in database");
+				return false;
+			}
+		}
+		return true;
 		
-		
+	}
+	
+	
+	public void showCatalog(Category category) {
+        List<Product> list;
+        
 	}
 
 }

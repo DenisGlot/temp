@@ -2,6 +2,7 @@ package cache;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
@@ -78,6 +79,15 @@ public abstract class Cache<K, E> {
 		} 
 			return entity;
 	}
+	
+	public List<E> getAllByCriteria(String name, Object like){
+		if(cache.size() >= DEFAULT_MAX_SIZE) {
+			cache = new ConcurrentHashMap<>();
+		}
+		List<E> list = dao.getAllByCriteria(name, like);
+		
+		return null;
+	}
 
 	public  boolean update(E entity) {
 		if (dao.update(entity)) {
@@ -120,6 +130,9 @@ public abstract class Cache<K, E> {
 	 * @return True if it was saved in database.It does not depend on cache
 	 */
 	public boolean save(E entity) {
+		if(cache.size() >= DEFAULT_MAX_SIZE) {
+			cache = new ConcurrentHashMap<>();
+		}
 		if (dao.save(entity)) {
 			try {
 				cache.put((K) fieldWithKey.get(entity), entity);

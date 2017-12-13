@@ -24,6 +24,7 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	private String tableName;
 	
+	//name of id of entity in database
 	private String idName;
 	
 	private Field[] fields;
@@ -67,6 +68,32 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	public List<E> getALl() {
 		List<E> list = new ArrayList<>();
 		Object[][] obs = jt.executeSelect("select * from " + tableName);
+		Object[] obsForInstance = new Object[obs[0].length];
+		if(obs[0][0]==null) {
+			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
+			return null;
+		}
+		for (int i = 0; i < obs.length; i++) {
+			for(int j = 0; j < obs[0].length;j++) {
+				obsForInstance[j] = obs[i][j];
+			}
+				try {
+					if(obs[i][0]==null) { continue;}
+					list.add(type.getConstructor(cArgs).newInstance(obsForInstance));
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					e.printStackTrace();
+					logger.error(e.getMessage()+ " in " + type.getSimpleName());
+					return null;
+				}
+		}
+		return list;
+	}
+	
+	@Override
+	public List<E> getAllByCriteria(String name,Object like){
+		List<E> list = new ArrayList<>();
+		Object[][] obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?", like.toString());
 		Object[] obsForInstance = new Object[obs[0].length];
 		if(obs[0][0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());

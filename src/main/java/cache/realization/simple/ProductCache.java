@@ -7,7 +7,10 @@ public class ProductCache extends SimpleLoading<Integer, Product>{
 
 	public ProductCache(Class<Product> type) {
 		super(type);
+		setMaxSize(256);
 	}
+	
+	
 
 	
 }

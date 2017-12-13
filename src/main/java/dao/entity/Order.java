@@ -104,6 +104,12 @@ public class Order {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Order [orderid=" + orderid + ", userid=" + userid + ", orderDate=" + orderDate + ", shipperedDate="
+				+ shipperedDate + "]";
+	}
 	
 	
 }
