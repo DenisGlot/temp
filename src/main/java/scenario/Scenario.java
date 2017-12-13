@@ -107,7 +107,6 @@ public class Scenario {
 	
 	
 	public void showCatalog(Category category) {
-        List<Product> list;
         
 	}
 
