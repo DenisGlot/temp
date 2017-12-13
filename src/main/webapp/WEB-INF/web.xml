@@ -4,55 +4,21 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  
   <filter>
     <filter-name>AuthFilt</filter-name>
     <filter-class>AuthFilter</filter-class>
   </filter>
   <filter-mapping>
-  
     <filter-name>AuthFilt</filter-name>
     <url-pattern>/calc</url-pattern>
   </filter-mapping>
   <servlet>
-    <description></description>
     <display-name>MailServlet</display-name>
     <servlet-name>MailServlet</servlet-name>
     <servlet-class>mail.MailServlet</servlet-class>
   </servlet>
-  
   <servlet-mapping>
     <servlet-name>MailServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
-  
-  <!-- Uncomment this only in case that annotation WevService is commented 
-		<servlet>
-		   <servlet-name>MySer</servlet-name> 
-		    <servlet-class>CalcServlet</servlet-class> 
-		</servlet> 
-		<servlet-mapping>
-		 <servlet-name>MySer</servlet-name>
-		  <url-pattern>/calc</url-pattern> 
-		</servlet-mapping> -->
-		
-  
-  <!-- For Security with realm, roles
-	<login-config>
-		<auth-method>BASIC</auth-method>
-		<realm-name>Test</realm-name>
-	</login-config>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>all</web-resource-name>
-			<url-pattern>/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>admin</role-name>
-		</auth-constraint>
-	</security-constraint>
-	<security-role>
-		<role-name>admin</role-name>
-	</security-role>
--->
 </web-app>

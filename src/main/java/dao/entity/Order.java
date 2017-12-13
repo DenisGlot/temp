@@ -15,6 +15,9 @@ public class Order {
 	@MyColumn(clazz = Integer.class, columnName = "userid")
 	private Integer userid;
 	
+	@MyColumn(clazz = Integer.class, columnName = "courierid")
+	private Integer courirerid;
+	
 	@MyColumn(clazz = Timestamp.class, columnName = "orderdate")
 	private Timestamp orderDate;
 	
@@ -60,6 +63,14 @@ public class Order {
 
 	public void setShipperedDate(Timestamp shipperedDate) {
 		this.shipperedDate = shipperedDate;
+	}
+	
+	public Integer getCourirerid() {
+		return courirerid;
+	}
+
+	public void setCourirerid(Integer courirerid) {
+		this.courirerid = courirerid;
 	}
 
 	@Override

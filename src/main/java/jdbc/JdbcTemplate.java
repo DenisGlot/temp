@@ -68,7 +68,7 @@ public class JdbcTemplate {
 	 * @return
 	 * @throws RuneTime exception 
 	 */
-	public void connectToDataBase() {
+	protected void connectToDataBase() {
 		try {
 			con = DriverManager.getConnection(jdbc_url);
 		} catch (SQLException e) {
@@ -78,7 +78,7 @@ public class JdbcTemplate {
 		}
 	}
 	
-	public void closeConnection() {
+	protected void closeConnection() {
 		try {
 			con.close();
 		} catch (SQLException e) {
@@ -255,8 +255,8 @@ public class JdbcTemplate {
 			// ORDERS
 			if(tableNotExist(metaData, "ORDERS")) {
 			executeDDL(
-					"create table ORDERS (orderid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid integer, orderdate timestamp, shippereddate timestamp)");
-			executeDDL("insert into ORDERS(userid,orderdate,shippereddate) values(1,'" + new Timestamp(1200000000l)
+					"create table ORDERS (orderid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), userid integer not null,courierid integer, orderdate timestamp, shippereddate timestamp)");
+			executeDDL("insert into ORDERS(userid,courierid,orderdate,shippereddate) values(1,1,'" + new Timestamp(1200000000l)
 					+ "', '" + new Timestamp(435346453324l) + "')");
 			OrderIdCounter.orderid.incrementAndGet();
 			logger.debug("ORDERS was created");
@@ -284,6 +284,14 @@ public class JdbcTemplate {
 			executeDDL("insert into CATEGORIES(name,description) values('Java','The best language ever, c# sucks')");
 			logger.debug("CATEGORIES was created");
 			}
+			//COURIERS
+			if(tableNotExist(metaData, "COURIERS")) {
+				executeDDL(
+						"create table COURIERS (courierid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), firstname varchar(45) not null, lastname varchar(45) not null, hiredate timestamp, birth timestamp)");
+				executeDDL("insert into COURIERS(firstname,lastname,hiredate,birth) values(1,1,'" + new Timestamp(1200000000l)
+						+ "', '" + new Timestamp(435346453324l) + "')");
+				logger.debug("COURIERS was created");
+				}
 			tablesAreNotCreated = false;
 		}
 

@@ -1,4 +1,4 @@
-package mail;
+package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,7 +42,7 @@ public class MailServlet extends HttpServlet {
 		if (validation) {
 			if(userCache.get(toEmail)==null) {
 				checkOnUnique=true;
-				Sender.send(toEmail, passwordForClient);
+				new Sender().sendPassword(toEmail, passwordForClient);
 				saveInDataBase(toEmail, passwordForClient);
 			}
 		}

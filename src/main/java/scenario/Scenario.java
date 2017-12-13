@@ -11,16 +11,19 @@ import org.apache.log4j.Logger;
 
 import cache.Cache;
 import cache.realization.UserCache;
+import cache.realization.simple.CourierCache;
 import cache.realization.simple.OrderCache;
 import cache.realization.simple.OrderDetailsCache;
 import cache.realization.simple.ProductCache;
 import dao.entity.Category;
+import dao.entity.Courier;
 import dao.entity.Order;
 import dao.entity.OrderDetails;
 import dao.entity.Product;
 import dao.entity.User;
 import hash.Hashing;
 import id_counter.OrderIdCounter;
+import mail.send.Sender;
 import shopping_card.ShoppingCard;
 
 /**
@@ -41,11 +44,14 @@ public class Scenario {
 	
 	private ProductCache productCache;
 	
+	private CourierCache courierCache;
+	
 	public Scenario() {
 		userCache = new UserCache(User.class);
 		orderCache = new OrderCache(Order.class);
 		odCache = new OrderDetailsCache(OrderDetails.class);
 		productCache = new ProductCache(Product.class);
+		courierCache = new CourierCache(Courier.class);
 	}
 	
 	public boolean registerUser(User user) {
@@ -106,8 +112,22 @@ public class Scenario {
 	}
 	
 	
-	public void showCatalog(Category category) {
-        
+	public List<Product> getCatalogByCategory(Category category) {
+        return productCache.getAllByCriteria("categoryid", category.getCategoryid());
+	}
+	
+	/**
+	 * saving time of sending to database and cache
+	 * @param courier
+	 * @param order
+	 */
+	public void sendProdutsToClient(Courier courier, Order order) {
+		order.setShipperedDate(new Timestamp(new Date().getTime()));
+	    orderCache.save(order);
+	}
+	
+	public void sendFeedBack(String message) {
+		new Sender().sendFeedBack(message);
 	}
 
 }

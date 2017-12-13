@@ -85,8 +85,7 @@ public abstract class Cache<K, E> {
 			cache = new ConcurrentHashMap<>();
 		}
 		List<E> list = dao.getAllByCriteria(name, like);
-		
-		return null;
+		return list;
 	}
 
 	public  boolean update(E entity) {
