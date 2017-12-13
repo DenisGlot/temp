@@ -44,14 +44,11 @@ public class Scenario {
 	
 	private ProductCache productCache;
 	
-	private CourierCache courierCache;
-	
 	public Scenario() {
 		userCache = new UserCache(User.class);
 		orderCache = new OrderCache(Order.class);
 		odCache = new OrderDetailsCache(OrderDetails.class);
 		productCache = new ProductCache(Product.class);
-		courierCache = new CourierCache(Courier.class);
 	}
 	
 	public boolean registerUser(User user) {
@@ -82,13 +79,14 @@ public class Scenario {
 	
 	/**
 	 * It works only with dao and cache yet
+	 * The courier is first
 	 * @param shoppingCard
 	 * @return true if order and orderDetails was saved in database
  	 */
 	public boolean buyFromBasket(ShoppingCard shoppingCard) {
 		int orderid = -1;
 		//The primary key will be created as new one in dao
-		Order order = new Order(1,shoppingCard.getUser().getId(),new Timestamp(new Date().getTime()),null);
+		Order order = new Order(1,1,shoppingCard.getUser().getId(),new Timestamp(new Date().getTime()),null);
 		
 		if(orderCache.save(order)) {
 			orderid=OrderIdCounter.orderid.incrementAndGet();
@@ -112,8 +110,8 @@ public class Scenario {
 	}
 	
 	
-	public List<Product> getCatalogByCategory(Category category) {
-        return productCache.getAllByCriteria("categoryid", category.getCategoryid());
+	public List<Product> getCatalogByCategory(int categoryid) {
+        return productCache.getAllByCriteria("categoryid", categoryid);
 	}
 	
 	/**

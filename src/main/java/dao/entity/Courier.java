@@ -22,4 +22,18 @@ public class Courier {
 	
 	@MyColumn(clazz = Timestamp.class, columnName = "birth")
 	private Timestamp birth;
+
+	
+	
+	public Courier() {}
+
+	public Courier(Integer courierid, String firstname, String lastname, Timestamp hiredate, Timestamp birth) {
+		this.courierid = courierid;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.hiredate = hiredate;
+		this.birth = birth;
+	}
+	
+	
 }

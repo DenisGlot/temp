@@ -288,7 +288,7 @@ public class JdbcTemplate {
 			if(tableNotExist(metaData, "COURIERS")) {
 				executeDDL(
 						"create table COURIERS (courierid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), firstname varchar(45) not null, lastname varchar(45) not null, hiredate timestamp, birth timestamp)");
-				executeDDL("insert into COURIERS(firstname,lastname,hiredate,birth) values(1,1,'" + new Timestamp(1200000000l)
+				executeDDL("insert into COURIERS(firstname,lastname,hiredate,birth) values('Vasya','Pupkin','" + new Timestamp(1200000000l)
 						+ "', '" + new Timestamp(435346453324l) + "')");
 				logger.debug("COURIERS was created");
 				}
@@ -326,5 +326,6 @@ public class JdbcTemplate {
 	    executeDDL("drop table ORDERS");
 	    executeDDL("drop table ORDERDETAILS");
 	    executeDDL("drop table CATEGORIES");
+	    executeDDL("drop table CoURIERS");
 	}
 }

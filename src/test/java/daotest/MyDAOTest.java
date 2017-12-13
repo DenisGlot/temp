@@ -87,11 +87,11 @@ public class MyDAOTest {
 	
 	@Test
 	public void order() {
-		assertEquals(daoOrder.findById(1), new Order(1,1,new Timestamp(1200000000l), new Timestamp(435346453324l)));
-		assertEquals(daoOrder.findByCriteria("userid", 1),new Order(1,1,new Timestamp(1200000000l), new Timestamp(435346453324l)));
-		assertTrue(daoOrder.save( new Order(1,1,new Timestamp(120000000000l), new Timestamp(435346453324l))));
+		assertEquals(daoOrder.findById(1), new Order(1,1,1,new Timestamp(1200000000l), new Timestamp(435346453324l)));
+		assertEquals(daoOrder.findByCriteria("userid", 1),new Order(1,1,1,new Timestamp(1200000000l), new Timestamp(435346453324l)));
+		assertTrue(daoOrder.save( new Order(1,1,1,new Timestamp(120000000000l), new Timestamp(435346453324l))));
 		Order order = daoOrder.findByCriteria("orderDate", new Timestamp(120000000000l));
-		assertEquals(order, new Order(order.getOrderid(),1,new Timestamp(120000000000l), new Timestamp(435346453324l)));
+		assertEquals(order, new Order(order.getOrderid(),1,1,new Timestamp(120000000000l), new Timestamp(435346453324l)));
 		order.setOrderDate(new Timestamp(213423423498324l));
 		assertTrue(daoOrder.update(order));
 		assertEquals(daoOrder.findById(order.getOrderid()),order);

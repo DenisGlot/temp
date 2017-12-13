@@ -26,12 +26,16 @@ public class Order {
 
 	public Order() {}
 	
-	public Order(Integer orderid,Integer userid, Timestamp orderDate, Timestamp shipperedDate) {
+	
+	public Order(Integer orderid, Integer userid, Integer courirerid, Timestamp orderDate, Timestamp shipperedDate) {
+		super();
 		this.orderid = orderid;
 		this.userid = userid;
+		this.courirerid = courirerid;
 		this.orderDate = orderDate;
 		this.shipperedDate = shipperedDate;
 	}
+
 
 	public Integer getOrderid() {
 		return orderid;
