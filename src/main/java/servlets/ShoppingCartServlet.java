@@ -8,30 +8,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.derby.iapi.util.StringUtil;
 import org.apache.log4j.Logger;
 
+import cache.realization.simple.OrderCache;
 import cache.realization.simple.ProductCache;
-import cache.realization.simple.SuplierCache;
-import dao.MyDAO;
 import dao.entity.Product;
-import dao.entity.Suplier;
-import scenario.Scenario;
 
-public class ItemServlet extends HttpServlet {
-	private static final long serialVersionUID = 1234234534L;
+public class ShoppingCartServlet extends HttpServlet {
+	private static final long serialVersionUID = 13453441243L;
 	
-	private final Logger logger = Logger.getLogger(ItemServlet.class);
+	private final Logger logger = Logger.getLogger(ShoppingCartServlet.class);
 	
-	private ProductCache productCache;
-	
-	private SuplierCache suplierCache;
+	private OrderCache orderCache;
        
-    public ItemServlet() {
+    public ShoppingCartServlet() {
         super();
-        productCache = new ProductCache(Product.class);
-        suplierCache = new SuplierCache(Suplier.class);
+        orderCache = new OrderCache(Order.class);
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -91,6 +83,5 @@ public class ItemServlet extends HttpServlet {
 				out.println("</html>");
 			}
 		}
-	}
 
 }

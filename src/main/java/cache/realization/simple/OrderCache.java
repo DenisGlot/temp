@@ -1,6 +1,5 @@
 package cache.realization.simple;
 
-import cache.Cache;
 import cache.realization.SimpleLoading;
 import dao.entity.Order;
 
