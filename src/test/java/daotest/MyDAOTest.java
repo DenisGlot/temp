@@ -74,11 +74,11 @@ public class MyDAOTest {
 	
 	@Test
 	public void product() {
-		assertEquals(daoProduct.findById(1), new Product(1,1,1,100500L,1,"machine","makes super clean house"));
-		assertEquals(daoProduct.findByCriteria("price", 100500), new Product(1,1,1,100500L,1,"machine","makes super clean house"));
-		assertTrue(daoProduct.save( new Product(1,1,1,100500L,1,"notebook","Super cheap notebook")));
+		assertEquals(daoProduct.findById(1), new Product(1,1,1,100500L,1,"machine","makes super clean house","https://designmodo.com/demo/shopping-cart/item-2.png"));
+		assertEquals(daoProduct.findByCriteria("price", 100500), new Product(1,1,1,100500L,1,"machine","makes super clean house","https://designmodo.com/demo/shopping-cart/item-2.png"));
+		assertTrue(daoProduct.save( new Product(1,1,1,100500L,1,"notebook","Super cheap notebook","http://deneg.net")));
 		Product notebook = daoProduct.findByCriteria("name", "notebook");
-		assertEquals(notebook, new Product(notebook.getProductid(),1,1,100500L,1,"notebook","Super cheap notebook"));
+		assertEquals(notebook, new Product(notebook.getProductid(),1,1,100500L,1,"notebook","Super cheap notebook","http://deneg.net"));
 		notebook.setDescription("Not cheap anymore");
 		assertTrue(daoProduct.update(notebook));
 		assertEquals(daoProduct.findById(notebook.getProductid()),notebook);

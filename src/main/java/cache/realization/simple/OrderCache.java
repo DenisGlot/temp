@@ -8,5 +8,4 @@ public class OrderCache extends SimpleLoading<Integer,Order> {
 	public OrderCache(Class<Order> type) {
 		super(type);
 	}
-
 }

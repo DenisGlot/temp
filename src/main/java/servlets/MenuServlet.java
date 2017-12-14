@@ -10,11 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.entity.Product;
+import prefix.Prefix;
 import scenario.Scenario;
 
 @WebServlet("/menu")
 public class MenuServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 113412341243L;
 	
 	private Scenario scenario;
        
@@ -48,7 +49,7 @@ public class MenuServlet extends HttpServlet {
 		    out.println(" <h1>Catalog</h1><br/>");
 		    out.println(" <div class=\"catalog\">");
 		    for(Product product : scenario.getCatalogByCategory(1)) {
-		    	out.println("<div class=\"item\">" + product.getName() + "<br/><a href=\"/item?product=" + product.getProductid() + "\">See Details</a></div>");
+		    	out.println("<div class=\"item\">" + product.getName() + "<br/><a href=\"" + Prefix.prefix  + "/item?product=" + product.getProductid() + "\">See Details</a></div>");
 		    }
 		    out.println("");
 			out.println("</div>");

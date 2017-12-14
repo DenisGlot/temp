@@ -29,12 +29,15 @@ public class Product {
 
 	@MyColumn(clazz = String.class, columnName = "description")
 	private String description;
+	
+	@MyColumn(clazz = String.class, columnName = "urlofimg")
+	private String urlofimg;
 
 	public Product() {
 	}
 
 	public Product(Integer productid,Integer categoryid, Integer suplierid, Long price, Integer quantity, String name,
-			String description) {
+			String description,String urlofimg) {
 		this.productid = productid;
 		this.categoryid = categoryid;
 		this.suplierid = suplierid;
@@ -42,6 +45,7 @@ public class Product {
 		this.quantity = quantity;
 		this.name = name;
 		this.description = description;
+		this.urlofimg = urlofimg;
 	}
 
 	public Integer getProductid() {
@@ -98,6 +102,14 @@ public class Product {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+	
+	public String getUrlofimg() {
+		return urlofimg;
+	}
+
+	public void setUrlofimg(String urlofimg) {
+		this.urlofimg = urlofimg;
 	}
 
 	//Counts just name and productid

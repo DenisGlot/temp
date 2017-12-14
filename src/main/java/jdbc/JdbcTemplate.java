@@ -54,6 +54,7 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
+//		dropTables();
 		createTables();
 	}
 	
@@ -246,9 +247,9 @@ public class JdbcTemplate {
 			// PRODUCTS
 			if(tableNotExist(metaData, "PRODUCTS")) {
 			executeDDL(
-					"create table PRODUCTS (productid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), categoryid integer, suplierid integer not null, price bigint, quantity integer, name varchar(45) not null, description varchar(255))");
+					"create table PRODUCTS (productid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), categoryid integer, suplierid integer not null, price bigint, quantity integer, name varchar(45) not null, description varchar(255),urlofimg varchar(255))");
 			executeDDL(
-					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description) values(1,1,100500,1,'machine','makes super clean house')");
+					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,100500,1,'machine','makes super clean house','https://designmodo.com/demo/shopping-cart/item-2.png')");
 			logger.debug("PRODUCTS was created");
 			}
 			
@@ -319,6 +320,7 @@ public class JdbcTemplate {
 	 * Because the database id embedded
 	 */
 	private void dropTables() {
+		logger.debug("Droping Tables");
 	    executeDDL("drop table ACCESS");
 	    executeDDL("drop table ROLES");
 	    executeDDL("drop table PRODUCTS");

@@ -22,22 +22,11 @@
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
   <servlet>
-    <display-name>ItemServlet</display-name>
-    <servlet-name>ItemServlet</servlet-name>
-    <servlet-class>servlets.ItemServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ItemServlet</servlet-name>
-    <url-pattern>/ItemServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ShoppingCartServlet</display-name>
     <servlet-name>ShoppingCartServlet</servlet-name>
     <servlet-class>servlets.ShoppingCartServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ShoppingCartServlet</servlet-name>
-    <url-pattern>/ShoppingCartServlet</url-pattern>
+    <url-pattern>/shoppingcart</url-pattern>
   </servlet-mapping>
 </web-app>

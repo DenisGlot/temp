@@ -104,7 +104,11 @@ public class Scenario {
 				logger.error(od + "was not saved in database");
 				return false;
 			}
-		}
+			// Deleting from database quantity that was bought
+			Product product = orderUnit.getKey();
+			product.setQuantity(product.getQuantity()-orderUnit.getValue());
+			productCache.update(product);
+			}
 		return true;
 		
 	}
