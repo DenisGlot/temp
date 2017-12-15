@@ -21,6 +21,8 @@ import dao.MyDAO;
 import dao.entity.Role;
 import dao.entity.User;
 import hash.Hashing;
+import prefix.Prefix;
+import scenario.Scenario;
 
 /**
  * This class is for authentication.
@@ -33,7 +35,9 @@ public class AuthFilter implements Filter {
 	final Logger logger = Logger.getLogger(AuthFilter.class);
 
 	
-	private Cache<String, User> userCache;
+	private Scenario scenario;
+	
+	private UserCache userCache;
 	
 	private Cache<Integer, Role> roleCache;
 	
@@ -59,6 +63,7 @@ public class AuthFilter implements Filter {
 			// Otherwise this logic checking in database email and password
 			try (PrintWriter out = response.getWriter();) {
 				email = request.getParameter("email");
+				logger.debug("The email is " + email);
 				password = request.getParameter("password");
 				// if email and password is correct then we are going to page with calculator
 				if (email != null && password != null && checkInDataBase(email, password)) {
@@ -77,7 +82,7 @@ public class AuthFilter implements Filter {
 					out.println("</head>");
 					out.println("<body>");
 					out.println("<h1>username or password is not correct</h1>");
-					out.println("<a href=\"/\">Try again?</a>");
+					out.println("<a href=\"" + Prefix.prefix + "/signin.html\">Login?</a>");
 					out.println("</body></html>");
 				}
 			}
@@ -90,6 +95,7 @@ public class AuthFilter implements Filter {
 		logger.debug("***initialize AuthFilter");
 		userCache = new UserCache(User.class);
 		roleCache = new RoleCache(Role.class);
+		scenario = new Scenario();
 	}
 
 	@Override
@@ -107,7 +113,7 @@ public class AuthFilter implements Filter {
 		if (user == null) {
 			return false;
 		}
-		if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+		if (scenario.authorization(user, userCache)) {
             declareRoleOfUser(user);
 			return true;
 		}

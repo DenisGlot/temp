@@ -249,7 +249,7 @@ public class JdbcTemplate {
 			executeDDL(
 					"create table PRODUCTS (productid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), categoryid integer, suplierid integer not null, price bigint, quantity integer, name varchar(45) not null, description varchar(255),urlofimg varchar(255))");
 			executeDDL(
-					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,100500,1,'machine','makes super clean house','https://designmodo.com/demo/shopping-cart/item-2.png')");
+					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,100500,5,'machine','makes super clean house','https://designmodo.com/demo/shopping-cart/item-2.png')");
 			logger.debug("PRODUCTS was created");
 			}
 			

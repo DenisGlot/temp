@@ -22,23 +22,28 @@ import mail.validation.EmailValidation;
  * This servlet is supposed to send mail with login and password . url-pattern =
  * '/register'
  */
-public class MailServlet extends HttpServlet {
+public class MailServlet extends TemplateServlet {
 	private static final long serialVersionUID = 1L;
 
 	private Cache<String, User> userCache;
+	private String toEmail;
+	private String passwordForClient;
+	private boolean validation;
+	private boolean checkOnUnique;
 
 	public MailServlet() {
 		super();
 		userCache = new UserCache(User.class);
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		String toEmail = request.getParameter("mail");
-		String passwordForClient = RandomStringUtils.randomAlphanumeric(6);
-		boolean validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
-		boolean checkOnUnique = false;
+		toEmail = request.getParameter("mail");
+		passwordForClient = RandomStringUtils.randomAlphanumeric(6);
+		validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
+		checkOnUnique = false;
 		if (validation) {
 			if(userCache.get(toEmail)==null) {
 				checkOnUnique=true;
@@ -47,48 +52,45 @@ public class MailServlet extends HttpServlet {
 			}
 		}
 
-		sendHtmlToBrowser(request, response, toEmail, validation, checkOnUnique);
+		sendHtmlToBrowser(request, response);
 		
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
+	
+	@Override
+	protected String insertJs() {
+		return "sign";
 	}
-   
 
-	private void sendHtmlToBrowser(HttpServletRequest request, HttpServletResponse response, String toEmail, boolean validation,
-			boolean checkOnUnique) throws IOException {
-		try (PrintWriter out = response.getWriter()) {
-			out.println("<!DOCTYPE html>");
-			out.println("<html><head>");
-			out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
-			out.println("<script type=\"text/javascript\" src=\"sign.js\"></script>");
-			// For style
-			out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
-			//
-			out.println("<title>Registration</title></head>");
-			out.println("<body>");
-			out.println("<div class=\"box\">");
-			out.println("<form method=\"GET\">");
-			if (!validation || !checkOnUnique) {
-				out.println("<h1>On this email will be sent the password</h1>");
-				out.println("<input value =\"" + toEmail + "\" type=\"text\" name=\"mail\""
-						+ "onFocus=\"field_focus(this, 'email');\""
-						+ "onblur=\"field_blur(this, 'email');\" class=\"email\" />"
-						+ (validation ? (checkOnUnique ? "" : "<br/><em style=\"color:red;\">This email already exists</em>") 
-								                       : "<br/><em style=\"color:red;\">Please, write a valid email</em>"));
-				out.println("<input type=\"submit\" value=\"Send\" id=\"btn2\"/>");
-			} else {
-				out.println("<h1>Message with password was sent on your email!</h1> <br/>");
-				out.println("<a class=\"button\" href=\"/\">Go to Main page</a>");
-			}
-			out.println("</form>");
-			out.println("</div>");
-			out.println("</body>");
-			out.println("</html>");
+	@Override
+	protected String insertCss() {
+		return "style";
+	}
+
+	@Override
+	protected String insertTitle() {
+		return "Registration";
+	}
+
+	@Override
+	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
+			throws IOException {
+		out.println("<div class=\"box\">");
+		out.println("<form method=\"GET\">");
+		if (!validation || !checkOnUnique) {
+			out.println("<h1>On this email will be sent the password</h1>");
+			out.println("<input value =\"" + toEmail + "\" type=\"text\" name=\"mail\""
+					+ "onFocus=\"field_focus(this, 'email');\""
+					+ "onblur=\"field_blur(this, 'email');\" class=\"email\" />"
+					+ (validation ? (checkOnUnique ? "" : "<br/><em style=\"color:red;\">This email already exists</em>") 
+							                       : "<br/><em style=\"color:red;\">Please, write a valid email</em>"));
+			out.println("<input type=\"submit\" value=\"Send\" id=\"btn2\"/>");
+		} else {
+			out.println("<h1>Message with password was sent on your email!</h1> <br/>");
+			out.println("<a class=\"button\" href=\"/\">Go to Main page</a>");
 		}
+		out.println("</form>");
+		out.println("</div>");
+		
 	}
 	
 	 /**
@@ -100,5 +102,7 @@ public class MailServlet extends HttpServlet {
 	private boolean saveInDataBase(String email, String password) {
 		return userCache.save(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build());
 	}
+
+	
 
 }

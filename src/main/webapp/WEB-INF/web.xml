@@ -10,7 +10,8 @@
   </filter>
   <filter-mapping>
     <filter-name>AuthFilt</filter-name>
-    <url-pattern>/calc</url-pattern>
+    <url-pattern>/shoppingcart</url-pattern>
+    <url-pattern>/item</url-pattern>
   </filter-mapping>
   <servlet>
     <display-name>MailServlet</display-name>

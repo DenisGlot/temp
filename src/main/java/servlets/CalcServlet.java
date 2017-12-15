@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @WebServlet("/calc")
-public class CalcServlet extends HttpServlet {
+public class CalcServlet extends TemplateServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -39,12 +39,14 @@ public class CalcServlet extends HttpServlet {
 		super();
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 			logger.debug("I'm in doGet()");
 		sendHtmlToBrowser(request, response);
 	}
 
+	@Override
 	/**
 	 * I tried to catch exceptions from parsing JSON but try-catch can't catch
 	 * RunTimeException So in doGet method i made a check on right filling first
@@ -66,11 +68,24 @@ public class CalcServlet extends HttpServlet {
 		isPOST = true;
 		sendHtmlToBrowser(request, response);
 	}
+	
+	@Override
+	protected String insertJs() {
+		return "calculate";
+	}
 
-	private void sendHtmlToBrowser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@Override
+	protected String insertCss() {
+		return "style";
+	}
 
-			logger.debug("**** Starting sendHtmlToBrowser ******");
+	@Override
+	protected String insertTitle() {
+		return "Calculator";
+	}
 
+	@Override
+	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out) throws IOException {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		String role = (String) session.getAttribute("role");
@@ -96,47 +111,30 @@ public class CalcServlet extends HttpServlet {
 			}
 			
 			calculateResult();
-
-			// Sending html
-			try(PrintWriter out = response.getWriter()) {
-				out.println("<!DOCTYPE html>");
-				out.println("<html><head>");
-				out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-				// // I use ajax here.
-				out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
-				out.println("<script type=\"text/javascript\" src=\"calculate.js\"></script>");
-				//
-				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
-				out.println("<title>Calculator</title></head>");
-				out.println("<body>");
-				out.println("<div id=\"mydiv\" class=\"box\">");
-				out.println("<h1>Calculator Pro</h1>");
-				if(role!=null && role.equals("admin")) {
-					out.println("<h2>Welcome, sir!</h2>");
-				} 
-				else if (email != null) {
-					out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")==-1?email.length():email.indexOf("@")) + "</h2>");
-				}
-				out.println("<form id=\"myform\">");
-				out.println(
-						"<strong>First part</strong><input id=\"first\" class=\"email\" name=\"first\" type=\"text\" value=\""
-								+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"><br/> "
-								+ (er1 ? error : "") + "</em><br/>");
-				out.println(
-						"<strong>Second part</strong><input id = \"second\" class=\"email\" name=\"second\" type=\"text\" value = \""
-								+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\"><br/>"
-								+ (er2 ? error : "") + "</em><br/>");
-				out.println(selectShowPreviousOption(act));
-				out.println("<input type=\"submit\" value=\"Calculate\" id=\"btn2\"/><br/><br/><br/><br/>");
-				out.println("<h1>" + result + "</h1>");
-				out.println("</form>");
-				out.println("</div>");
-				out.println("</body>");
-				out.println("</html>");
+			
+			out.println("<div id=\"mydiv\" class=\"box\">");
+			if(role!=null && role.equals("admin")) {
+				out.println("<h2>Welcome, sir!</h2>");
 			} 
+			else if (email != null) {
+				out.println("<h2>You signed in as " + email.substring(0, email.indexOf("@")==-1?email.length():email.indexOf("@")) + "</h2>");
+			}
+			out.println("<form id=\"myform\">");
+			out.println(
+					"<strong>First part</strong><input id=\"first\" class=\"email\" name=\"first\" type=\"text\" value=\""
+							+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"><br/> "
+							+ (er1 ? error : "") + "</em><br/>");
+			out.println(
+					"<strong>Second part</strong><input id = \"second\" class=\"email\" name=\"second\" type=\"text\" value = \""
+							+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\"><br/>"
+							+ (er2 ? error : "") + "</em><br/>");
+			out.println(selectShowPreviousOption(act));
+			out.println("<input type=\"submit\" value=\"Calculate\" id=\"btn2\"/><br/><br/><br/><br/>");
+			out.println("<h1>" + result + "</h1>");
+			out.println("</form>");
+			out.println("</div>");
 			isPOST = false;
 		}
-			logger.debug("*****Done with sendHtmlToBrowser!");
 	}
 	
 	private void calculateResult() {
@@ -260,4 +258,6 @@ public class CalcServlet extends HttpServlet {
 		String selectEnd = select.substring(index);
 		return selectBegin + selected + selectEnd;
 	}
+
+	
 }

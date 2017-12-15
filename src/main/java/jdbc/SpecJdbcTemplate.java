@@ -17,7 +17,7 @@ import hash.Hashing;
  */
 public class SpecJdbcTemplate {
 	
-	private final Logger logger = Logger.getLogger(JdbcTemplate.class);
+	private final Logger logger = Logger.getLogger(SpecJdbcTemplate.class);
 	
 	private JdbcTemplate jt;
 
@@ -35,22 +35,24 @@ public class SpecJdbcTemplate {
 	 */
 	public boolean checkInDataBase(User user) {
 		synchronized (jt) {
+			System.out.println(user + "password = " +user.getPassword());
 			jt.connectToDataBase();
-			String password2 = Hashing.sha1(user.getPassword());
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
 				ps = jt.con.prepareStatement(JdbcTemplate.FIND_WHERE);
 				ps.setString(1, user.getEmail());
-				ps.setString(2, password2);
+				ps.setString(2, user.getPassword());
 				rs = ps.executeQuery();
 				if (rs.next() == false) {
+					logger.debug("resultset was null");
 					return false;
 				}
 				String result = rs.getString(1);
 				if (result != null && result.equals("OK")) {
 					return true;
 				} else {
+					logger.debug("user was not ok but was '" + result + "'");
 					return false;
 				}
 			} catch (SQLException e) {
