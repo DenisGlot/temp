@@ -30,4 +30,11 @@
     <servlet-name>ShoppingCartServlet</servlet-name>
     <url-pattern>/shoppingcart</url-pattern>
   </servlet-mapping>
+  <!-- Enable servlets as welcome files in Jetty -->
+<context-param>
+    <param-name>
+       org.eclipse.jetty.servlet.Default.welcomeServlets
+    </param-name>
+    <param-value>true</param-value>
+</context-param>
 </web-app>
