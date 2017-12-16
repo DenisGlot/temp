@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import dao.entity.Product;
+import math.Arithmetic;
 import prefix.Prefix;
 import scenario.Scenario;
 import shopping_card.ShoppingCard;
@@ -40,12 +41,13 @@ public class ShoppingCartServlet extends TemplateServlet {
 			throws ServletException, IOException {
 		JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
 		quantityString = data.get("quantity").getAsString();
+		logger.debug("The quantity was = " + quantityString);
 		doGet(request, response);
 	}
 
 	@Override
 	protected String insertJs() {
-		return "shoppingcart";
+		return null;
 	}
 
 	@Override
@@ -76,8 +78,9 @@ public class ShoppingCartServlet extends TemplateServlet {
 		if (isBought) {
 			out.println(
 					"<h1 style=\"text-align: center;\">Thank you for using our shop. All information will be sent to your mail.</h1>");
-			out.println("<a style=\"margin-left: 30%;\" href = \"" + Prefix.prefix + "\">Choose something else? </a>");
+			out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "\">Choose something else? </a>");
 		} else {
+			out.println("<form id =\"myForm\">");
 			out.println("<div class=\"shopping-cart\">");
 			out.println("<div class=\"title\">Shopping Bag</div>");
 			// Products
@@ -88,34 +91,36 @@ public class ShoppingCartServlet extends TemplateServlet {
 					Integer quantity = Integer.parseInt(quantityString);
 					if(!quantityInMemory.equals(quantity));{
 						shoppingCard.setQuantityOfProducts(product, quantity);
+						quantityInMemory = quantity;
 					}
 				} else {
 					logger.warn("The quantity from javascript was not number but was " + quantityString);
 				}
 				
-				out.println("<div class=\"item\">");
+				out.println("<div id=\"myDiv\" class=\"item\">");
 				out.println(
 						"<div class=\"buttons\"><span class=\"delete-btn\"></span><span class=\"like-btn\"></span></div>");
-				out.println("<div class=\"image\"><img src=\"" + product.getUrlofimg() + "\" alt=\"\" /></div>");
+				out.println("<div class=\"image\"><img src=\"" + product.getUrlofimg() + "\" alt=\"\" width=\"120\" height=\"80\" /></div>");
 				out.println("<div class=\"description\"><span>" + product.getName() + "</span><span>"
-						+ product.getPrice() + "$</span></div>");
+						+ Arithmetic.round(product.getPrice(), 2) + "$</span></div>");
 				out.println("<div class=\"quantity\">");
-				out.println("<button class=\"plus-btn\" type=\"submit\" name=\"button\">");
-				// Image plus
-				out.println("<img src=\"https://designmodo.com/demo/shopping-cart/plus.svg\" alt=\"\" />");
-				out.println("</button>");
-				out.println(" <input id=\"quantity\" type=\"submit\" name=\"name\" value=\"" + quantityInMemory + "\">");
-				out.println("<button class=\"minus-btn\" type=\"submit\" name=\"button\">");
-				// Image Minus
-				out.println("<img src=\"https://designmodo.com/demo/shopping-cart/minus.svg\" alt=\"\" />");
-				out.println("</button>");
+				 out.println("<button class=\"plus-btn\" type=\"submit\" name=\"button\">");
+				 // Image plus
+				 out.println("<img src=\"https://designmodo.com/demo/shopping-cart/plus.svg\" alt=\"\" />");
+				 out.println("</button>");
+				 out.println(" <input id=\"quantity\" type=\"submit\" name=\"name\" value=\"" + quantityInMemory + "\">");
+				 out.println("<button class=\"minus-btn\" type=\"submit\" name=\"button\">");
+				 // Image Minus
+				 out.println("<img src=\"https://designmodo.com/demo/shopping-cart/minus.svg\" alt=\"\" />");
+				 out.println("</button>");
 				out.println("</div>");
-				out.println("<div id=\"total-price\" class=\"total-price\">" + product.getPrice() * quantityInMemory + "$</div>");
+				out.println("<div id=\"total-price\" class=\"total-price\">" + Arithmetic.round(product.getPrice(), 2) * quantityInMemory + "$</div>");
 				out.println("</div>");
 			}
 			out.println("<a style=\"margin-left: 30%;\" href = \"" + Prefix.prefix + "/shoppingcart?buy=yes\">Buy it!</a>");
 			out.println("</div>");
-			out.println("<script type=\"text/javascript\" src=\"shoppingQuantity.js\"></script>");
+			out.println("</form>");
+			out.println("<script type=\"text/javascript\" src=\"settingQuantitie.js\"></script>");
 
 		}
 	}

@@ -31,7 +31,7 @@ public class MenuServlet extends TemplateServlet {
 
 	@Override
 	protected String insertCss() {
-		return "styleForMenu";
+		return "styleMenu";
 	}
 
 	@Override

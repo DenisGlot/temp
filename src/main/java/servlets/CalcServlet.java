@@ -89,8 +89,6 @@ public class CalcServlet extends TemplateServlet {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		String role = (String) session.getAttribute("role");
-		// Set the response message's MIME type
-		response.setContentType("text/html;charset=UTF-8");
         // If current http request has email parameter then 
 		// page redirects to new one without parameters at all
 		//I wrote request.getAttribute("email") again 

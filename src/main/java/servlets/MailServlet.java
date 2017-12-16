@@ -4,28 +4,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-import cache.Cache;
 import cache.realization.UserCache;
-import dao.DAO;
-import dao.MyDAO;
 import dao.entity.User;
 import mail.send.Sender;
 import mail.validation.EmailValidation;
+import scenario.Scenario;
 
 /**
  * This servlet is supposed to send mail with login and password . url-pattern =
  * '/register'
  */
 public class MailServlet extends TemplateServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 12342352L;
 
-	private Cache<String, User> userCache;
+	private UserCache userCache;
+	private Scenario scenario;
 	private String toEmail;
 	private String passwordForClient;
 	private boolean validation;
@@ -34,6 +32,7 @@ public class MailServlet extends TemplateServlet {
 	public MailServlet() {
 		super();
 		userCache = new UserCache(User.class);
+		scenario = new Scenario();
 	}
 
 	@Override
@@ -100,7 +99,7 @@ public class MailServlet extends TemplateServlet {
      * @return
      */
 	private boolean saveInDataBase(String email, String password) {
-		return userCache.save(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build());
+		return scenario.registerUser(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build(), userCache);
 	}
 
 	

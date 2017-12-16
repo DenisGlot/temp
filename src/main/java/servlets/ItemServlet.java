@@ -21,6 +21,7 @@ import dao.MyDAO;
 import dao.entity.Product;
 import dao.entity.Suplier;
 import dao.entity.User;
+import math.Arithmetic;
 import prefix.Prefix;
 import scenario.Scenario;
 import shopping_card.ShoppingCard;
@@ -100,26 +101,28 @@ public class ItemServlet extends TemplateServlet {
 			out.println("<h1 class=\"my-4\">" + product.getName() + "</h1>");
 			out.println("<div class=\"row\">");
 			out.println(
-					"<div class=\"col-md-8\"><img class=\"img-fluid\" src=\"http://placehold.it/750x500\" alt=\"\"></div>");
+					"<div class=\"col-md-8\"><img class=\"img-fluid\" src=\"" + product.getUrlofimg() + "\" alt=\"\" width=\"750\" height=\"500\"></div>");
 			out.println("<div class=\"col-md-4\">");
 			out.println("<h3 class=\"my-3\">Description</h3>");
 			out.println("<p>" + product.getDescription() + "</p>");
-			out.println("<h3 class=\"my-3\">Price : " + product.getPrice() + "</h3>");
+			out.println("<h3 class=\"my-3\">Price : " + Arithmetic.round(product.getPrice(), 2) + "$</h3>");
 			out.println("<h3 class=\"my-3\">Left : " + product.getQuantity() + "</h3>");
 			out.println(
 					"<h3 class=\"my-3\">Made by : " + suplierCache.get(product.getSuplierid()).getName() + " </h3>");
-			out.println("</div>");
-			out.println("</div>");
 			if (isPut) {
-				out.println("<a href = \"" + Prefix.prefix + "/shoppingcart?cart=yes\">Go to the shopping cart</a>");
+				out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/shoppingcart?cart=yes\">Go to the shopping cart</a>");
 			} else {
 				if(product.getQuantity()<=0) {
-					out.println("<a href = \"" + Prefix.prefix + "/shoppingcart?cart=yes\">Sorry,Nothing left.Go to the shopping cart</a>");
+					out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "\">Sorry,Nothing left.Go choose something else</a>");
 				} else {
-					out.println("<a href = \"" + Prefix.prefix + "/item?product=" + productid
+					out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/item?product=" + productid
 							+ "&quantity=1&cart=yes\">Add it in cart</a>");
 				}
 			}
+			
+			out.println("</div>");
+			out.println("</div>");
+			
 			out.println("</div");
 
 		}

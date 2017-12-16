@@ -49,7 +49,17 @@ public class Scenario {
 
 	private ProductCache productCache;
 
-	public boolean registerUser(User user) {
+	/**
+	 * userCache can be null.In that case would be used userCache from Scenario
+	 * class. It was done for performance in MailServlet
+	 * @param user
+	 * @param userCache
+	 * @return
+	 */
+	public boolean registerUser(User user,UserCache userCache) {
+		if(userCache == null) {
+			userCache = this.userCache;
+		}
 		userCache = (UserCache) lazyInit(userCache, CacheType.USER);
 		return userCache.save(user);
 	}
@@ -128,7 +138,8 @@ public class Scenario {
 			Product product = orderUnit.getKey();
 			int quantity = product.getQuantity() - orderUnit.getValue();
 			product.setQuantity(quantity<=0?0:quantity);
-			product.setQuantity(5);
+			// On case if quantity = 0 :) :)
+//			product.setQuantity(100);
 			productCache.update(product);
 		}
 		return true;

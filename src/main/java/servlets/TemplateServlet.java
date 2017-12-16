@@ -62,6 +62,8 @@ public abstract class TemplateServlet extends HttpServlet {
 	protected void sendHtmlToBrowser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		logger.debug("**** Starting sendHtmlToBrowser ******");
+		// Set the response message's MIME type
+        response.setContentType("text/html;charset=UTF-8");
 		try (PrintWriter out = response.getWriter()) {
 			out.println("<!DOCTYPE html>");
 			out.println("<html><head>");
@@ -78,7 +80,7 @@ public abstract class TemplateServlet extends HttpServlet {
 				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + addCss() + ".css\">");
 			}
 			out.println("<title>" + insertTitle() + "</title></head>");
-			out.println("<body>");
+			out.println("<body style = \"background: #3498db;\">");
 			insertLogic(request, response, out);
 			out.println("</body>");
 			out.println("</html>");

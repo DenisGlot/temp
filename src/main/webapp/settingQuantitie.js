@@ -1,12 +1,46 @@
+
 var isSubmitting = false;
-$(document).ready(function(){
+
+$('.minus-btn').on('click', function(e) {
+	e.preventDefault();
+	var $this = $(this);
+	var $input = $this.closest('div').find('input');
+	var value = parseInt($input.val());
+
+	if (value > 1) {
+		value = value - 1;
+	} else {
+		value = 0;
+	}
+
+	$input.val(value);
+	update();
+
+});
+
+$('.plus-btn').on('click', function(e) {
+	e.preventDefault();
+	var $this = $(this);
+	var $input = $this.closest('div').find('input');
+	var value = parseInt($input.val());
+
+	if (value < 100) {
+		value = value + 1;
+	} else {
+		value = 100;
+	}
+
+	$input.val(value);
+	update();
+});
+
+
+function update(){
         $(function(){
-        $('html').submit(function calc(e){
         	if(isSubmitting){
         		return;
         	}
         	isSubmitting=true;
-                e.preventDefault();
                 var form = $(this);
                 var post_url = form.attr('action');
                 if($('#quantity').val()==null){
@@ -23,14 +57,13 @@ $(document).ready(function(){
                     data: JSON.stringify(post_data),
                     async: true,
                     success: function(msg) {
-                        $('#total-price').html(msg).fadeIn(1000);
+                        $('body').html(msg).fadeIn(1000);
                         isSubmitting=false;
                     },
                     error: function(message) {
-                    	$('#total-price').html(msg);
+                    	$('body').html(msg);
                         isSubmitting=false;
                     }
                 });
-            });
         });
-         });
+     }
