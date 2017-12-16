@@ -78,7 +78,7 @@ public class ShoppingCartServlet extends TemplateServlet {
 		if (isBought) {
 			out.println(
 					"<h1 style=\"text-align: center;\">Thank you for using our shop. All information will be sent to your mail.</h1>");
-			out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "\">Choose something else? </a>");
+			out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 33%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/\">Choose something else? </a>");
 		} else {
 			out.println("<form id =\"myForm\">");
 			out.println("<div class=\"shopping-cart\">");
