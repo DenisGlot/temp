@@ -70,22 +70,22 @@ public class CalcServlet extends TemplateServlet {
 	}
 	
 	@Override
-	protected String insertJs() {
+	public String insertJs() {
 		return "calculate";
 	}
 
 	@Override
-	protected String insertCss() {
+	public String insertCss() {
 		return "style";
 	}
 
 	@Override
-	protected String insertTitle() {
+	public String insertTitle() {
 		return "Calculator";
 	}
 
 	@Override
-	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out) throws IOException {
+	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out) throws IOException {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		String role = (String) session.getAttribute("role");

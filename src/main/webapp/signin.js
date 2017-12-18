@@ -18,8 +18,12 @@ function field_blur(field, email)
 $(document).ready(function(){
   $('.box').hide().fadeIn(1000);
   });
-
 //Stop click event
-$('a').click(function(event){
+$('#btn2').click(function(event){
   event.preventDefault(); 
-	});
+  window.location.href = 'item?email='+$('#email').val()+'password='+$('#password').val();
+});
+
+function redirect(){
+	 window.location.href = 'item?email='+$('#email').val()+'password='+$('#password').val();
+}

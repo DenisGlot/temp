@@ -4,14 +4,45 @@
 <meta charset="UTF-8">
 <title>Authorization</title>
 <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
+
 <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="sign.js"></script>
 </head>
 <body>
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600'
-		rel='stylesheet' type='text/css'>
-
-	<form method="GET" action="item">
+<!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Menu</a></li>
+            <li ><a href="/shoppingcart">Cart</a></li>
+            <li style ="margin-left: 230px"><a href="/register">Registration</a></li>
+            <li><a href="/signin">Log in</a></li>
+             <li style = "margin-left : 380px"><a href="/signin">Calculator :)</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <link rel="stylesheet" type="text/css" href="style.css">
+	<form style ="margin-top: 60px" method="GET" action="item">
 		<div class="box">
 			<h1>Calculator Pro</h1> Your email address
 			<input type="text" name="email"
@@ -22,9 +53,8 @@
 				onFocus="field_focus(this, 'email');"
 				onblur="field_blur(this, 'email');" class="email" />
               <input type="submit" value="Login" id="btn2"/>
-              <a href ="/register">Registration</a>
+              <h1><a href ="/register">Registration</a></h1>
 		</div>
-
 	</form>
 </body>
 </html>

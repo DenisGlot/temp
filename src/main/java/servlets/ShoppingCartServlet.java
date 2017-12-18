@@ -46,22 +46,22 @@ public class ShoppingCartServlet extends TemplateServlet {
 	}
 
 	@Override
-	protected String insertJs() {
+	public String insertJs() {
 		return null;
 	}
 
 	@Override
-	protected String insertCss() {
+	public String insertCss() {
 		return "styleForCart";
 	}
 
 	@Override
-	protected String insertTitle() {
+	public String insertTitle() {
 		return "Details";
 	}
 
 	@Override
-	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
+	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
 		// Logic begins
 		HttpSession session = request.getSession();

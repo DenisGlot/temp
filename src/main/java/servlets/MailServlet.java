@@ -56,22 +56,22 @@ public class MailServlet extends TemplateServlet {
 	}
 	
 	@Override
-	protected String insertJs() {
+	public String insertJs() {
 		return "sign";
 	}
 
 	@Override
-	protected String insertCss() {
+	public String insertCss() {
 		return "style";
 	}
 
 	@Override
-	protected String insertTitle() {
+	public String insertTitle() {
 		return "Registration";
 	}
 
 	@Override
-	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
+	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
 		out.println("<div class=\"box\">");
 		out.println("<form method=\"GET\">");

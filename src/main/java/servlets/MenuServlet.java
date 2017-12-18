@@ -25,24 +25,24 @@ public class MenuServlet extends TemplateServlet {
     }
 
 	@Override
-	protected String insertJs() {
+	public String insertJs() {
 		return null;
 	}
 
 	@Override
-	protected String insertCss() {
-		return "styleMenu";
+	public String insertCss() {
+		return "csForMenu";
 	}
 
 	@Override
-	protected String insertTitle() {
+	public String insertTitle() {
 		return "Catalog";
 	}
 
 	@Override
-	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
+	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
-		 out.println("<div class=\"container\">");
+		 out.println("<div class=\"contain\">");
 		    out.println(" <h1>Catalog</h1><br/>");
 		    out.println(" <div class=\"catalog\">");
 		    for(Product product : scenario.getCatalogByCategory(1)) {

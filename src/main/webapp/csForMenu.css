@@ -1,16 +1,15 @@
 body {
-    font-size: 16px;
     font-family: "PT Sans", sans-serif;
     background: #3498db;
 }
 
 h1 {
+	
     margin: 0 auto 0 auto;
-    font-size: 18px;
     text-align: center;
 }
 
-.container {
+.contain {
     width: 400px;
     margin: 20px auto;
 }

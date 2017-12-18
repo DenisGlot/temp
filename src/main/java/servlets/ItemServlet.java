@@ -47,12 +47,12 @@ public class ItemServlet extends TemplateServlet {
 	}
 
 	@Override
-	protected String insertJs() {
+	public String insertJs() {
 		return "sign";
 	}
 
 	@Override
-	protected String insertCss() {
+	public String insertCss() {
 		return "css/bootstrap.min";
 	}
 
@@ -62,12 +62,12 @@ public class ItemServlet extends TemplateServlet {
 	}
 
 	@Override
-	protected String insertTitle() {
+	public String insertTitle() {
 		return "Details";
 	}
 
 	@Override
-	protected void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
+	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
 		// Logic begins
 		HttpSession session = request.getSession();
