@@ -25,5 +25,5 @@ $('#btn2').click(function(event){
 });
 
 function redirect(){
-	 window.location.href = 'item?email='+$('#email').val()+'password='+$('#password').val();
+	 window.location.href = 'item?email='+$('#email').val()+'&password='+$('#password').val();
 }
