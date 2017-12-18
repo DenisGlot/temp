@@ -53,12 +53,7 @@ public class ItemServlet extends TemplateServlet {
 
 	@Override
 	public String insertCss() {
-		return "css/bootstrap.min";
-	}
-
-	@Override
-	protected String addCss() {
-		return "css/portfolio-item";
+		return null;
 	}
 
 	@Override
