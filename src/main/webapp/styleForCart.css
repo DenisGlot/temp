@@ -163,3 +163,7 @@ input:focus {
     margin-right: 20px;
   }
 }
+.contain {
+    width: 400px;
+    margin: 20px auto;
+}

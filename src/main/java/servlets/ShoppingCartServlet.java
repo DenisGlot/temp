@@ -76,10 +76,11 @@ public class ShoppingCartServlet extends TemplateServlet {
 		}
 		// Logic ends
 		if (isBought) {
-			out.println(
-					"<h1 style=\"text-align: center;\">Thank you for using our shop. All information will be sent to your mail.</h1>");
-			out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 33%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/\">Choose something else? </a>");
-		} else {
+			out.println("<div class=\"contain\">");
+			out.println("<strong style = \"color: #00FA9A; font-size: 1.5em; margin-left: 30px;\">Thank you for using our shop. All information will be sent to your mail.</strong>");
+			out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/\">Choose something else? </a>");
+			out.println("</div>");
+ 		} else {
 			out.println("<form id =\"myForm\">");
 			out.println("<div class=\"shopping-cart\">");
 			out.println("<div class=\"title\">Shopping Bag</div>");
