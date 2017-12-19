@@ -38,7 +38,6 @@ public class MailServlet extends TemplateServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
 		toEmail = request.getParameter("mail");
 		passwordForClient = RandomStringUtils.randomAlphanumeric(6);
 		validation = EmailValidation.validate(toEmail == null ? "" : toEmail);

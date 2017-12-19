@@ -10,9 +10,14 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
+
 import exceptions.MailSenderException;
+import servlets.TemplateServlet;
 
 public class Sender {
+	
+	private final Logger logger = Logger.getLogger(Sender.class);
 
 	protected final String username = "denisglotov.1911@gmail.com";
 	protected final String password = "123456asdzxcv";
@@ -56,23 +61,25 @@ public class Sender {
 		} catch (MessagingException e) {
 			throw new MailSenderException();
 		}
+		logger.debug("The message was sent");
 	}
 	/**
 	 * 
 	 * @param feedback
 	 * @throws MailSenderException
 	 */
-	public void sendFeedBack(String feedback) {
+	public void sendFeedBack(String feedback,String subject,String email) {
 		try {
 			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("denisglotov98@mail.ru"));
-			message.setSubject("FeedBack");
+			message.setSubject(subject + " from " + email);
 			message.setContent(feedback,
-					"text/html");
+					"text/plain");
 			Transport.send(message);
 
 		} catch (MessagingException e) {
 			throw new MailSenderException();
 		}
+		logger.debug("The message was sent");
 	}
 }

@@ -12,6 +12,7 @@
     <filter-name>AuthFilt</filter-name>
     <url-pattern>/shoppingcart</url-pattern>
     <url-pattern>/item</url-pattern>
+    <url-pattern>/feedback</url-pattern>
   </filter-mapping>
   <servlet>
     <display-name>MailServlet</display-name>
@@ -41,5 +42,13 @@
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/signin</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>FeedbackServlet</servlet-name>
+    <servlet-class>servlets.FeedbackServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FeedbackServlet</servlet-name>
+    <url-pattern>/feedback</url-pattern>
   </servlet-mapping>
 </web-app>

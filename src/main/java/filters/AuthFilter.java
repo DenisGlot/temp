@@ -77,50 +77,6 @@ public class AuthFilter implements Filter,SendHtml {
 					// Or else we will see page with 'try again'
 				try (PrintWriter out = response.getWriter()) {
 					sendHtmlToBrowser( (HttpServletRequest) request, (HttpServletResponse) response);
-					out.println("<!DOCTYPE html>");
-					out.println("<html><head>");
-					out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-					out.println("<title>Error</title></head>");
-					out.println("<link rel=\"stylesheet\"\r\n" + 
-							"	href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\"\r\n" + 
-							"	integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\"\r\n" + 
-							"	crossorigin=\"anonymous\">\r\n" + 
-							"\r\n" + 
-							"<link rel=\"stylesheet\"\r\n" + 
-							"	href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css\"\r\n" + 
-							"	integrity=\"sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp\"\r\n" + 
-							"	crossorigin=\"anonymous\">");
-					out.println("</head>");
-					out.println("<body>");
-					out.println("<!-- Fixed navbar -->\r\n" + 
-							"    <nav class=\"navbar navbar-default navbar-fixed-top\">\r\n" + 
-							"      <div class=\"container\">\r\n" + 
-							"        <div class=\"navbar-header\">\r\n" + 
-							"          <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\r\n" + 
-							"            <span class=\"sr-only\">Toggle navigation</span>\r\n" + 
-							"            <span class=\"icon-bar\"></span>\r\n" + 
-							"            <span class=\"icon-bar\"></span>\r\n" + 
-							"            <span class=\"icon-bar\"></span>\r\n" + 
-							"          </button>\r\n" + 
-							"          <a class=\"navbar-brand\" href=\"#\">Project name</a>\r\n" + 
-							"        </div>\r\n" + 
-							"        <div id=\"navbar\" class=\"navbar-collapse collapse\">\r\n" + 
-							"          <ul class=\"nav navbar-nav\">\r\n" + 
-							"            <li class=\"active\"><a href=\"" + Prefix.prefix + "/\">Menu</a></li>\r\n" + 
-							"            <li><a href=\"" + Prefix.prefix + "/shoppingcart\">Cart</a></li>\r\n" + 
-							"            <li style = \"margin-left : 70px;\"><a href=\"" + Prefix.prefix + "/register\">Registration</a></li>\r\n" + 
-							"            <li><a href=\"" + Prefix.prefix + "/signin\">Log in</a></li>\r\n" + 
-							"            <li style = \"margin-left : 100px;\"><a  href=\"" + Prefix.prefix + "/calc\">Calculator :)</a></li>\r\n" + 
-							"          </ul>\r\n" + 
-							"        </div><!--/.nav-collapse -->\r\n" + 
-							"      </div>\r\n" + 
-							"    </nav>");
-					out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"csForMenu.css\">");
-					out.println("<div style = \"margin-top : 60px;\"");
-					out.println("<h1>username or password is not correct</h1>");
-					out.println("<a href=\"" + Prefix.prefix + "/signin\">Login?</a>");
-					out.println("</div>");
-					out.println("</body></html>");
 				}
 			}
 		}
@@ -183,7 +139,9 @@ public class AuthFilter implements Filter,SendHtml {
 	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
 		out.println("<div class=\"contain\">");
-		if(request.getParameter("email")==null) {
+		if(request.getServletPath().equals("/feedback")) {
+			out.println("<strong style = \"color:red; font-size: 1.5em;\">You must authorize to send a message</strong>");
+		} else if(request.getParameter("email")==null){
 			out.println("<strong style = \"color:red; font-size: 1.5em; margin-left: 30px;\">You must authorize to get in</strong>");
 		} else {
 			out.println("<strong style = \"color:red; font-size: 1.5em;\">Username or password is not correct</strong>");

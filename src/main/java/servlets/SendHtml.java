@@ -82,6 +82,7 @@ public interface SendHtml {
 					"            <li " + (request.getServletPath().equals("/register") ?"class=\"active\"":"") + " style = \"margin-left : 70px;\"><a href=\"" + Prefix.prefix + "/register\">Registration</a></li>\r\n" + 
 					"            <li " + (request.getServletPath().equals("/signin") ?"class=\"active\"":"") + "><a href=\"" + Prefix.prefix + "/signin\">Log in</a></li>\r\n" + 
 					"            <li " + (request.getServletPath().equals("/calc") ?"class=\"active\"":"") + "style = \"margin-left : 100px;\"><a  href=\"" + Prefix.prefix + "/calc\">Calculator :)</a></li>\r\n" + 
+					"            <li " + (request.getServletPath().equals("/feedback") ?"class=\"active\"":"") + "style = \"margin-left : 100px;\"><a  href=\"" + Prefix.prefix + "/feedback\">Feedback</a></li>\r\n" + 
 					"          </ul>\r\n" + 
 					"        </div><!--/.nav-collapse -->\r\n" + 
 					"      </div>\r\n" + 

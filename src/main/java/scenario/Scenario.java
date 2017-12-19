@@ -163,8 +163,8 @@ public class Scenario {
 		orderCache.save(order);
 	}
 
-	public void sendFeedBack(String message) {
-		new Sender().sendFeedBack(message);
+	public void sendFeedBack(String message,String subject,String email) {
+		new Sender().sendFeedBack(message,subject,email);
 	}
 
 	/**
