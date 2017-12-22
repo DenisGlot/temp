@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import cache.Cache;
+import cache.factory.CacheType;
 import cache.realization.RoleCache;
 import cache.realization.UserCache;
 import dao.DAO;
@@ -38,10 +39,6 @@ public class AuthFilter implements Filter,SendHtml {
 
 	
 	private Scenario scenario;
-	
-	private UserCache userCache;
-	
-	private Cache<Integer, Role> roleCache;
 	
 	private String role = null;
 
@@ -86,8 +83,6 @@ public class AuthFilter implements Filter,SendHtml {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		logger.debug("***initialize AuthFilter");
-		userCache = new UserCache(User.class);
-		roleCache = new RoleCache(Role.class);
 		scenario = new Scenario();
 	}
 
@@ -102,11 +97,11 @@ public class AuthFilter implements Filter,SendHtml {
      * @return
      */
 	private boolean checkInDataBase(String email, String password) {
-		User user = userCache.get(email);
+		User user = (User) scenario.getById(CacheType.USER,email);
 		if (user == null) {
 			return false;
 		}
-		if (scenario.authorization(user, userCache)) {
+		if (scenario.authorization(user)) {
             declareRoleOfUser(user);
 			return true;
 		}
@@ -117,7 +112,7 @@ public class AuthFilter implements Filter,SendHtml {
      * @param user
      */
 	private void declareRoleOfUser(User user) {
-         this.role = roleCache.get(user.getGroupid()).getRole();
+         this.role = ((Role) scenario.getById(CacheType.ROLE,user.getGroupid())).getRole();
 	}
 
 	@Override

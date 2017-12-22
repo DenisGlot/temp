@@ -60,7 +60,12 @@ public abstract class Cache<K, E> {
 		dao = new MyDAO<>(type);
 	}
 
-	public E get(K id) {
+	/**
+	 *  It returns the concrete entity by id
+	 * @param id 
+	 * @return
+	 */
+	public E getById(K id) {
 		if(cache.size() >= DEFAULT_MAX_SIZE) {
 			cache = new ConcurrentHashMap<>();
 		}

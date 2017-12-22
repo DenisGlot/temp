@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.derby.iapi.util.StringUtil;
 import org.apache.log4j.Logger;
 
+import cache.factory.CacheType;
 import cache.realization.UserCache;
 import cache.realization.simple.ProductCache;
 import cache.realization.simple.SuplierCache;
@@ -32,18 +33,12 @@ public class ItemServlet extends TemplateServlet {
 	private static final long serialVersionUID = 1234234534L;
 
 	private final Logger logger = Logger.getLogger(ItemServlet.class);
-
-	private ProductCache productCache;
-
-	private SuplierCache suplierCache;
-
-	private UserCache userCahce;
+	
+	private Scenario scenario;
 
 	public ItemServlet() {
 		super();
-		productCache = new ProductCache(Product.class);
-		suplierCache = new SuplierCache(Suplier.class);
-		userCahce = new UserCache(User.class);
+		scenario = new Scenario();
 	}
 
 	@Override
@@ -77,7 +72,7 @@ public class ItemServlet extends TemplateServlet {
 		} else {
 
 			productid = Integer.parseInt(productidString);
-			product = productCache.get(productid);
+			product = (Product) scenario.getById(CacheType.PRODUCT, productid);
 			if (product == null) {
 				logger.warn("In database was not any appropriate id for product");
 				return;
@@ -85,7 +80,7 @@ public class ItemServlet extends TemplateServlet {
 			String isPutting = request.getParameter("cart");
 			boolean isPut = isPutting != null && isPutting.equals("yes");
 			if (isPut) {
-				ShoppingCard shoppingCard = new ShoppingCard(userCahce.get(email));
+				ShoppingCard shoppingCard = new ShoppingCard((User) scenario.getById(CacheType.USER, email));
 				shoppingCard.addProduct(product, Integer.parseInt(quantity));
 				ShoppingCarts.shoppingCarts.put(email, shoppingCard);
 			}
@@ -103,7 +98,7 @@ public class ItemServlet extends TemplateServlet {
 			out.println("<h3 class=\"my-3\">Price : " + Arithmetic.round(product.getPrice(), 2) + "$</h3>");
 			out.println("<h3 class=\"my-3\">Left : " + product.getQuantity() + "</h3>");
 			out.println(
-					"<h3 class=\"my-3\">Made by : " + suplierCache.get(product.getSuplierid()).getName() + " </h3>");
+					"<h3 class=\"my-3\">Made by : " + ((Suplier) scenario.getById(CacheType.SUPLIER,product.getSuplierid())).getName() + " </h3>");
 			if (isPut) {
 				out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/shoppingcart?cart=yes\">Go to the shopping cart</a>");
 			} else {

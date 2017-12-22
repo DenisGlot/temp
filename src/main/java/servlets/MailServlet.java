@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
 
+import cache.factory.CacheType;
 import cache.realization.UserCache;
 import dao.entity.User;
 import mail.send.Sender;
@@ -22,7 +23,6 @@ import scenario.Scenario;
 public class MailServlet extends TemplateServlet {
 	private static final long serialVersionUID = 12342352L;
 
-	private UserCache userCache;
 	private Scenario scenario;
 	private String toEmail;
 	private String passwordForClient;
@@ -31,7 +31,6 @@ public class MailServlet extends TemplateServlet {
 
 	public MailServlet() {
 		super();
-		userCache = new UserCache(User.class);
 		scenario = new Scenario();
 	}
 
@@ -43,7 +42,7 @@ public class MailServlet extends TemplateServlet {
 		validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
 		checkOnUnique = false;
 		if (validation) {
-			if(userCache.get(toEmail)==null) {
+			if(scenario.getById(CacheType.USER,toEmail)==null) {
 				checkOnUnique=true;
 				new Sender().sendPassword(toEmail, passwordForClient);
 				saveInDataBase(toEmail, passwordForClient);
@@ -98,7 +97,7 @@ public class MailServlet extends TemplateServlet {
      * @return
      */
 	private boolean saveInDataBase(String email, String password) {
-		return scenario.registerUser(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build(), userCache);
+		return scenario.registerUser(User.newBuilder().setEmail(email).setPassword(password).setGruopId(2).build());
 	}
 
 	

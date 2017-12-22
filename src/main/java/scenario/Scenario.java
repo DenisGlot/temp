@@ -1,10 +1,7 @@
 package scenario;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
@@ -15,17 +12,14 @@ import cache.Cache;
 import cache.factory.CacheFacroty;
 import cache.factory.CacheType;
 import cache.realization.UserCache;
-import cache.realization.simple.CourierCache;
 import cache.realization.simple.OrderCache;
 import cache.realization.simple.OrderDetailsCache;
-import cache.realization.simple.ProductCache;
-import dao.entity.Category;
 import dao.entity.Courier;
 import dao.entity.Order;
 import dao.entity.OrderDetails;
 import dao.entity.Product;
 import dao.entity.User;
-import hash.Hashing;
+import exceptions.IdTypeException;
 import id_counter.OrderIdCounter;
 import mail.send.Sender;
 import shopping_card.ShoppingCard;
@@ -41,49 +35,43 @@ public class Scenario {
 
 	private final Logger logger = Logger.getLogger(Scenario.class);
 
-	private UserCache userCache;
+	
+	//Here stored every cache in my application
+	   private Cache userCache;
 
-	private OrderCache orderCache;
+	   private Cache orderCache;
 
-	private OrderDetailsCache odCache;
-
-	private ProductCache productCache;
-
+	   private Cache odCache;
+ 
+	   private Cache productCache;
+	   
+	   private Cache suplierCache;
+	   
+	   private Cache roleCache;
+    //
+	
 	/**
-	 * userCache can be null.In that case would be used userCache from Scenario
-	 * class. It was done for performance in MailServlet
 	 * @param user
-	 * @param userCache
 	 * @return
 	 */
-	public boolean registerUser(User user,UserCache userCache) {
-		if(userCache == null) {
-			userCache = this.userCache;
-		}
-		userCache = (UserCache) lazyInit(userCache, CacheType.USER);
+	public boolean registerUser(User user) {
+		userCache = lazyInit(userCache, CacheType.USER);
 		return userCache.save(user);
 	}
 
 	/**
-	 * userCache can be null.In that case would be used userCache from Scenario
-	 * class
 	 * 
 	 * @param user
-	 * @param userCacheFrom
-	 *            it was for AuthFilter where is already userCache
-	 * @return
+	 * @return boolean if true then authorization passed
 	 * @throws NullPointerException
 	 *             if user == null
 	 */
-	public boolean authorization(User user, UserCache userCacheFrom) {
+	public boolean authorization(User user) {
 		if (user == null) {
 			throw new NullPointerException();
 		}
-		if (userCacheFrom == null) {
-			userCache = (UserCache) lazyInit(userCache, CacheType.USER);
-			userCacheFrom = userCache;
-		}
-		return userCacheFrom.authorization(user);
+		userCache = lazyInit(userCache, CacheType.USER);
+		return ((UserCache) userCache).authorization(user);
 	}
 
 	public void putInBasket(ShoppingCard shoppingCard, Product product, Integer quantity) {
@@ -105,9 +93,9 @@ public class Scenario {
 	 * @return true if order and orderDetails was saved in database
 	 */
 	public boolean buyFromBasket(ShoppingCard shoppingCard) {
-		orderCache = (OrderCache) lazyInit(orderCache, CacheType.ORDER);
-		odCache = (OrderDetailsCache) lazyInit(odCache, CacheType.ORDERDETAILS);
-		productCache = (ProductCache) lazyInit(productCache, CacheType.PRODUCT);
+		orderCache = lazyInit(orderCache, CacheType.ORDER);
+		odCache = lazyInit(odCache, CacheType.ORDERDETAILS);
+		productCache = lazyInit(productCache, CacheType.PRODUCT);
 		if (orderCache == null) {
 			orderCache = new OrderCache(Order.class);
 		}
@@ -147,7 +135,7 @@ public class Scenario {
 	}
 
 	public List<Product> getCatalogByCategory(int categoryid) {
-		productCache = (ProductCache) lazyInit(productCache, CacheType.PRODUCT);
+		productCache = lazyInit(productCache, CacheType.PRODUCT);
 		return productCache.getAllByCriteria("categoryid", categoryid);
 	}
 
@@ -158,7 +146,7 @@ public class Scenario {
 	 * @param order
 	 */
 	public void sendProdutsToClient(Courier courier, Order order) {
-		orderCache = (OrderCache) lazyInit(orderCache, CacheType.ORDER);
+		orderCache = lazyInit(orderCache, CacheType.ORDER);
 		order.setShipperedDate(new Timestamp(new Date().getTime()));
 		orderCache.save(order);
 	}
@@ -180,6 +168,51 @@ public class Scenario {
 		}
 		return cache;
 
+	}
+	
+	/**
+	 * if it is user type then is should be String,
+	 * if it is not user type then id should be Integer 
+	 * @param type
+	 * @param id
+	 * @return The concrete Entity by id
+	 * @throws IdTypeException if class of id is correct
+	 */
+	public Object getById(CacheType type, Object id) {
+		//Checking on correct id class
+		// I know, not flexible, but I did what I could
+		if(type.equals(CacheType.USER)) {
+			if(!(id instanceof String)) {
+			    throw new IdTypeException(type,id);
+			}
+		} else {
+			if(!(id instanceof Integer)) {
+				throw new IdTypeException(type,id);
+			}
+		}
+		switch (type) {
+		case USER:
+		    userCache = lazyInit(userCache, CacheType.USER);
+			return userCache.getById(id);
+		case PRODUCT:
+			productCache = lazyInit(productCache, CacheType.PRODUCT);
+			return productCache.getById(id);
+		case ORDER:
+			orderCache = lazyInit(orderCache, CacheType.ORDER);
+			return orderCache.getById(id);
+		case ORDERDETAILS:
+			odCache = lazyInit(odCache, CacheType.ORDERDETAILS);
+			return  odCache.getById(id);
+		case SUPLIER:
+			suplierCache = lazyInit(suplierCache, CacheType.SUPLIER);
+			return suplierCache.getById(id);
+		case ROLE:
+			roleCache = lazyInit(roleCache, CacheType.ROLE);
+			return roleCache.getById(id);
+//		case CATEGORY:
+//			return new CategeryCache(Category.class);
+		} 
+		return null;
 	}
 
 }

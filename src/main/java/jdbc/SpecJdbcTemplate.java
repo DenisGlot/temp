@@ -10,6 +10,7 @@ import dao.entity.User;
 import hash.Hashing;
 
 /**
+ * Kind of Pattern Decorator
  * This class is extension for JdbcTemplate,
  * which consist the right method for authorization
  * @author Denis
