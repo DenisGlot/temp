@@ -40,46 +40,49 @@ public class Sender {
 		});
 		message = new MimeMessage(session);
 	}
+	
+	/**
+	 * The Content must be text/html type 
+	 * @param toEmail
+	 * @param Subject 
+	 * @param Content must be text/html type 
+	 * @throws MailSenderException
+	 */
+	public void sendMessage(String toEmail,String Subject,String Content) {
+		try {
+			message.setFrom(new InternetAddress(username));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+			message.setSubject(Subject);
+			message.setContent(Content,"text/html");
+			Transport.send(message);
+		} catch(MessagingException e) {
+			throw new MailSenderException();
+		}
+	}
 
 	/**
 	 * 
 	 * @param toEmail
 	 * @param passwordForClient
-	 * @throws MailSenderException
+	 * @throws MailSenderException from sedMessage method
 	 */
 	public void sendPassword(String toEmail, String passwordForClient) {
-
-		try {
-			message.setFrom(new InternetAddress(username));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-			message.setSubject("Registration");
-			message.setContent("<h2>Dear user! Your password :  " + passwordForClient
-					+ "</h2><h2>Link to the website : </h2> <a href=\"https://calculator-netcracker.herokuapp.com/\">Click here!</a> ",
-					"text/html");
-			Transport.send(message);
-
-		} catch (MessagingException e) {
-			throw new MailSenderException();
-		}
+		
+		String content = "<h2>Dear user! Your password :  " + passwordForClient + "</h2><h2>Link to the website : </h2> <a href=\"https://calculator-netcracker.herokuapp.com/\">Click here!</a> ";
+		
+		sendMessage(toEmail,"Registration",content);
+		
 		logger.debug("The message was sent");
 	}
+	
 	/**
 	 * 
-	 * @param feedback
-	 * @throws MailSenderException
+	 * @param feedback the body of the message
+	 * @param subject 
+	 * @param email From whom?
+	 * @throws MailSenderException from sedMessage method
 	 */
 	public void sendFeedBack(String feedback,String subject,String email) {
-		try {
-			message.setFrom(new InternetAddress(username));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("denisglotov98@mail.ru"));
-			message.setSubject(subject + " from " + email);
-			message.setContent(feedback,
-					"text/plain");
-			Transport.send(message);
-
-		} catch (MessagingException e) {
-			throw new MailSenderException();
-		}
-		logger.debug("The message was sent");
+		sendMessage("denisglotov98@mail.ru",subject + " from " + email,feedback);
 	}
 }

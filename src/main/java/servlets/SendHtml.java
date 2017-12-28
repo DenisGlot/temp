@@ -90,12 +90,9 @@ public interface SendHtml {
 			if (insertCss() != null) {
 				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + insertCss() + ".css\">");
 			}
-			out.println("<div style = \"margin-top : 60px;\"");
+			out.println("<div style = \"margin-top : 60px;\">");
 			insertLogic(request, response, out);
 			out.println("</div>");
-			out.println("<!-- Placed at the end of the document so the pages load faster -->\r\n" + 
-					"    <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js\"></script>\r\n" + 
-					"    <script src=\"js/bootstrap.min.js\"></script>");
 			out.println("</body>");
 			out.println("</html>");
 			

@@ -20,7 +20,6 @@ $(document).ready(function(){
                       second : $('#second').val(),
                       act : $('#act option:selected').val()
                 };
-                $('#mydiv', form).fadeOut(1000);
                 $.ajax({
                     type: 'POST',
                     url: post_url, 
@@ -28,7 +27,8 @@ $(document).ready(function(){
                     data: JSON.stringify(post_data),
                     async: true,
                     success: function(msg) {
-                        $('body').html(msg).fadeIn(1000);
+                    	$('.myError').html(jQuery(msg).find('.myError').html());
+                        $('#myResult').html(jQuery(msg).find('#myResult').html());
                         isSubmitting=false;
                     },
                     error: function(message) {

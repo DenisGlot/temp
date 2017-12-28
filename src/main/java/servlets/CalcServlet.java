@@ -110,7 +110,7 @@ public class CalcServlet extends TemplateServlet {
 			
 			calculateResult();
 			
-			out.println("<div id=\"mydiv\" class=\"box\">");
+			out.println("<div id=\"mydiv\" class=\"box\" style = \"opacity: 1;\">");
 			if(role!=null && role.equals("admin")) {
 				out.println("<h2>Welcome, sir!</h2>");
 			} 
@@ -120,15 +120,15 @@ public class CalcServlet extends TemplateServlet {
 			out.println("<form id=\"myform\">");
 			out.println(
 					"<strong>First part</strong><input id=\"first\" class=\"email\" name=\"first\" type=\"text\" value=\""
-							+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"><br/> "
-							+ (er1 ? error : "") + "</em><br/>");
+							+ (er1 ? firstString : first) + "\"><em style=\"color:red;\"><br/><div class =\"myError\"> "
+							+ (er1 ? error : "") + "</div></em><br/>");
 			out.println(
 					"<strong>Second part</strong><input id = \"second\" class=\"email\" name=\"second\" type=\"text\" value = \""
-							+ (er2 ? secondString : second) + "\"> <em style=\"color:red;\"><br/>"
-							+ (er2 ? error : "") + "</em><br/>");
+							+ (er2 ? secondString : second) + "\"><em style=\"color:red;\"><br/><div class =\"myError\">"
+							+ (er2 ? error : "") + "</div></em><br/>");
 			out.println(selectShowPreviousOption(act));
 			out.println("<input type=\"submit\" value=\"Calculate\" id=\"btn2\"/><br/><br/><br/><br/>");
-			out.println("<h1>" + result + "</h1>");
+			out.println("<h1><div id = \"myResult\">" + result + "</div></h1>");
 			out.println("</form>");
 			out.println("</div>");
 			isPOST = false;
