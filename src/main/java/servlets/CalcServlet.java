@@ -71,7 +71,7 @@ public class CalcServlet extends TemplateServlet {
 	
 	@Override
 	public String insertJs() {
-		return "calculate";
+		return "calculateNumber";
 	}
 
 	@Override
