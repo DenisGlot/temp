@@ -22,6 +22,9 @@ public class User {
 	
 	@MyColumn(columnName = "address",clazz = String.class)
 	private String address;
+	
+	@MyColumn(columnName = "phone",clazz = String.class)
+	private String phone;
 
 	@MyColumn(columnName = "email",clazz = String.class)
 	private String email;
@@ -35,14 +38,15 @@ public class User {
 	public User() {
 		
 	}
-
-	public User(Integer id, String firstname, String lastname, Timestamp dateOfBirth, String address, String email,
-			String password, Integer groupid) {
+	
+	public User(Integer id, String firstname, String lastname, Timestamp dateofbirth, String address, String phone,
+			String email, String password, Integer groupid) {
 		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.dateofbirth = dateOfBirth;
+		this.dateofbirth = dateofbirth;
 		this.address = address;
+		this.phone = phone;
 		this.email = email;
 		this.password = password;
 		this.groupid = groupid;
@@ -56,28 +60,36 @@ public class User {
 		this.id = id;
 	}
 
-	public String getFirstName() {
+	public String getFirstname() {
 		return firstname;
 	}
 
-	public void setFirstName(String firstname) {
+	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
 
-	public String getLastName() {
+	public String getLastname() {
 		return lastname;
 	}
 
-	public void setLastName(String lastname) {
+	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
-	public Timestamp getDateOfBirth() {
+	public Timestamp getDateofbirth() {
 		return dateofbirth;
 	}
 
-	public void setDateOfBirth(Timestamp dateOfBirth) {
-		this.dateofbirth = dateOfBirth;
+	public void setDateofbirth(Timestamp dateofbirth) {
+		this.dateofbirth = dateofbirth;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getAddress() {
@@ -87,6 +99,7 @@ public class User {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
 
 	public String getEmail() {
 		return email;
@@ -113,6 +126,7 @@ public class User {
 	public void setGroupid(Integer groupid) {
 		this.groupid = groupid;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -169,6 +183,11 @@ public class User {
         
         public Builder setId(Integer id) {
             User.this.id = id;
+            return this;
+        }
+        
+        public Builder setPhone(String phone) {
+            User.this.phone = phone;
             return this;
         }
         

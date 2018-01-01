@@ -11,16 +11,27 @@ import org.apache.log4j.Logger;
 import dao.annotation.MyColumn;
 import dao.annotation.MyEntity;
 import dao.entity.User;
+import jdbc.DataBaseCreator;
 import jdbc.JdbcTemplate;
 import jdbc.SpecJdbcTemplate;
 
+/**
+ * It uses constructor to create an instance of entity 
+ * So the constructor of entity should consist all fields in RIGHT order
+ * @author Denis
+ *
+ * @param <E>
+ * @param <K>
+ */
 public class MyDAO<E,K> implements DAO<E, K> {
 	
 	private final Logger logger = Logger.getLogger(MyDAO.class);
 	
 	private JdbcTemplate jt;
 	
-	public SpecJdbcTemplate sjt;
+	private SpecJdbcTemplate sjt;
+	
+	private DataBaseCreator dbc;
 	
 	private String tableName;
 	
@@ -40,6 +51,9 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	public MyDAO(Class<E> type) {
 		jt = new JdbcTemplate();
 		sjt = new SpecJdbcTemplate(jt);
+		//Creating database
+		dbc = new DataBaseCreator(jt);
+		//
 		this.type = type;
 		MyEntity annotation  = type.getAnnotation(MyEntity.class);
 		tableName = annotation.tableName();
@@ -244,6 +258,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		}
 		logger.debug(sb.toString());
 		return jt.executeDDL(sb.toString());
+	}
+	
+	public boolean checkInDataBase(User user) {
+		return sjt.checkInDataBase(user);
 	}
 	
 }

@@ -51,4 +51,12 @@
     <servlet-name>FeedbackServlet</servlet-name>
     <url-pattern>/feedback</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>RegisterDetails</servlet-name>
+    <servlet-class>servlets.RegisterDetails</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterDetails</servlet-name>
+    <url-pattern>/registerDetails</url-pattern>
+  </servlet-mapping>
 </web-app>

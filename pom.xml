@@ -7,6 +7,14 @@
 	<packaging>war</packaging>
 
 	<dependencies>
+         
+        <!-- For some operations in jsp pages>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency--> 
+
 		<!-- For a ResultSetHandler -->
 		<dependency>
 			<groupId>commons-dbutils</groupId>
@@ -33,11 +41,11 @@
 		</dependency>
 
 		<!-- For EJB -->
-		<dependency>
+		<!--  dependency>
 			<groupId>org.jboss.spec.javax.ejb</groupId>
 			<artifactId>jboss-ejb-api_3.1_spec</artifactId>
 			<version>1.0.2.Final</version>
-		</dependency>
+		</dependency-->
 
 		<!-- For logger -->
 		<dependency>

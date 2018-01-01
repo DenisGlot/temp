@@ -51,7 +51,7 @@ public class LoginServlet extends TemplateServlet {
 		  		"				onFocus=\"field_focus(this, 'email');\"\r\n" + 
 		  		"				onblur=\"field_blur(this, 'email');\" class=\"email\" />\r\n" + 
 		  		"              <input onclick = \"redirect()\" type=\"submit\" value=\"Log in\" id=\"btn2\"/>\r\n" + 
-		  		"              <h1><a href =\""+ Prefix.prefix +"/register\">Registration</a></h1>\r\n" + 
+		  		"              <h1><a href =\""+ Prefix.prefix +"/registerDetails\">Registration</a></h1>\r\n" + 
 		  		"		</div>\r\n" + 
 		  		"	</form>");
 	}

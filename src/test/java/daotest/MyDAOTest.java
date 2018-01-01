@@ -47,11 +47,11 @@ public class MyDAOTest {
 	
 	@Test
 	public void user() {
-		assertEquals(daoUser.findById(1), new User(1,"admin","adminof",new Timestamp(123213412l),"Street","admin",Hashing.sha1("admin"),1));
-		assertEquals(daoUser.findByCriteria("email", "admin"), new User(1,"admin","adminof",new Timestamp(123213412l),"Street","admin",Hashing.sha1("admin"),1));
-		assertTrue(daoUser.save( new User(1,"sergey","donnow",new Timestamp(1232132312l),"Moscow","sergey",Hashing.sha1("123456"),1)));
+		assertEquals(daoUser.findById(1), new User(1,"admin","adminof",new Timestamp(123213412l),"Street","+7-777-777-77-77","admin",Hashing.sha1("admin"),1));
+		assertEquals(daoUser.findByCriteria("email", "admin"), new User(1,"admin","adminof",new Timestamp(123213412l),"Street","+7-777-777-77-77","admin",Hashing.sha1("admin"),1));
+		assertTrue(daoUser.save( new User(1,"sergey","donnow",new Timestamp(1232132312l),"Moscow","+7-777-777-77-77","sergey",Hashing.sha1("123456"),1)));
 		User sergey = daoUser.findByCriteria("email", "sergey");
-		assertEquals(sergey, new User(sergey.getId(),"sergey","donnow",new Timestamp(1232132312l),"Moscow","sergey",Hashing.sha1("123456"),1));
+		assertEquals(sergey, new User(sergey.getId(),"sergey","donnow",new Timestamp(1232132312l),"Moscow","sergey","+7-777-777-77-77",Hashing.sha1("123456"),1));
 		sergey.setAddress("London");
 		assertTrue(daoUser.update(sergey));
 		assertEquals(daoUser.findById(sergey.getId()),sergey);

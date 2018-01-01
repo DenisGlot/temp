@@ -37,17 +37,17 @@ public class Scenario {
 
 	
 	//Here stored every cache in my application
-	   private Cache userCache;
+	   private static Cache userCache;
 
-	   private Cache orderCache;
+	   private static Cache orderCache;
 
-	   private Cache odCache;
+	   private static Cache odCache;
  
-	   private Cache productCache;
+	   private static Cache productCache;
 	   
-	   private Cache suplierCache;
+	   private static Cache suplierCache;
 	   
-	   private Cache roleCache;
+	   private static Cache roleCache;
     //
 	
 	/**

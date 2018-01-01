@@ -10,7 +10,6 @@ import dao.entity.User;
 import hash.Hashing;
 
 /**
- * Kind of Pattern Decorator
  * This class is extension for JdbcTemplate,
  * which consist the right method for authorization
  * @author Denis
@@ -61,7 +60,7 @@ public class SpecJdbcTemplate {
 				e.printStackTrace();
 			} finally {
 				try {
-					jt.con.close();
+					jt.closeConnection();
 					ps.close();
 					rs.close();
 				} catch (SQLException e) {

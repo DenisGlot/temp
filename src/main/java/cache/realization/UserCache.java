@@ -24,7 +24,7 @@ public class UserCache extends Cache<String,User> {
 	 * @return authorized or not authorized
 	 */
 	public boolean authorization(User user) {
-		return dao.sjt.checkInDataBase(user);
+		return dao.checkInDataBase(user);
 	}
 	
 }

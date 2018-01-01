@@ -1,0 +1,7 @@
+input[type="tel"] {
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+}
+input[type="tel"]:focus {
+  border: 1px solid #000;
+}
