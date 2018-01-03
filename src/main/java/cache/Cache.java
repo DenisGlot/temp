@@ -39,7 +39,7 @@ public abstract class Cache<K, E> {
 		declareMapAndDAO(capacity);
 		load();
 		if(type.equals(User.class)) {
-			idName = "email";
+			idName = "phone";
 		} else {
 			MyEntity annotationEntity = type.getAnnotation(MyEntity.class);
 		    idName = annotationEntity.id();

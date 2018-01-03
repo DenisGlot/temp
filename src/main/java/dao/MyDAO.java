@@ -174,8 +174,15 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		}
 	}
 
+	/**
+	 * Check on null. If entity equals null then return false
+	 */
 	@Override
 	public boolean update(E entity) {
+		if(entity == null) {
+        	logger.debug("Entity was null");
+        	return false;
+        }
 		StringBuffer sb = new StringBuffer();
 		sb.append("update " + tableName + " set ");
 		int i = 1;
@@ -208,8 +215,15 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		return jt.executeDDL(sb.toString());
 	}
 
+	/**
+	 * Check on null. If entity equals null then return false
+	 */
 	@Override
 	public boolean delete(E entity) {
+		if(entity == null) {
+        	logger.debug("Entity was null");
+        	return false;
+        }
 		StringBuffer sb = new StringBuffer();
 		sb.append("delete from " + tableName);
 		try {
@@ -223,8 +237,15 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		
 	}
 
+	/**
+	 * Check on null. If entity equals null then return false
+	 */
 	@Override
 	public boolean save(E entity) {
+        if(entity == null) {
+        	logger.debug("Entity was null");
+        	return false;
+        }
 		//Creating insert statement
         StringBuffer sb = new StringBuffer();
         sb.append("insert into " + tableName + "(");

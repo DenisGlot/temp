@@ -58,7 +58,7 @@ public class RegisterDetails extends TemplateServlet {
 		logger.debug(firstName + " " + lastName + " " + phone + " " + password ) ; 
 		
 	    if(firstName!=null && lastName != null && phone !=null && password !=null) {
-	    	request.setAttribute("user", new User().newBuilder().setFirstName(firstName).setLastName(lastName).setPhone(phone).setPassword(password).build());
+	    	request.setAttribute("user", new User().newBuilder().setFirstName(firstName).setLastName(lastName).setGruopId(2).setPhone(phone).setPassword(password).build());
 	    	//forward the request to MailServlet
 	    	RequestDispatcher reqDispatcher = request.getRequestDispatcher("/register");// No need prefix here
 	    	try {
@@ -79,7 +79,7 @@ public class RegisterDetails extends TemplateServlet {
 				"    <input id = \"lname\" name =\"lname\" type=\"text\" class=\"form-control\" id=\"last\" aria-describedby=\"emailHelp\" placeholder=\"Enter first name\">\r\n" + 
 				"  </div>\r\n" + 
 				"  <div class=\"form-group\">\r\n" + 
-				"    <label for=\"phone\">Phone number</label>\r\n" + 
+				"    <label for=\"phone\">Phone number(format XXXX-XXX-XXXX)</label>\r\n" + 
 				"    <input id=\"phone\" name =\"phone\" type=\"text\" class=\"form-control input-medium bfh-phone\" type=\"tel\" pattern=\"^\\d{4}-\\d{3}-\\d{4}$\" required id=\"phone\">\r\n" + 
 				"  </div>\r\n" + 
 				"  <div class=\"form-group\">\r\n" + 

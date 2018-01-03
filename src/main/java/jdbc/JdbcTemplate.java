@@ -30,9 +30,6 @@ import id_counter.OrderIdCounter;
  *
  */
 public class JdbcTemplate {
-	
-	//ACCESS is the table where stored all information about users
-	static final String FIND_WHERE = "select 'OK' from ACCESS where email = ? and password = ?";
 
 	private final Logger logger = Logger.getLogger(JdbcTemplate.class);
 

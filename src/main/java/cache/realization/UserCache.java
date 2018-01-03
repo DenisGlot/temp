@@ -3,6 +3,11 @@ package cache.realization;
 import cache.Cache;
 import dao.entity.User;
 
+/**
+ * The email was the key Object but now it's the phone
+ * @author Denis
+ *
+ */
 public class UserCache extends Cache<String,User> {
 	
 	public UserCache(Class<User> type) {

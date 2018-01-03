@@ -61,7 +61,7 @@ public class AuthFilter implements Filter,SendHtml {
 		} else {
 			// Otherwise this logic checking in database email and password
 			email = request.getParameter("email");
-			logger.debug("The email is " + email);
+			logger.debug("The email or phone is " + email);
 			password = request.getParameter("password");
 			// if email and password is correct then we are going to page with calculator
 			if (email != null && password != null && checkInDataBase(email, password)) {
@@ -92,7 +92,7 @@ public class AuthFilter implements Filter,SendHtml {
 	}
     /**
      * Checks in database on presence of user
-     * @param email
+     * @param email could be phone or email
      * @param password
      * @return
      */

@@ -68,7 +68,7 @@ public class Scenario {
 	 */
 	public boolean authorization(User user) {
 		if (user == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("You can not authorize with null");
 		}
 		userCache = lazyInit(userCache, CacheType.USER);
 		return ((UserCache) userCache).authorization(user);

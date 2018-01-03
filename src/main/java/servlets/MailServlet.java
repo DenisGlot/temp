@@ -2,6 +2,10 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,42 +32,70 @@ public class MailServlet extends TemplateServlet {
 	private final Logger logger = Logger.getLogger(MailServlet.class);
 
 	private Scenario scenario;
+	private User user;
 	private String toEmail;
-	private String passwordForClient;
+	private Long id;
 	private boolean validation;
 	private boolean checkOnUnique;
 	private boolean noThanks;
+	
+	private static ConcurrentHashMap<Long, User> userCache;
+	private static AtomicLong userId;
 
 	public MailServlet() {
 		super();
 		scenario = new Scenario();
+		userCache = new ConcurrentHashMap<>();
+		userId = new AtomicLong(0);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		User user = (User) request.getAttribute("user");
-		toEmail = request.getParameter("mail");
-		validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
-		checkOnUnique = false;
-		noThanks = toEmail==null?false:toEmail.equals("a@mail.ru");
-		if (validation) {
-			if(noThanks || scenario.getById(CacheType.USER,toEmail)==null) {
-				//Needs checkOnUnique equals true further
-				checkOnUnique=true;
-				if (!noThanks) {
-					if (toEmail != null) {
-						user.setEmail(toEmail);
-
-					}
-					new Sender().sendPassword(toEmail, user.getPassword());
-				}
-					saveInDataBase(user);
-			}
-		}
-		user = null; //for GC
-		sendHtmlToBrowser(request, response);
 		
+		toEmail = request.getParameter("mail");
+		//Make possible for update
+		//It's working just from RegisterDetails
+		if (request.getAttribute("user") != null) {
+			user = (User) request.getAttribute("user");
+		    id = userId.incrementAndGet();
+			userCache.put(id, user);
+		} 
+		else {
+			String idString = request.getParameter("userId");
+			if(idString == null) {
+				throw new NullPointerException("userId parameter equals null(MailServlet)");
+			}
+			id = Long.parseLong(idString);
+			user = userCache.remove(id);
+		}
+		//
+		logger.debug(user);
+ 		// On case if user will try get this page through writing http-request by himself
+ 		if(user == null) {
+ 			response.sendRedirect("menu");
+ 			logger.debug("User was null");
+ 		} else {
+			validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
+			checkOnUnique = false;
+			noThanks = toEmail == null ? false : toEmail.equals("a@mail.ru");
+			if (validation) {
+				if (noThanks || scenario.getById(CacheType.USER, toEmail) == null) {
+					// Needs checkOnUnique equals true further
+					checkOnUnique = true;
+					if (!noThanks) {
+						if (toEmail != null) {
+							user.setEmail(toEmail);
+
+						}
+						new Sender().sendPassword(toEmail, user.getPassword());
+					}
+					saveInDataBase(user);
+				}
+			}
+			user = null; // for GC
+			sendHtmlToBrowser(request, response);
+ 		}
 	}
 	
 	@Override
@@ -86,16 +118,17 @@ public class MailServlet extends TemplateServlet {
 	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
 		out.println("<div class=\"box\">");
-		out.println("<form method=\"GET\">");
+		out.println("<form action=\"register\" method=\"GET\">");
 		if (!validation || !checkOnUnique) {
 			out.println("<h1>Do you want to receive information from us?</h1>");
+			out.println("<input type=\"hidden\" name=\"userId\" value=\"" + id + "\" />");
 			out.println("<input placeholder=\"your email\" value =\"" + (toEmail==null?"":toEmail) + "\" type=\"text\" name=\"mail\""
 					+ "onFocus=\"field_focus(this, 'email');\""
 					+ "onblur=\"field_blur(this, 'email');\" class=\"email\" />"
 					+ (validation ? (checkOnUnique ? "" : "<br/><em style=\"color:red;\">This email already exists</em>") 
 							                       : "<br/><em style=\"color:red;\">Please, write a valid email</em>"));
 			out.println("<input type=\"submit\" value=\"Send\" id=\"btn2\"/><br/><br/><br/><br/><br/>");
-			out.println("<a href=\"" + Prefix.prefix + "/register?mail=a%40mail.ru\">No, thank you. Continue</a>");
+			out.println("<a href=\"" + Prefix.prefix + "/register?mail=a%40mail.ru&userId=" + id + "\">No, thank you. Continue</a>");
 		} else {
 			out.println("<h1>You were successfully signed up!</h1> <br/>");
 			out.println("<a class=\"button\" href=\"" + Prefix.prefix + "/\">Go to Main page</a>");
@@ -115,7 +148,4 @@ public class MailServlet extends TemplateServlet {
 	private boolean saveInDataBase(User user) {
 		return scenario.registerUser(user);
 	}
-
-	
-
 }
