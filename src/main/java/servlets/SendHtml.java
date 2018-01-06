@@ -95,6 +95,7 @@ public interface SendHtml {
 			if (insertCss() != null) {
 				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + insertCss() + ".css\">");
 			}
+			
 			out.println("<div style = \"margin-top : 60px;\">");
 			insertLogic(request, response, out);
 			out.println("</div>");
