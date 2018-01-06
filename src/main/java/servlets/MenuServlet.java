@@ -2,6 +2,8 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,32 +56,32 @@ public class MenuServlet extends TemplateServlet {
 		 		"      </ol>\r\n" + 
 		 		"      <div class=\"carousel-inner\" role=\"listbox\">\r\n" + 
 		 		"        <div class=\"item active\">\r\n" + 
-		 		"          <img class=\"first-slide\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==\" alt=\"First slide\">\r\n" + 
+		 		"          <img class=\"first-slide\" src=\"imgs/slide_1.jpg\" style=\"position: relative; width: 900px; height:900px; top:-200px;\" alt=\"First slide\">\r\n" + 
 		 		"          <div class=\"container\">\r\n" + 
 		 		"            <div class=\"carousel-caption\">\r\n" + 
-		 		"              <h1>Example headline.</h1>\r\n" + 
-		 		"              <p>Note: If you're viewing this page via a <code>file://</code> URL, the \"next\" and \"previous\" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>\r\n" + 
-		 		"              <p><a class=\"btn btn-lg btn-primary\" href=\"#\" role=\"button\">Sign up today</a></p>\r\n" + 
+		 		"              <h1>New Era of Nikon</h1>\r\n" + 
+		 		"              <p>Only today! <code>-40%</code> on all cameras!</p>\r\n" + 
+		 		"              <p><a class=\"btn btn-lg btn-primary\" href=\"" + Prefix.prefix + "/item?product=1\" role=\"button\">Buy it now!</a></p>\r\n" + 
 		 		"            </div>\r\n" + 
 		 		"          </div>\r\n" + 
 		 		"        </div>\r\n" + 
 		 		"        <div class=\"item\">\r\n" + 
-		 		"          <img class=\"second-slide\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==\" alt=\"Second slide\">\r\n" + 
+		 		"          <img class=\"second-slide\" src=\"imgs/slide_2.jpg\" style=\"position: relative; width: 900px; height:900px; top:-200px;\" alt=\"Second slide\">\r\n" + 
 		 		"          <div class=\"container\">\r\n" + 
 		 		"            <div class=\"carousel-caption\">\r\n" + 
-		 		"              <h1>Another example headline.</h1>\r\n" + 
-		 		"              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>\r\n" + 
-		 		"              <p><a class=\"btn btn-lg btn-primary\" href=\"#\" role=\"button\">Learn more</a></p>\r\n" + 
+		 		"              <h1>Make youself happy</h1>\r\n" + 
+		 		"              <p>Acquire a heater with new technologty which keeps you warm th whole winter</p>\r\n" + 
+		 		"              <p><a class=\"btn btn-lg btn-primary\" href=\"" + Prefix.prefix + "/item?product=1\" role=\"button\">Acquire it now!</a></p>\r\n" + 
 		 		"            </div>\r\n" + 
 		 		"          </div>\r\n" + 
 		 		"        </div>\r\n" + 
 		 		"        <div class=\"item\">\r\n" + 
-		 		"          <img class=\"third-slide\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==\" alt=\"Third slide\">\r\n" + 
+		 		"          <img class=\"third-slide\" src=\"imgs/slide_3.jpg\" style=\"position: relative; width: 900px; height:900px; top:-200px;\" alt=\"Third slide\">\r\n" + 
 		 		"          <div class=\"container\">\r\n" + 
 		 		"            <div class=\"carousel-caption\">\r\n" + 
-		 		"              <h1>One more for good measure.</h1>\r\n" + 
-		 		"              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>\r\n" + 
-		 		"              <p><a class=\"btn btn-lg btn-primary\" href=\"#\" role=\"button\">Browse gallery</a></p>\r\n" + 
+		 		"              <h1>Printer which you've never seen</h1>\r\n" + 
+		 		"              <p>With colored glass </p>\r\n" + 
+		 		"              <p><a class=\"btn btn-lg btn-primary\" href=\"" + Prefix.prefix + "/item?product=1\" role=\"button\">What is it?</a></p>\r\n" + 
 		 		"            </div>\r\n" + 
 		 		"          </div>\r\n" + 
 		 		"        </div>\r\n" + 
@@ -123,54 +125,10 @@ public class MenuServlet extends TemplateServlet {
 		 		"        </div><!-- /.col-lg-4 -->\r\n" + 
 		 		"      </div><!-- /.row -->\r\n" + 
 		 		"\r\n" + 
-		 		"\r\n" + 
-		 		"      <!-- START THE FEATURETTES -->\r\n" + 
-		 		"\r\n" + 
-		 		"      <hr class=\"featurette-divider\">\r\n" + 
-		 		"\r\n" + 
-		 		"      <div class=\"row featurette\">\r\n" + 
-		 		"        <div class=\"col-md-7\">\r\n" + 
-		 		"          <h2 class=\"featurette-heading\">First featurette heading. <span class=\"text-muted\">It'll blow your mind.</span></h2>\r\n" + 
-		 		"          <p class=\"lead\">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>\r\n" + 
-		 		"        </div>\r\n" + 
-		 		"        <div class=\"col-md-5\">\r\n" + 
-		 		"          <img class=\"featurette-image img-responsive center-block\" data-src=\"holder.js/500x500/auto\" alt=\"Generic placeholder image\">\r\n" + 
-		 		"        </div>\r\n" + 
-		 		"      </div>\r\n" + 
-		 		"\r\n" + 
-		 		"      <hr class=\"featurette-divider\">\r\n" + 
-		 		"\r\n" + 
-		 		"      <div class=\"row featurette\">\r\n" + 
-		 		"        <div class=\"col-md-7 col-md-push-5\">\r\n" + 
-		 		"          <h2 class=\"featurette-heading\">Oh yeah, it's that good. <span class=\"text-muted\">See for yourself.</span></h2>\r\n" + 
-		 		"          <p class=\"lead\">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>\r\n" + 
-		 		"        </div>\r\n" + 
-		 		"        <div class=\"col-md-5 col-md-pull-7\">\r\n" + 
-		 		"          <img class=\"featurette-image img-responsive center-block\" data-src=\"holder.js/500x500/auto\" alt=\"Generic placeholder image\">\r\n" + 
-		 		"        </div>\r\n" + 
-		 		"      </div>\r\n" + 
-		 		"\r\n" + 
-		 		"      <hr class=\"featurette-divider\">\r\n" + 
-		 		"\r\n" + 
-		 		"      <div class=\"row featurette\">\r\n" + 
-		 		"        <div class=\"col-md-7\">\r\n" + 
-		 		"          <h2 class=\"featurette-heading\">And lastly, this one. <span class=\"text-muted\">Checkmate.</span></h2>\r\n" + 
-		 		"          <p class=\"lead\">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>\r\n" + 
-		 		"        </div>\r\n" + 
-		 		"        <div class=\"col-md-5\">\r\n" + 
-		 		"          <img class=\"featurette-image img-responsive center-block\" data-src=\"holder.js/500x500/auto\" alt=\"Generic placeholder image\">\r\n" + 
-		 		"        </div>\r\n" + 
-		 		"      </div>\r\n" + 
-		 		"\r\n" + 
-		 		"      <hr class=\"featurette-divider\">\r\n" + 
-		 		"\r\n" + 
-		 		"      <!-- /END THE FEATURETTES -->\r\n" + 
-		 		"\r\n" + 
-		 		"\r\n" + 
 		 		"      <!-- FOOTER -->\r\n" + 
 		 		"      <footer>\r\n" + 
 		 		"        <p class=\"pull-right\"><a href=\"#\">Back to top</a></p>\r\n" + 
-		 		"        <p>&copy; 2016 Company, Inc. &middot; <a href=\"#\">Privacy</a> &middot; <a href=\"#\">Terms</a></p>\r\n" + 
+		 		"        <p>&copy; " + Calendar.getInstance().get(Calendar.YEAR) + " Was stolen from bootstrap. &middot; <a href=\"#\">Privacy</a> &middot; <a href=\"#\">Terms</a></p>\r\n" + 
 		 		"      </footer>\r\n" + 
 		 		"\r\n" + 
 		 		"    </div><!-- /.container -->\r\n" + 
