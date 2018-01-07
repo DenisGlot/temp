@@ -2,6 +2,7 @@
 <html><head>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
 <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -17,11 +18,19 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">E-shop</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/calculator-0.0.1-SNAPSHOT/">Menu</a></li>
+            <li class="active"><div class="dropdown">
+               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 Menu<span class="caret"></span></button>
+               <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+               </ul>
+            </div></li>
+            <li  style = "margin-left : 70px;"><a href="/calculator-0.0.1-SNAPSHOT/">Home Page</a></li>
             <li  ><a href="/calculator-0.0.1-SNAPSHOT/shoppingcart">Cart</a></li>
             <li  style = "margin-left : 70px;"><a href="/calculator-0.0.1-SNAPSHOT/registerDetails">Registration</a></li>
             <li ><a href="/calculator-0.0.1-SNAPSHOT/signin">Log in</a></li>
@@ -31,6 +40,7 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+
 <link rel="stylesheet" type="text/css" href="css/carousel.css">
 <div style = "margin-top : 53px;">
  <!-- Carousel
@@ -47,9 +57,9 @@
           <img class="first-slide" src="imgs/slide_1.jpg" style="position: relative; width: 900px; height:900px; top:-200px;" alt="First slide">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Example headline.</h1>
-              <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+              <h1>New Era of Nikon</h1>
+              <p>Only today! <code>-40%</code> on all cameras!</p>
+              <p><a class="btn btn-lg btn-primary" href="/calculator-0.0.1-SNAPSHOT/item?product=1" role="button">Buy it now!</a></p>
             </div>
           </div>
         </div>
@@ -57,9 +67,9 @@
           <img class="second-slide" src="imgs/slide_2.jpg" style="position: relative; width: 900px; height:900px; top:-200px;" alt="Second slide">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Another example headline.</h1>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+              <h1>Make youself happy</h1>
+              <p>Acquire a heater with new technologty which keeps you warm th whole winter</p>
+              <p><a class="btn btn-lg btn-primary" href="/calculator-0.0.1-SNAPSHOT/item?product=1" role="button">Acquire it now!</a></p>
             </div>
           </div>
         </div>
@@ -67,9 +77,9 @@
           <img class="third-slide" src="imgs/slide_3.jpg" style="position: relative; width: 900px; height:900px; top:-200px;" alt="Third slide">
           <div class="container">
             <div class="carousel-caption">
-              <h1>One more for good measure.</h1>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
+              <h1>Printer which you've never seen</h1>
+              <p>With colored glass </p>
+              <p><a class="btn btn-lg btn-primary" href="/calculator-0.0.1-SNAPSHOT/item?product=1" role="button">What is it?</a></p>
             </div>
           </div>
         </div>

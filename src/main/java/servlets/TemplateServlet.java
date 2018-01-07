@@ -11,14 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import prefix.Prefix;
+import scenario.Scenario;
 
 public abstract class TemplateServlet extends HttpServlet implements SendHtml {
 	private static final long serialVersionUID = 12534655463L;
 
 	private final Logger logger = Logger.getLogger(TemplateServlet.class);
+	
+	protected Scenario scenario;
 
 	public TemplateServlet() {
 		super();
+		scenario = new Scenario();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

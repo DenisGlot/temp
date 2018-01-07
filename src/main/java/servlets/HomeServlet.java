@@ -15,20 +15,17 @@ import dao.entity.Product;
 import prefix.Prefix;
 import scenario.Scenario;
 
-@WebServlet("/menu")
-public class MenuServlet extends TemplateServlet {
+@WebServlet("/home")
+public class HomeServlet extends TemplateServlet {
 	private static final long serialVersionUID = 113412341243L;
 	
-	private Scenario scenario;
-       
-    public MenuServlet() {
+    public HomeServlet() {
         super();
-        scenario = new Scenario();
     }
 
 	@Override
 	public String insertJs() {
-		return "js/bootstrap.min";
+		return "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min";
 	}
 
 	@Override

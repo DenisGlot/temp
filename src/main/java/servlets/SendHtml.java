@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import dao.entity.Category;
 import prefix.Prefix;
+import scenario.Scenario;
 
 /**
  * Here is used Template method pattern
@@ -56,8 +58,8 @@ public interface SendHtml {
 			out.println("<!DOCTYPE html>");
 			out.println("<html><head>");
 			out.println("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
-			// // I use ajax here.
 			out.println("<script type=\"text/javascript\" src=\"jquery-3.2.1.min.js\"></script>");
+			out.println("<script type=\"text/javascript\" src=\"js/bootstrap.min.js\"></script>");
 			if (insertJs() != null) {
 				out.println("<script type=\"text/javascript\" src=\"" + insertJs() + ".js\"></script>");
 			}
@@ -78,11 +80,21 @@ public interface SendHtml {
 			out.print("            <span class=\"icon-bar\"></span>\r\n"); 
 			out.print("            <span class=\"icon-bar\"></span>\r\n");
 			out.print("          </button>\r\n");
-			out.print("          <a class=\"navbar-brand\" href=\"#\">E-shop</a>\r\n");
 			out.print("        </div>\r\n");
 			out.print("        <div id=\"navbar\" class=\"navbar-collapse collapse\">\r\n");
 			out.print("          <ul class=\"nav navbar-nav\">\r\n");
-			out.print("            <li " + (request.getServletPath().equals("/menu") ?"class=\"active\"":"") + "><a href=\"" + Prefix.prefix + "/\">Menu</a></li>\r\n");
+			out.print("            <li " + (request.getServletPath().equals("/menu") ?"class=\"active\"":"") + "><div class=\"dropdown\">\r\n"); 
+		  out.println("               <button class=\"btn btn-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">"); 
+		  out.println("                 Menu</button>");
+		  out.println("               <ul class=\"dropdown-menu\">"); 
+		  //Making all categories in dropdown menu
+		  for(Category category : new Scenario().getAllCategory()) {
+		  out.println("                  <li><a class=\"dropdown-item\" href=\"" + Prefix.prefix + "/category?categoryId=" + category.getCategoryid() + "\">" + category.getName() + "</a></li>"); 
+		  }
+		  //
+		  out.println("               </ul>"); 
+		  out.println("            </div></li>");
+			out.print("            <li " + (request.getServletPath().equals("/category") ?"class=\"active\"":"") + "  style = \"margin-left : 40px;\"><a href=\"" + Prefix.prefix + "/\">Home Page</a></li>\r\n");
 			out.print("            <li  " + (request.getServletPath().equals("/shoppingcart") ?"class=\"active\"":"") + "><a href=\"" + Prefix.prefix + "/shoppingcart\">Cart</a></li>\r\n");
 			out.print("            <li " + (request.getServletPath().equals("/registerDetails") ?"class=\"active\"":"") + " style = \"margin-left : 70px;\"><a href=\"" + Prefix.prefix + "/registerDetails\">Registration</a></li>\r\n");
 			out.print("            <li " + (request.getServletPath().equals("/signin") ?"class=\"active\"":"") + "><a href=\"" + Prefix.prefix + "/signin\">Log in</a></li>\r\n");
@@ -92,6 +104,7 @@ public interface SendHtml {
 			out.print("        </div><!--/.nav-collapse -->\r\n");
 			out.print("      </div>\r\n");
 			out.println("    </nav>");
+			out.println("");
 			if (insertCss() != null) {
 				out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + insertCss() + ".css\">");
 			}

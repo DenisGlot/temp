@@ -31,7 +31,6 @@ public class MailServlet extends TemplateServlet {
 	
 	private final Logger logger = Logger.getLogger(MailServlet.class);
 
-	private Scenario scenario;
 	private User user;
 	private String toEmail;
 	private Long id;
@@ -44,7 +43,6 @@ public class MailServlet extends TemplateServlet {
 
 	public MailServlet() {
 		super();
-		scenario = new Scenario();
 		userCache = new ConcurrentHashMap<>();
 		userId = new AtomicLong(0);
 	}
@@ -147,5 +145,9 @@ public class MailServlet extends TemplateServlet {
      */
 	private boolean saveInDataBase(User user) {
 		return scenario.registerUser(user);
+	}
+	
+	private void clearCacheHere() {
+		userCache.clear();
 	}
 }

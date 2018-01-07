@@ -34,11 +34,8 @@ public class ItemServlet extends TemplateServlet {
 
 	private final Logger logger = Logger.getLogger(ItemServlet.class);
 	
-	private Scenario scenario;
-
 	public ItemServlet() {
 		super();
-		scenario = new Scenario();
 	}
 
 	@Override

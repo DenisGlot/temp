@@ -18,11 +18,8 @@ public class FeedbackServlet extends TemplateServlet {
 	
 	private final Logger logger = Logger.getLogger(FeedbackServlet.class);
        
-	private Scenario scenario;
-
     public FeedbackServlet() {
         super();
-        scenario = new Scenario(); 
     }
 
 	@Override

@@ -12,8 +12,10 @@ import cache.Cache;
 import cache.factory.CacheFacroty;
 import cache.factory.CacheType;
 import cache.realization.UserCache;
+import cache.realization.simple.CategoryCache;
 import cache.realization.simple.OrderCache;
 import cache.realization.simple.OrderDetailsCache;
+import dao.entity.Category;
 import dao.entity.Courier;
 import dao.entity.Order;
 import dao.entity.OrderDetails;
@@ -48,6 +50,8 @@ public class Scenario {
 	   private static Cache suplierCache;
 	   
 	   private static Cache roleCache;
+	   
+	   private static Cache categoryCache;
     //
 	
 	/**
@@ -209,10 +213,16 @@ public class Scenario {
 		case ROLE:
 			roleCache = lazyInit(roleCache, CacheType.ROLE);
 			return roleCache.getById(id);
-//		case CATEGORY:
-//			return new CategeryCache(Category.class);
+		case CATEGORY:
+			categoryCache = lazyInit(categoryCache, CacheType.CATEGORY);
+			return categoryCache.getById(id);
 		} 
 		return null;
+	}
+	
+	public List<Category> getAllCategory() {
+		categoryCache = lazyInit(categoryCache, CacheType.CATEGORY);
+		return ((CategoryCache) categoryCache).getAll();
 	}
 
 }

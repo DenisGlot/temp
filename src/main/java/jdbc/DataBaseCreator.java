@@ -81,13 +81,13 @@ public class DataBaseCreator {
 				jt.executeDDL(
 					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,99,100,'JVM','the best assembly','https://i.ytimg.com/vi/G1ubVOl9IBw/maxresdefault.jpg')");
 				jt.executeDDL(
-					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,2,10000,50,'laptop HP190','The super fast processor Intel - 9213, RAM - 8192MB','https://cnet3.cbsistatic.com/img/ttt0dUBA6U9m043Fj1uEui4-6X8=/770x578/2014/09/07/30e56559-a526-47f0-9068-1ca1958ff73d/hp-streammodern-silver.jpg')");
+					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(2,2,10000,50,'laptop HP190','The super fast processor Intel - 9213, RAM - 8192MB','https://cnet3.cbsistatic.com/img/ttt0dUBA6U9m043Fj1uEui4-6X8=/770x578/2014/09/07/30e56559-a526-47f0-9068-1ca1958ff73d/hp-streammodern-silver.jpg')");
 				jt.executeDDL(
 					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,100,100,'Windows 10','the best assembly','https://www.windowscentral.com/sites/wpcentral.com/files/styles/larger/public/field/image/2017/03/cloudwallpaper.jpg?itok=VC2ajDrI')");
 				jt.executeDDL(
-					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,2,2000,20,'iPhone X','It was announced on September 12, 2017, alongside the iPhone 8 and iPhone 8 Plus at the Steve Jobs Theater in the Apple Park campus. The phone was released on November 3, 2017','http://bm.img.com.ua/berlin/storage/orig/3/ae/1d734f3a21d07121c9c3996a18884ae3.jpg')");
+					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(2,2,2000,20,'iPhone X','It was announced on September 12, 2017, alongside the iPhone 8 and iPhone 8 Plus at the Steve Jobs Theater in the Apple Park campus. The phone was released on November 3, 2017','http://bm.img.com.ua/berlin/storage/orig/3/ae/1d734f3a21d07121c9c3996a18884ae3.jpg')");
 				jt.executeDDL(
-					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,2,99,100,'Fire TV Edition','Element 43-Inch 4K Ultra HD Smart LED TV - Fire TV Edition','https://assets.pcmag.com/media/images/560165-amazon-fire-tv.jpg?thumb=y&width=980&height=416')");
+					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(2,2,99,100,'Fire TV Edition','Element 43-Inch 4K Ultra HD Smart LED TV - Fire TV Edition','https://assets.pcmag.com/media/images/560165-amazon-fire-tv.jpg?thumb=y&width=980&height=416')");
 			logger.debug("PRODUCTS was created");
 			}
 			

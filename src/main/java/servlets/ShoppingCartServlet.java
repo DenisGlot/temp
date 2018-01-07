@@ -27,13 +27,10 @@ public class ShoppingCartServlet extends TemplateServlet {
 
 	private final Logger logger = Logger.getLogger(ShoppingCartServlet.class);
 
-	private Scenario scenario;
-	
 	private String quantityString;
 
 	public ShoppingCartServlet() {
 		super();
-		scenario = new Scenario();
 	}
 	
 	@Override

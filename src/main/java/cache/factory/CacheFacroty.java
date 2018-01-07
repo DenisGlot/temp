@@ -3,7 +3,7 @@ package cache.factory;
 import cache.Cache;
 import cache.realization.RoleCache;
 import cache.realization.UserCache;
-import cache.realization.simple.CategeryCache;
+import cache.realization.simple.CategoryCache;
 import cache.realization.simple.OrderCache;
 import cache.realization.simple.OrderDetailsCache;
 import cache.realization.simple.ProductCache;
@@ -33,7 +33,7 @@ public class CacheFacroty {
 		case ROLE:
 			return new RoleCache(Role.class);
 		case CATEGORY:
-			return new CategeryCache(Category.class);
+			return new CategoryCache(Category.class);
 		} 
 		return null;
     	 
