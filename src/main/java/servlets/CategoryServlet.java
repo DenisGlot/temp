@@ -32,7 +32,7 @@ public class CategoryServlet extends TemplateServlet {
 
 	@Override
 	public String insertTitle() {
-		return null;
+		return "Menu";
 	}
 
 	@Override

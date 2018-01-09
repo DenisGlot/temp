@@ -71,7 +71,7 @@ public class MailServlet extends TemplateServlet {
 		logger.debug(user);
  		// On case if user will try get this page through writing http-request by himself
  		if(user == null) {
- 			response.sendRedirect("menu");
+ 			response.sendRedirect("home");
  			logger.debug("User was null");
  		} else {
 			validation = EmailValidation.validate(toEmail == null ? "" : toEmail);
