@@ -33,18 +33,12 @@ public class JdbcTemplate {
 
 	private final Logger logger = Logger.getLogger(JdbcTemplate.class);
 
-	private String driver = null;
-	private String jdbc_url = null;
-
-	protected Connection con = null;
+	private final String driver = initDriver();
+	private final String jdbc_url = initJdbcUrl();
 	
-	private ResultSetHandler<Object[][]> h;
-
-	private static boolean tablesAreNotCreated = true;
+	private final ResultSetHandler<Object[][]> h = initResultSetHandler();
 
 	public JdbcTemplate() {
-		initFields();
-		initResultSetHandler();
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
@@ -60,9 +54,9 @@ public class JdbcTemplate {
 	 * @return
 	 * @throws RuneTime exception 
 	 */
-	 void connectToDataBase() {
+	 Connection connectToDataBase() {
 		try {
-			con = DriverManager.getConnection(jdbc_url);
+			return DriverManager.getConnection(jdbc_url);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -72,7 +66,7 @@ public class JdbcTemplate {
 	/**
 	 * It will be use in SpecJdbcTemplate which is in the same package
 	 */
-	void closeConnection() {
+	void closeConnection(Connection con) {
 		try {
 			con.close();
 		} catch (SQLException e) {
@@ -80,17 +74,9 @@ public class JdbcTemplate {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * is used in DataBaseCreator which is in the same package
-	 * @return
-	 */
-	Connection getConnection() {
-		return con;
-	}
 
 	public boolean executeDDL(String myQuery) {
-		connectToDataBase();
+		Connection con = connectToDataBase();
 		try(Statement statement = con.createStatement()) {
 		     int res = statement.executeUpdate(myQuery);
 		     if(res>0) {
@@ -102,13 +88,13 @@ public class JdbcTemplate {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		} finally {
-			closeConnection();
+			closeConnection(con);
 		}
 		return false;
 	}
 	
 	public boolean executePreparedDDLwithTimestamp(String myQuery,Timestamp time ) {
-		connectToDataBase();
+		Connection con = connectToDataBase();
 		try(PreparedStatement ps = con.prepareStatement(myQuery)){
 		      	ps.setObject(1, time);
 		      	ps.executeUpdate();
@@ -118,7 +104,7 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			return false;
 		} finally {
-			closeConnection();
+			closeConnection(con);
 		}
 		
 	}
@@ -130,7 +116,7 @@ public class JdbcTemplate {
 	 * @return
 	 */
 	public Object[][] executeSelect(String myQuery) {
-		connectToDataBase();
+		Connection con = connectToDataBase();
 		QueryRunner run = new QueryRunner();
 		try {
 			return run.query(con, myQuery, h);
@@ -138,7 +124,7 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			closeConnection();
+			closeConnection(con);
 		}
 		return null;
 
@@ -150,7 +136,7 @@ public class JdbcTemplate {
 	 * @return
 	 */
 	public Object[][] executePreparedSelect(String myQuery, Object ... param ) {
-		connectToDataBase();
+		Connection con = connectToDataBase();
 		QueryRunner run = new QueryRunner();
 		try {
 			return run.query(con, myQuery, h, param);
@@ -158,7 +144,7 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			closeConnection();
+			closeConnection(con);
 		}
 		return null;
 
@@ -167,7 +153,7 @@ public class JdbcTemplate {
 	/**
 	 * Declaring String parameters jdbc_url and driver from Property
 	 */
-	private void initFields() {
+	private String initDriver() {
 		Properties prop = new Properties();
 		try(InputStream input = getClass().getResourceAsStream("/file.properties");) {
 			prop.load(input);
@@ -175,16 +161,27 @@ public class JdbcTemplate {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		driver = prop.getProperty("driver_derby");
-		jdbc_url = prop.getProperty("jdbc_url");
+		return prop.getProperty("driver_derby");
+	}
+	
+	private String initJdbcUrl() {
+		Properties prop = new Properties();
+		try(InputStream input = getClass().getResourceAsStream("/file.properties");) {
+			prop.load(input);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return prop.getProperty("jdbc_url");
 	}
 
 	/**
 	 * Create a ResultSetHandler implementation to convert the first row into an
 	 * Object[]. I don't know how to count rows so I used 100
+	 * @return 
 	 */
-	private void initResultSetHandler() {
-		h = new ResultSetHandler<Object[][]>() {
+	private ResultSetHandler<Object[][]> initResultSetHandler() {
+		return new ResultSetHandler<Object[][]>() {
 			public Object[][] handle(ResultSet rs) throws SQLException {
 				ResultSetMetaData meta = rs.getMetaData();
 				int cols = meta.getColumnCount();

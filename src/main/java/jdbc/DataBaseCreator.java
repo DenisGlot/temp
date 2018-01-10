@@ -41,7 +41,7 @@ public class DataBaseCreator {
 		DatabaseMetaData metaData = null;
 		//Declares metaData
 		try {
-			metaData = jt.getConnection().getMetaData();
+			metaData = jt.connectToDataBase().getMetaData();
 			metaData.getTables(null, null, "ACCESS", null);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class DataBaseCreator {
 				jt.executeDDL(
 					"create table PRODUCTS (productid integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), categoryid integer, suplierid integer not null, price bigint, quantity integer, name varchar(45) not null, description varchar(255),urlofimg varchar(255))");
 				jt.executeDDL(
-					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,99,100,'JVM','the best assembly','https://i.ytimg.com/vi/G1ubVOl9IBw/maxresdefault.jpg')");
+					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(1,1,99,10000,'JVM','the best assembly','https://i.ytimg.com/vi/G1ubVOl9IBw/maxresdefault.jpg')");
 				jt.executeDDL(
 					"insert into PRODUCTS(categoryid, suplierid,price,quantity,name,description,urlofimg) values(2,2,10000,50,'laptop HP190','The super fast processor Intel - 9213, RAM - 8192MB','https://cnet3.cbsistatic.com/img/ttt0dUBA6U9m043Fj1uEui4-6X8=/770x578/2014/09/07/30e56559-a526-47f0-9068-1ca1958ff73d/hp-streammodern-silver.jpg')");
 				jt.executeDDL(

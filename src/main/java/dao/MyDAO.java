@@ -40,13 +40,13 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	private Field[] fields;
 	
-	private Field fieldId = null;
+	private volatile Field fieldId = null;
 	
 	private Class[] cArgs;
 	
 	private String[] nameOfColumns;
 	
-	private Class<E> type;
+	private volatile Class<E> type;
 	
 	public MyDAO(Class<E> type) {
 		jt = new JdbcTemplate();
@@ -81,7 +81,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	@Override
 	public List<E> getALl() {
 		List<E> list = new ArrayList<>();
-		Object[][] obs = jt.executeSelect("select * from " + tableName);
+		Object[][] obs = null;
+		synchronized (jt) {
+			obs = jt.executeSelect("select * from " + tableName);	
+		}
 		Object[] obsForInstance = new Object[obs[0].length];
 		if(obs[0][0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
@@ -107,7 +110,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	@Override
 	public List<E> getAllByCriteria(String name,Object like){
 		List<E> list = new ArrayList<>();
-		Object[][] obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?", like.toString());
+		Object[][] obs = null;
+		synchronized (jt) {
+			obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?", like.toString());
+		}
 		Object[] obsForInstance = new Object[obs[0].length];
 		if(obs[0][0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
@@ -132,7 +138,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 
 	@Override
 	public E findById(K id) {
-		Object[][] obs = jt.executeSelect("select * from " + tableName + " where " + idName + " = " + id);
+		Object[][] obs = null;
+		synchronized (jt) {
+			obs = jt.executeSelect("select * from " + tableName + " where " + idName + " = " + id);
+		}
 		Object[] obsForInstance = new Object[obs[0].length];
 		if(obs[0][0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
@@ -155,7 +164,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	@Override
 	public E findByCriteria(String name, Object like) {
-		Object[][] obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?",like.toString());
+		Object[][] obs = null;
+		synchronized (jt) {
+			obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?",like.toString());
+		}
 		Object[] obsForInstance = new Object[obs[0].length];
 		if(obs[0][0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
@@ -212,7 +224,9 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
 		}
-		return jt.executeDDL(sb.toString());
+		synchronized (jt) {
+			return jt.executeDDL(sb.toString());
+		}
 	}
 
 	/**
@@ -233,7 +247,9 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			logger.error(e.getMessage()+ " in " + type.getSimpleName());
 			return false;
 		}
-		return jt.executeDDL(sb.toString());
+		synchronized (jt) {
+			return jt.executeDDL(sb.toString());	
+		}
 		
 	}
 
@@ -278,10 +294,13 @@ public class MyDAO<E,K> implements DAO<E, K> {
 			i++;
 		}
 		logger.debug(sb.toString());
-		return jt.executeDDL(sb.toString());
+		synchronized (jt) {
+			return jt.executeDDL(sb.toString());	
+		}
 	}
 	
 	public boolean checkInDataBase(User user) {
+		
 		return sjt.checkInDataBase(user);
 	}
 	

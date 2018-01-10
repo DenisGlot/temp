@@ -62,13 +62,13 @@ public class ShoppingCartServlet extends TemplateServlet {
 			throws IOException {
 		// Logic begins
 		HttpSession session = request.getSession();
-		String email = (String) session.getAttribute("email");
+		String phone = (String) session.getAttribute("phone");
 		String isBuying = request.getParameter("buy");
-		ShoppingCard shoppingCard = ShoppingCarts.shoppingCarts.get(email);
+		ShoppingCard shoppingCard = ShoppingCarts.shoppingCarts.get(phone);
 		boolean isBought = false;
 		if (isBuying != null && isBuying.equals("yes")) {
 			scenario.buyFromBasket(shoppingCard);
-			ShoppingCarts.shoppingCarts.remove(email);
+			ShoppingCarts.shoppingCarts.remove(phone);
 			isBought = true;
 		}
 		// Logic ends

@@ -1,5 +1,10 @@
 package cache.realization;
 
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.print.attribute.HashAttributeSet;
+
 import cache.Cache;
 import dao.entity.User;
 
@@ -12,6 +17,7 @@ public class UserCache extends Cache<String,User> {
 	
 	public UserCache(Class<User> type) {
 		super(type);
+		
 	}
 
 	@Override

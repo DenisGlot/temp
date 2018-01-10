@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import cache.factory.CacheType;
 import dao.entity.User;
 import jdbc.JdbcTemplate;
 import prefix.Prefix;
@@ -54,10 +55,16 @@ public class RegisterDetails extends TemplateServlet {
 		String lastName = (String) request.getParameter("lname");
 		String phone = (String) request.getParameter("phone");
 		String password = (String) request.getParameter("password");
+		boolean isNotUnique = false; 
 		
 		logger.debug(firstName + " " + lastName + " " + phone + " " + password ) ; 
 		
-	    if(firstName!=null && lastName != null && phone !=null && password !=null) {
+		/* Eventually uncomment
+		if(password!=null) {
+			isNotUnique=scenario.getById(CacheType.USER, phone)!=null;
+		}
+		*/
+	    if(firstName!=null && lastName != null && phone !=null && password !=null /*Eventually uncomment && isNotUnique*/) {
 	    	request.setAttribute("user", new User().newBuilder().setFirstName(firstName).setLastName(lastName).setGruopId(2).setPhone(phone).setPassword(password).build());
 	    	//forward the request to MailServlet
 	    	RequestDispatcher reqDispatcher = request.getRequestDispatcher("/register");// No need prefix here
@@ -80,8 +87,11 @@ public class RegisterDetails extends TemplateServlet {
 				"  </div>\r\n" + 
 				"  <div class=\"form-group\">\r\n" + 
 				"    <label for=\"phone\">Phone number(format XXXX-XXX-XXXX)</label>\r\n" + 
-				"    <input id=\"phone\" name =\"phone\" type=\"text\" class=\"form-control input-medium bfh-phone\" type=\"tel\" pattern=\"^\\d{4}-\\d{3}-\\d{4}$\" required id=\"phone\">\r\n" + 
-				"  </div>\r\n" + 
+				"    <input id=\"phone\" name =\"phone\" type=\"text\" class=\"form-control input-medium bfh-phone\" type=\"tel\" pattern=\"^\\d{4}-\\d{3}-\\d{4}$\" required id=\"phone\">"); 
+				if(isNotUnique) {
+				out.println("    <label>This phone already exists</label>");
+				}
+				out.println("  </div>\r\n" + 
 				"  <div class=\"form-group\">\r\n" + 
 				"    <label for=\"password\">Password</label>\r\n" + 
 				"    <input id = \"password\" name =\"password\" type=\"password\" class=\"form-control\" id=\"password\">\r\n" + 

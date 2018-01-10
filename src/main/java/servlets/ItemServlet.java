@@ -58,7 +58,7 @@ public class ItemServlet extends TemplateServlet {
 			throws IOException {
 		// Logic begins
 		HttpSession session = request.getSession();
-		String email = (String) session.getAttribute("email");
+		String phone = (String) session.getAttribute("phone");
 		String productidString = request.getParameter("product");
 		String quantity = request.getParameter("quantity");
 		Integer productid;
@@ -77,9 +77,9 @@ public class ItemServlet extends TemplateServlet {
 			String isPutting = request.getParameter("cart");
 			boolean isPut = isPutting != null && isPutting.equals("yes");
 			if (isPut) {
-				ShoppingCard shoppingCard = new ShoppingCard((User) scenario.getById(CacheType.USER, email));
+				ShoppingCard shoppingCard = new ShoppingCard((User) scenario.getById(CacheType.USER, phone));
 				shoppingCard.addProduct(product, Integer.parseInt(quantity));
-				ShoppingCarts.shoppingCarts.put(email, shoppingCard);
+				ShoppingCarts.shoppingCarts.put(phone, shoppingCard);
 			}
 
 			// Logic ends

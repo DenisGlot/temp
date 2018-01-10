@@ -1,5 +1,6 @@
 package jdbc;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,13 +43,15 @@ public class SpecJdbcTemplate {
 	 */
 	public boolean checkInDataBase(User user) {
 		String result;
+		Connection con = null;
 		synchronized (jt) {
-			jt.connectToDataBase();
+			con = jt.connectToDataBase();
+		}
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
 				//For the phone authorization
-				ps = jt.con.prepareStatement(FIND_WHERE_PHONE);
+				ps = con.prepareStatement(FIND_WHERE_PHONE);
 				ps.setString(1, user.getPhone());
 				ps.setString(2, user.getPassword());
 				rs = ps.executeQuery();
@@ -57,7 +60,7 @@ public class SpecJdbcTemplate {
 					if(Objects.equals("OK", result)) { return true;}
 				}
 				//For the email authentication
-				ps = jt.con.prepareStatement(FIND_WHERE_EMAIL);
+				ps = con.prepareStatement(FIND_WHERE_EMAIL);
 				ps.setString(1, user.getEmail());
 				ps.setString(2, user.getPassword());
 				rs = ps.executeQuery();
@@ -77,7 +80,9 @@ public class SpecJdbcTemplate {
 				e.printStackTrace();
 			} finally {
 				try {
-					jt.closeConnection();
+					synchronized (jt) {
+						jt.closeConnection(con);	
+					}
 					ps.close();
 					rs.close();
 				} catch (SQLException e) {
@@ -87,5 +92,5 @@ public class SpecJdbcTemplate {
 			}
 			return false;
 		}
-	}
+	
 }

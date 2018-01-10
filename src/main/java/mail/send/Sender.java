@@ -13,32 +13,27 @@ import javax.mail.internet.MimeMessage;
 import org.apache.log4j.Logger;
 
 import exceptions.MailSenderException;
-import servlets.TemplateServlet;
 
 public class Sender {
 	
 	private final Logger logger = Logger.getLogger(Sender.class);
 
-	protected final String username = "denisglotov.1911@gmail.com";
-	protected final String password = "123456asdzxcv";
-
-	protected final Properties props;
+	protected final static String username = "denisglotov.1911@gmail.com";
+	protected final static String password = "123456asdzxcv";
 	
-	protected Message message;
-
-	public Sender() {
-		props = new Properties();
+	static Session session;
+	
+	static {
+		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-
-		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+		session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
 			}
 		});
-		message = new MimeMessage(session);
 	}
 	
 	/**
@@ -48,7 +43,8 @@ public class Sender {
 	 * @param Content must be text/html type 
 	 * @throws MailSenderException
 	 */
-	public void sendMessage(String toEmail,String Subject,String Content) {
+	private void sendMessage(String toEmail,String Subject,String Content) {
+		Message message = new MimeMessage(session);
 		try {
 			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));

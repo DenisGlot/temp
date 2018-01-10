@@ -42,11 +42,9 @@ public class FeedbackServlet extends TemplateServlet {
 			throws IOException {
 		String message = request.getParameter("message");
 		logger.debug(message);
-		logger.debug( request.getSession().getAttribute("email"));
-		logger.debug( request.getSession().getAttribute("email").toString());
 		logger.debug( request.getParameter("subject"));
 		if(message != null) {
-			scenario.sendFeedBack(message,request.getParameter("subject"), request.getSession().getAttribute("email").toString());
+			scenario.sendFeedBack(message,request.getParameter("subject"), (String) request.getSession().getAttribute("name"));
 			out.println("<div class=\"contain\">");
 			out.println("<strong style = \"color: #00FA9A; font-size: 1.5em;\">Thank you! Your opinion is very important to us.</strong>");
 			out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/\">Choose something else? </a>");

@@ -47,7 +47,7 @@ public class AuthFilter implements Filter,SendHtml {
 			throws IOException, ServletException {
 
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		String email = null;
+		String phoneOrEmail = null;
 		String password = null;
 		logger.debug("Session Atribute = " + session.getAttribute("login"));
 		// Logic begins
@@ -60,13 +60,12 @@ public class AuthFilter implements Filter,SendHtml {
 			chain.doFilter(request, response);
 		} else {
 			// Otherwise this logic checking in database email and password
-			email = request.getParameter("email");
-			logger.debug("The email or phone is " + email);
+			phoneOrEmail = request.getParameter("email");
+			logger.debug("The email or phone is " + phoneOrEmail);
 			password = request.getParameter("password");
 			// if email and password is correct then we are going to page with calculator
-			if (email != null && password != null && checkInDataBase(email, password)) {
+			if (phoneOrEmail != null && password != null && checkInDataBase(phoneOrEmail, password,session)) {
 				session.setAttribute("login", "LOGIN");
-				session.setAttribute("email", email);
 				session.setAttribute("role", role);
 				logger.debug("The filter did log in with email and password");
 				chain.doFilter(request, response);
@@ -92,19 +91,24 @@ public class AuthFilter implements Filter,SendHtml {
 	}
     /**
      * Checks in database on presence of user
-     * @param email could be phone or email
+     * @param emailOrPassword could be phone or email
      * @param password
      * @return
      */
-	private boolean checkInDataBase(String email, String password) {
-		User user = (User) scenario.getById(CacheType.USER,email);
+	private boolean checkInDataBase(String phoneOrEmail, String password,HttpSession session) {
+		User user = (User) scenario.getById(CacheType.USER,phoneOrEmail);
 		if (user == null) {
 			return false;
 		}
 		if (scenario.authorization(user)) {
             declareRoleOfUser(user);
+            session.setAttribute("phone", user.getPhone());
+            session.setAttribute("mail", user.getEmail());
+            session.setAttribute("name", user.getFirstname() + " " + user.getLastname());
+            user = null;//GC
 			return true;
 		}
+		user = null;//GC
 		return false;
 	}
     /**

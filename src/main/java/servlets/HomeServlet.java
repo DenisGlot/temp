@@ -130,11 +130,6 @@ public class HomeServlet extends TemplateServlet {
 		 		"\r\n" + 
 		 		"    </div><!-- /.container -->\r\n" + 
 		 		"\r\n" + 
-		 		"\r\n" + 
-		 		"    <!-- Bootstrap core JavaScript\r\n" + 
-		 		"    ================================================== -->\r\n" + 
-		 		"    <!-- Placed at the end of the document so the pages load faster -->\r\n" + 
-		 		"    <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js\"></script>\r\n" + 
 		 		"    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->\r\n" + 
 		 		"    <script src=\"js/holder.min.js\"></script>"); 
 		
