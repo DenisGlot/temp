@@ -51,4 +51,14 @@ public class ShoppingCard {
 	public void removeProduct(Product product) {
 		products.remove(product);
 	}
+	
+	public void removeAllProducts() {
+		products.clear();
+	}
+	
+	@Override
+	public String toString() {
+		return "ShoppingCard [user=" + user + "]";
+	}
+
 }

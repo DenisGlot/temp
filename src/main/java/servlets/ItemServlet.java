@@ -26,7 +26,6 @@ import math.Arithmetic;
 import prefix.Prefix;
 import scenario.Scenario;
 import shopping_card.ShoppingCard;
-import shopping_card.ShoppingCarts;
 
 @WebServlet("/item")
 public class ItemServlet extends TemplateServlet {
@@ -79,7 +78,7 @@ public class ItemServlet extends TemplateServlet {
 			if (isPut) {
 				ShoppingCard shoppingCard = new ShoppingCard((User) scenario.getById(CacheType.USER, phone));
 				shoppingCard.addProduct(product, Integer.parseInt(quantity));
-				ShoppingCarts.shoppingCarts.put(phone, shoppingCard);
+				session.setAttribute("card", shoppingCard);
 			}
 
 			// Logic ends

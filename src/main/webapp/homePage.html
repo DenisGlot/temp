@@ -2,8 +2,8 @@
 <html><head>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
 <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <title>Home Page</title></head>
@@ -21,21 +21,20 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><div class="dropdown">
+            <li ><div class="dropdown">
                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                 Menu<span class="caret"></span></button>
+                 Menu</button>
                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item" href="/category?categoryId=1">Software</a></li>
+                  <li><a class="dropdown-item" href="/category?categoryId=2">Hardware</a></li>
                </ul>
             </div></li>
-            <li  style = "margin-left : 70px;"><a href="/calculator-0.0.1-SNAPSHOT/">Home Page</a></li>
-            <li  ><a href="/calculator-0.0.1-SNAPSHOT/shoppingcart">Cart</a></li>
-            <li  style = "margin-left : 70px;"><a href="/calculator-0.0.1-SNAPSHOT/registerDetails">Registration</a></li>
-            <li ><a href="/calculator-0.0.1-SNAPSHOT/signin">Log in</a></li>
-            <li style = "margin-left : 100px;"><a  href="/calculator-0.0.1-SNAPSHOT/calc">Calculator :)</a></li>
-            <li style = "margin-left : 100px;"><a  href="/calculator-0.0.1-SNAPSHOT/feedback">Feedback</a></li>
+            <li   style = "margin-left : 40px;"><a href="/">Home Page</a></li>
+            <li  ><a href="/shoppingcart">Cart</a></li>
+            <li  style = "margin-left : 70px;"><a href="/registerDetails">Registration</a></li>
+            <li ><a href="/signin">Log in</a></li>
+            <li style = "margin-left : 100px;"><a  href="/calc">Calculator :)</a></li>
+            <li style = "margin-left : 100px;"><a  href="/feedback">Feedback</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -59,7 +58,7 @@
             <div class="carousel-caption">
               <h1>New Era of Nikon</h1>
               <p>Only today! <code>-40%</code> on all cameras!</p>
-              <p><a class="btn btn-lg btn-primary" href="/calculator-0.0.1-SNAPSHOT/item?product=1" role="button">Buy it now!</a></p>
+              <p><a class="btn btn-lg btn-primary" href="/item?product=1" role="button">Buy it now!</a></p>
             </div>
           </div>
         </div>
@@ -69,7 +68,7 @@
             <div class="carousel-caption">
               <h1>Make youself happy</h1>
               <p>Acquire a heater with new technologty which keeps you warm th whole winter</p>
-              <p><a class="btn btn-lg btn-primary" href="/calculator-0.0.1-SNAPSHOT/item?product=1" role="button">Acquire it now!</a></p>
+              <p><a class="btn btn-lg btn-primary" href="/item?product=1" role="button">Acquire it now!</a></p>
             </div>
           </div>
         </div>
@@ -79,7 +78,7 @@
             <div class="carousel-caption">
               <h1>Printer which you've never seen</h1>
               <p>With colored glass </p>
-              <p><a class="btn btn-lg btn-primary" href="/calculator-0.0.1-SNAPSHOT/item?product=1" role="button">What is it?</a></p>
+              <p><a class="btn btn-lg btn-primary" href="/item?product=1" role="button">What is it?</a></p>
             </div>
           </div>
         </div>
@@ -131,11 +130,6 @@
 
     </div><!-- /.container -->
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
     <script src="js/holder.min.js"></script>
 </div>

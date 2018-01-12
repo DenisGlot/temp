@@ -2,19 +2,14 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Objects;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import cache.factory.CacheType;
 import dao.entity.User;
-import jdbc.JdbcTemplate;
-import prefix.Prefix;
 
 /**
  * the path is \/registerDetails
@@ -50,6 +45,7 @@ public class RegisterDetails extends TemplateServlet {
 	@Override
 	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
+		HttpSession session = request.getSession();		
 		//Declares variables
 		String firstName = (String) request.getParameter("fname");
 		String lastName = (String) request.getParameter("lname");
@@ -64,16 +60,10 @@ public class RegisterDetails extends TemplateServlet {
 			isNotUnique=scenario.getById(CacheType.USER, phone)!=null;
 		}
 		*/
-	    if(firstName!=null && lastName != null && phone !=null && password !=null /*Eventually uncomment && isNotUnique*/) {
-	    	request.setAttribute("user", new User().newBuilder().setFirstName(firstName).setLastName(lastName).setGruopId(2).setPhone(phone).setPassword(password).build());
+	    if(firstName!=null && lastName != null && phone !=null && password !=null /*Eventually uncomment: && isNotUnique*/) {
+	    	session.setAttribute("user", new User().newBuilder().setFirstName(firstName).setLastName(lastName).setGruopId(2).setPhone(phone).setPassword(password).build());
 	    	//forward the request to MailServlet
-	    	RequestDispatcher reqDispatcher = request.getRequestDispatcher("/register");// No need prefix here
-	    	try {
-				reqDispatcher.forward(request, response);
-			} catch (ServletException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-			}
+	    	response.sendRedirect("register");
 	    } else {
 	    	out.println("<div class=\"container\">");
 		     out.println("<form class =\"form-horizontal registrationForm\">\r\n" + 

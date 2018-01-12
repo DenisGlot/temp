@@ -101,6 +101,9 @@ public class Scenario {
 		odCache = lazyInit(odCache, CacheType.ORDERDETAILS);
 		productCache = lazyInit(productCache, CacheType.PRODUCT);
 		int orderid = -1;
+		logger.debug(shoppingCard);
+		logger.debug(shoppingCard.getUser());
+		logger.debug(shoppingCard.getUser().getId());
 		// The primary key will be created as new one in dao
 		Order order = new Order(1, 1, shoppingCard.getUser().getId(), new Timestamp(new Date().getTime()), null);
 

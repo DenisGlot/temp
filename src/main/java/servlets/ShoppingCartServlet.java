@@ -20,7 +20,6 @@ import math.Arithmetic;
 import prefix.Prefix;
 import scenario.Scenario;
 import shopping_card.ShoppingCard;
-import shopping_card.ShoppingCarts;
 
 public class ShoppingCartServlet extends TemplateServlet {
 	private static final long serialVersionUID = 13453441243L;
@@ -64,11 +63,14 @@ public class ShoppingCartServlet extends TemplateServlet {
 		HttpSession session = request.getSession();
 		String phone = (String) session.getAttribute("phone");
 		String isBuying = request.getParameter("buy");
-		ShoppingCard shoppingCard = ShoppingCarts.shoppingCarts.get(phone);
+		logger.debug("The phone is " + phone);
+		ShoppingCard shoppingCard = (ShoppingCard) session.getAttribute("card");
+		logger.debug("ShopppingCard is " + shoppingCard);
 		boolean isBought = false;
 		if (isBuying != null && isBuying.equals("yes")) {
 			scenario.buyFromBasket(shoppingCard);
-			ShoppingCarts.shoppingCarts.remove(phone);
+			shoppingCard.removeAllProducts();
+			session.setAttribute("card", shoppingCard);
 			isBought = true;
 		}
 		// Logic ends
