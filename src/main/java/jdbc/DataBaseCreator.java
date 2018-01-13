@@ -17,23 +17,23 @@ import id_counter.OrderIdCounter;
  */
 public class DataBaseCreator {
 	
-    private final Logger logger = Logger.getLogger(DataBaseCreator.class);
+    private final static Logger logger = Logger.getLogger(DataBaseCreator.class);
 	
-	private JdbcTemplate jt;
+	private static JdbcTemplate jt = new JdbcTemplate();
 	
 	private static boolean tablesAreNotCreated = true;
 	
-	public DataBaseCreator(JdbcTemplate jt) {
-		this.jt= jt;
+	static {
 //		dropTables();
 		createTables();
+		jt = null;//For GC
 	}
 	
 	/**
 	 * It is method which creates whole database
 	 * derby note: after type you can write either "not null" or nothing
 	 */
-	private void createTables() {
+	private static void createTables() {
 		// Because i don't know how to check on existing tables. So i wrote down a try
 		// catch
 		// It will work only once on deployment
@@ -137,6 +137,8 @@ public class DataBaseCreator {
 				}
 			tablesAreNotCreated = false;
 		}
+		
+		metaData = null;//For GC
 
 	}
 	
@@ -147,7 +149,7 @@ public class DataBaseCreator {
 	 * If you want to use then you must declare con by calling cannictToDataBase
 	 * @return
 	 */
-	private boolean tableNotExist(DatabaseMetaData metaData, String tableName) {
+	private static boolean tableNotExist(DatabaseMetaData metaData, String tableName) {
 		try {
 			return !metaData.getTables(null, null, tableName, null).next();
 		} catch (SQLException e) {
@@ -161,7 +163,7 @@ public class DataBaseCreator {
 	 * On case when i need to change database
 	 * Because the database id embedded
 	 */
-	private void dropTables() {
+	private static void dropTables() {
 		logger.debug("Droping Tables");
 		jt.executeDDL("drop table ACCESS");
 		jt.executeDDL("drop table ROLES");

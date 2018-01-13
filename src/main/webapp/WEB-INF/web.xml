@@ -4,6 +4,14 @@
   <welcome-file-list>
     <welcome-file>/home</welcome-file>
   </welcome-file-list>
+  <servlet>
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>jsp</servlet-name>
+    <url-pattern>*.jsp</url-pattern>
+  </servlet-mapping>
   <filter>
     <filter-name>AuthFilt</filter-name>
     <filter-class>filters.AuthFilter</filter-class>
@@ -13,6 +21,7 @@
     <url-pattern>/shoppingcart</url-pattern>
     <url-pattern>/item</url-pattern>
     <url-pattern>/feedback</url-pattern>
+    <url-pattern>/gohome</url-pattern>
   </filter-mapping>
   <servlet>
     <display-name>MailServlet</display-name>

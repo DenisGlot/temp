@@ -11,8 +11,4 @@ public class CategoryCache extends SimpleLoading<Integer, Category>{
 	public CategoryCache(Class<Category> type) {
 		super(type);
 	}
-
-	public List<Category> getAll(){
-		return dao.getALl();
-	}
 }

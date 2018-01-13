@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import cache.factory.CacheType;
 import dao.entity.Category;
 import prefix.Prefix;
 import scenario.Scenario;
@@ -88,8 +89,8 @@ public interface SendHtml {
 		  out.println("                 Menu</button>");
 		  out.println("               <ul class=\"dropdown-menu\">"); 
 		  //Making all categories in dropdown menu
-		  for(Category category : new Scenario().getAllCategory()) {
-		  out.println("                  <li><a class=\"dropdown-item\" href=\"" + Prefix.prefix + "/category?categoryId=" + category.getCategoryid() + "\">" + category.getName() + "</a></li>"); 
+		  for(Object category : new Scenario().getAll(CacheType.CATEGORY)) {
+		  out.println("                  <li><a class=\"dropdown-item\" href=\"" + Prefix.prefix + "/category?categoryId=" + ( (Category) category).getCategoryid() + "\">" + ( (Category) category).getName() + "</a></li>"); 
 		  }
 		  //
 		  out.println("               </ul>"); 

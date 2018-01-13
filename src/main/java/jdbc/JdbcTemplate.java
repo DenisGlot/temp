@@ -13,11 +13,14 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.derby.tools.sysinfo;
 import org.apache.log4j.Logger;
 
 import exceptions.NotDeclaredConnection;
@@ -37,7 +40,11 @@ public class JdbcTemplate {
 	private final String jdbc_url = initJdbcUrl();
 	
 	private final ResultSetHandler<Object[][]> h = initResultSetHandler();
+	
+	private final ResultSetHandler<List<Object[]>> rsHandlerForList = initResultSetHandlerWithList();
 
+	private final ResultSetHandler<Object[]> rsHandlerForOneRow = initResultSetHandlerWithOne();
+	
 	public JdbcTemplate() {
 		try {
 			Class.forName(driver);
@@ -115,6 +122,7 @@ public class JdbcTemplate {
 	 * @param string
 	 * @return
 	 */
+	@Deprecated
 	public Object[][] executeSelect(String myQuery) {
 		Connection con = connectToDataBase();
 		QueryRunner run = new QueryRunner();
@@ -135,6 +143,7 @@ public class JdbcTemplate {
 	 * @param param
 	 * @return
 	 */
+	@Deprecated
 	public Object[][] executePreparedSelect(String myQuery, Object ... param ) {
 		Connection con = connectToDataBase();
 		QueryRunner run = new QueryRunner();
@@ -148,6 +157,74 @@ public class JdbcTemplate {
 		}
 		return null;
 
+	}
+	
+	public List<Object[]> execSelect(String myQuery) {
+		Connection con = connectToDataBase();
+		QueryRunner run = new QueryRunner();
+		try {
+			return run.query(con, myQuery, rsHandlerForList);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			closeConnection(con);
+		}
+		return null;
+
+	}
+	
+	public List<Object[]> execPreparedSelect(String myQuery, Object ... param ) {
+		Connection con = connectToDataBase();
+		QueryRunner run = new QueryRunner();
+		try {
+			return run.query(con, myQuery, rsHandlerForList, param);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			closeConnection(con);
+		}
+		return null;
+
+	}
+	
+	/**
+	 * It was created for method in NewDAO.findById 
+	 * @param myQuery
+	 * @return
+	 */
+	public Object[] execSelectForOneRow(String myQuery) {
+		Connection con = connectToDataBase();
+		QueryRunner run = new QueryRunner();
+		try {
+			return run.query(con, myQuery, rsHandlerForOneRow);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			closeConnection(con);
+		}
+		return null;
+	}
+	
+	/**
+	 * It was created for method in NewDAO.findByCriteria 
+	 * @param myQuery
+	 * @return
+	 */
+	public Object[] execPreparedSelectForOneRow(String myQuery, Object ... param ) {
+		Connection con = connectToDataBase();
+		QueryRunner run = new QueryRunner();
+		try {
+			return run.query(con, myQuery, rsHandlerForOneRow, param);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			closeConnection(con);
+		}
+		return null;
 	}
 
 	/**
@@ -176,10 +253,12 @@ public class JdbcTemplate {
 	}
 
 	/**
+	 * Do not use it!
 	 * Create a ResultSetHandler implementation to convert the first row into an
-	 * Object[]. I don't know how to count rows so I used 100
+	 * Object[]. ResultSet can not count rows so I used 100.
 	 * @return 
 	 */
+	@Deprecated
 	private ResultSetHandler<Object[][]> initResultSetHandler() {
 		return new ResultSetHandler<Object[][]>() {
 			public Object[][] handle(ResultSet rs) throws SQLException {
@@ -193,6 +272,92 @@ public class JdbcTemplate {
 						result[i][j] = rs.getObject(j + 1);
 					}
 				}
+				return result;
+			}
+		};
+	}
+	
+	/**
+	 * I found fabulous error of jdk or jvm  
+	 * It works in methos below 
+	 * All i needed to do is put Object[] row inside loop 
+	 * @return
+	 */
+	private ResultSetHandler<List<Object[]>> initResultSetHandlerWithErrorOfJDK() {
+		return new ResultSetHandler<List<Object[]>>() {
+			public List<Object[]> handle(ResultSet rs) throws SQLException {
+				ResultSetMetaData meta = rs.getMetaData();
+				int cols = meta.getColumnCount();
+				List<Object[]> result = new ArrayList<Object[]>();
+				//This is a row array 
+				Object[] row = new Object[cols];
+				System.out.println("It's while");
+				while(rs.next()) {
+					for (int j = 0; j < cols; j++) {
+						row[j] = rs.getObject(j + 1);
+					}
+					for(Object o : row) {
+						System.out.print(o.toString() + " ");
+					}
+					System.out.println();
+					result.add(row);
+				}
+				System.out.println("It's list");
+				result.forEach((i)->{
+					for(Object o : i) {
+						System.out.print(o.toString() + " ");
+					}
+					System.out.println();
+				});
+				meta = null;
+				row = null;
+				return result;
+			}
+		};
+	}
+	
+	/**
+	 * That's the new way with ArrayList<Object[]>
+	 * @return
+	 */
+	private ResultSetHandler<List<Object[]>> initResultSetHandlerWithList() {
+		return new ResultSetHandler<List<Object[]>>() {
+			public List<Object[]> handle(ResultSet rs) throws SQLException {
+				ResultSetMetaData meta = rs.getMetaData();
+				int cols = meta.getColumnCount();
+				List<Object[]> result = new ArrayList<Object[]>();
+				while(rs.next()) {
+					//This is a row array
+					Object[] row = new Object[cols];// have to do this 
+					for (int j = 0; j < cols; j++) {
+						row[j] = rs.getObject(j + 1);
+					}
+					result.add(row);
+					row = null;
+				}
+				meta = null;
+				return result;
+			}
+		};
+	}
+	
+	/**
+	 * It returns just one row for finById,and findByCriteria.
+	 * WARNING!!! : And even if more than one row it returns the first one.
+	 * @return
+	 */
+	private ResultSetHandler<Object[]> initResultSetHandlerWithOne() {
+		return new ResultSetHandler<Object[]>() {
+			public Object[] handle(ResultSet rs) throws SQLException {
+				ResultSetMetaData meta = rs.getMetaData();
+				int cols = meta.getColumnCount();
+				//This is a row array 
+				Object[] result = new Object[cols];
+				rs.next();
+				for (int j = 0; j < cols; j++) {
+					result[j] = rs.getObject(j + 1);
+				}
+				meta = null;
 				return result;
 			}
 		};

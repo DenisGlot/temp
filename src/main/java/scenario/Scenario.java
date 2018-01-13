@@ -172,6 +172,10 @@ public class Scenario {
 
 	}
 	
+	/*
+	 * I have to return Object.class there but it either String or Integer
+	 */
+	
 	/**
 	 * if it is user type then is should be String,
 	 * if it is not user type then id should be Integer 
@@ -192,35 +196,47 @@ public class Scenario {
 				throw new IdTypeException(type,id);
 			}
 		}
+		Cache cache = getCacheFromType(type);
+		return cache.getById(id);
+	}
+	
+	public List<Object> getAll(CacheType type){
+		Cache cache = getCacheFromType(type);
+		return cache.getAll();
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 * @throws NullPointerException
+	 */
+	private Cache getCacheFromType(CacheType type) {
 		switch (type) {
 		case USER:
 		    userCache = lazyInit(userCache, CacheType.USER);
-			return userCache.getById(id);
+			return userCache;
 		case PRODUCT:
 			productCache = lazyInit(productCache, CacheType.PRODUCT);
-			return productCache.getById(id);
+			return productCache;
 		case ORDER:
 			orderCache = lazyInit(orderCache, CacheType.ORDER);
-			return orderCache.getById(id);
+			return orderCache;
 		case ORDERDETAILS:
 			odCache = lazyInit(odCache, CacheType.ORDERDETAILS);
-			return  odCache.getById(id);
+			return  odCache;
 		case SUPLIER:
 			suplierCache = lazyInit(suplierCache, CacheType.SUPLIER);
-			return suplierCache.getById(id);
+			return suplierCache;
 		case ROLE:
 			roleCache = lazyInit(roleCache, CacheType.ROLE);
-			return roleCache.getById(id);
+			return roleCache;
 		case CATEGORY:
 			categoryCache = lazyInit(categoryCache, CacheType.CATEGORY);
-			return categoryCache.getById(id);
-		} 
-		return null;
-	}
-	
-	public List<Category> getAllCategory() {
-		categoryCache = lazyInit(categoryCache, CacheType.CATEGORY);
-		return ((CategoryCache) categoryCache).getAll();
+			return categoryCache;
+		default:
+			throw new NullPointerException("There is not a such type of Cache!");
+		}
 	}
 
 }

@@ -16,23 +16,22 @@ import jdbc.JdbcTemplate;
 import jdbc.SpecJdbcTemplate;
 
 /**
- * It uses constructor to create an instance of entity 
- * So the constructor of entity should consist all fields in RIGHT order
+ * Keep in mind that findByCriteria returns Object and getAllByCriteria returns List of Objects.
+ * I add new in JdbcTemplate method for findById and findByCriteria which will be faster for returning one row
  * @author Denis
  *
  * @param <E>
  * @param <K>
  */
-@Deprecated
-public class MyDAO<E,K> implements DAO<E, K> {
-	
-	private final Logger logger = Logger.getLogger(MyDAO.class);
+public class NewDAO<E,K> implements DAO<E, K> {
+
+private final Logger logger = Logger.getLogger(NewDAO.class);
 	
 	private JdbcTemplate jt;
 	
 	private SpecJdbcTemplate sjt;
 	
-	private DataBaseCreator dbc;
+	private DataBaseCreator dbCreator;
 	
 	private String tableName;
 	
@@ -49,12 +48,12 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	private volatile Class<E> type;
 	
-	public MyDAO(Class<E> type) {
+	public NewDAO(Class<E> type) {
+		//Creating DataBase
+		dbCreator = new DataBaseCreator();
+		//
 		jt = new JdbcTemplate();
 		sjt = new SpecJdbcTemplate(jt);
-		//Creating database
-		dbc = new DataBaseCreator();
-		//
 		this.type = type;
 		MyEntity annotation  = type.getAnnotation(MyEntity.class);
 		tableName = annotation.tableName();
@@ -82,21 +81,27 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	@Override
 	public List<E> getAll() {
 		List<E> list = new ArrayList<>();
-		Object[][] obs = null;
+		List<Object[]> obs = null;
 		synchronized (jt) {
-			obs = jt.executeSelect("select * from " + tableName);	
+			obs = jt.execSelect("select * from " + tableName);	
 		}
-		Object[] obsForInstance = new Object[obs[0].length];
-		if(obs[0][0]==null) {
+//		//TODO remove below
+//		obs.forEach((i)->{
+//			for(Object o : i) {
+//				logger.debug(o.toString());
+//			}
+//		});
+		Object[] obsForInstance = new Object[obs.get(0).length];
+		if(obs.get(0)[0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
 			return null;
 		}
-		for (int i = 0; i < obs.length; i++) {
-			for(int j = 0; j < obs[0].length;j++) {
-				obsForInstance[j] = obs[i][j];
+		for (int i = 0; i < obs.size(); i++) {
+			for(int j = 0; j < obsForInstance.length;j++) {
+				obsForInstance[j] = obs.get(i)[j];
 			}
 				try {
-					if(obs[i][0]==null) { continue;}
+					if(obs.get(i)[0]==null) { continue;}
 					list.add(type.getConstructor(cArgs).newInstance(obsForInstance));
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -111,21 +116,21 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	@Override
 	public List<E> getAllByCriteria(String name,Object like){
 		List<E> list = new ArrayList<>();
-		Object[][] obs = null;
+		List<Object[]> obs = null;
 		synchronized (jt) {
-			obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?", like.toString());
+			obs = jt.execPreparedSelect("select * from " + tableName + " where " + name + " = ?", like.toString());
 		}
-		Object[] obsForInstance = new Object[obs[0].length];
-		if(obs[0][0]==null) {
+		Object[] obsForInstance = new Object[obs.get(0).length];
+		if(obs.get(0)[0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
 			return null;
 		}
-		for (int i = 0; i < obs.length; i++) {
-			for(int j = 0; j < obs[0].length;j++) {
-				obsForInstance[j] = obs[i][j];
+		for (int i = 0; i < obs.size(); i++) {
+			for(int j = 0; j < obs.get(0).length;j++) {
+				obsForInstance[j] = obs.get(i)[j];
 			}
 				try {
-					if(obs[i][0]==null) { continue;}
+					if(obs.get(i)[0]==null) { continue;}
 					list.add(type.getConstructor(cArgs).newInstance(obsForInstance));
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -139,21 +144,17 @@ public class MyDAO<E,K> implements DAO<E, K> {
 
 	@Override
 	public E findById(K id) {
-		Object[][] obs = null;
+		Object[] obs = null;
 		synchronized (jt) {
-			obs = jt.executeSelect("select * from " + tableName + " where " + idName + " = " + id);
+			obs = jt.execSelectForOneRow("select * from " + tableName + " where " + idName + " = " + id);
 		}
-		Object[] obsForInstance = new Object[obs[0].length];
-		if(obs[0][0]==null) {
+		if(obs[0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
 			return null;
 		}
-		for(int j = 0; j < obs[0].length;j++) {
-			obsForInstance[j] = obs[0][j];
-		}
 		try {
 			Constructor<E> con = type.getConstructor(cArgs);
-			return con.newInstance(obsForInstance);
+			return con.newInstance(obs);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
@@ -165,20 +166,16 @@ public class MyDAO<E,K> implements DAO<E, K> {
 	
 	@Override
 	public E findByCriteria(String name, Object like) {
-		Object[][] obs = null;
+		Object[] obs = null;
 		synchronized (jt) {
-			obs = jt.executePreparedSelect("select * from " + tableName + " where " + name + " = ?",like.toString());
+			obs = jt.execPreparedSelectForOneRow("select * from " + tableName + " where " + name + " = ?",like.toString());
 		}
-		Object[] obsForInstance = new Object[obs[0].length];
-		if(obs[0][0]==null) {
+		if(obs[0]==null) {
 			logger.debug("The array of objects contains nulls with " + type.getSimpleName());
 			return null;
 		}
-		for(int j = 0; j < obs[0].length;j++) {
-			obsForInstance[j] = obs[0][j];
-		}
 		try {
-			return type.getConstructor(cArgs).newInstance(obsForInstance);
+			return type.getConstructor(cArgs).newInstance(obs);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
@@ -300,9 +297,10 @@ public class MyDAO<E,K> implements DAO<E, K> {
 		}
 	}
 	
+	@Override
 	public boolean checkInDataBase(User user) {
 		
 		return sjt.checkInDataBase(user);
 	}
-	
+
 }

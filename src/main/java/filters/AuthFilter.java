@@ -29,6 +29,7 @@ import servlets.SendHtml;
 
 /**
  * This class is for authentication.
+ * Here declares all session attributes {mail,phone,name}
  * 
  * @author Denis
  *

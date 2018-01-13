@@ -41,7 +41,7 @@ public class LoginServlet extends TemplateServlet {
 	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
 		// parameter email means email or password
-		  out.println("<form method=\"POST\" action=\"item\">\r\n" + 
+		  out.println("<form method=\"POST\" action=\"gohome\">\r\n" + 
 		  		"		<div class=\"box\">\r\n" + 
 		  		"			<h1>Sign in</h1> Your email or phone</br>phone format(XXXX-XXX-XXXX)\r\n" + 
 		  		"			<input id=\"email\" type=\"text\" name=\"email\"\r\n" + 

@@ -7,7 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
+import dao.DAO;
 import dao.MyDAO;
+import dao.NewDAO;
 import dao.annotation.MyEntity;
 import dao.entity.User;
 
@@ -25,7 +27,7 @@ public abstract class Cache<K, E> {
 
 	protected ConcurrentHashMap<K, E> cache;
 
-	protected MyDAO<E, K> dao;
+	protected DAO<E, K> dao;
 
 	Class<E> type;
 
@@ -36,7 +38,9 @@ public abstract class Cache<K, E> {
 	
 	public Cache(Class<E> type,int capacity) {
 		this.type = type;
-		declareMapAndDAO(capacity);
+		cache = new ConcurrentHashMap<>(capacity);
+		//You can change realization of dao here and do nothing else
+		dao = new NewDAO<>(type);
 		load();
 		if(type.equals(User.class)) {
 			idName = "phone";
@@ -54,11 +58,6 @@ public abstract class Cache<K, E> {
 	}
 	
 	protected abstract void load();
-
-	protected void declareMapAndDAO(int capacity) {
-		cache = new ConcurrentHashMap<>(capacity);
-		dao = new MyDAO<>(type);
-	}
 
 	/**
 	 *  It returns the concrete entity by id
@@ -85,6 +84,9 @@ public abstract class Cache<K, E> {
 			return entity;
 	}
 	
+	/*
+	 * I'm not going to put all data in cache
+	 */
 	public List<E> getAllByCriteria(String name, Object like){
 		if(cache.size() >= DEFAULT_MAX_SIZE) {
 			cache = new ConcurrentHashMap<>();
@@ -163,6 +165,12 @@ public abstract class Cache<K, E> {
 		DEFAULT_MAX_SIZE = max_size;
 	}
 	
-	
+	/**
+	 * I needed for table of data  in admin.jsp 
+	 *  I'm not going to put all data in cache
+	 */
+	public List<E> getAll(){
+		return dao.getAll();
+	}
 
 }
