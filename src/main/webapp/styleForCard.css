@@ -10,6 +10,9 @@ body {
   background: #3498db;
   font-family: 'Roboto', sans-serif;
 }
+h1{
+	text-align:  center;
+}
 .shopping-cart {
   width: 750px;
   height: 423px;
@@ -119,19 +122,21 @@ Let’s add some basic style to  product name and description.
   color: #43484D;
   font-weight: 300;
 }
- 
-button[class*=btn] {
+
+.minus-btn .plus-btn{
   width: 30px;
   height: 30px;
   background-color: #E1E8EE;
   border-radius: 6px;
-  border: none;
   cursor: pointer;
 }
+ 
 .minus-btn img {
+  border: none;
   margin-bottom: 3px;
 }
 .plus-btn img {
+  border: none;
   margin-top: 2px;
 }
  

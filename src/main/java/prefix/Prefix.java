@@ -1,5 +1,11 @@
 package prefix;
 
+/**
+ * I could not change the web context for a long time 
+ * 
+ * @author denis
+ *
+ */
 public class Prefix {
 
 	//Development state

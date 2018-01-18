@@ -1,6 +1,7 @@
 package shopping_card;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -13,11 +14,15 @@ public class ShoppingCard {
 
 	private User user;
 	
+	// Amount  of products in this shopping card
+	private AtomicInteger amount;
+	
 	private ConcurrentHashMap<Product, Integer> products;
 	
 	public ShoppingCard(User user) {
 		this.user = user;
 		products = new ConcurrentHashMap<>();
+		amount = new AtomicInteger(0);
 	}
 	
 	public User getUser() {
@@ -40,9 +45,10 @@ public class ShoppingCard {
 	 */
 	public void addProduct(Product product, Integer quantity) {
 		products.put(product, quantity);
+		amount.incrementAndGet();
 	}
 	
-	public void setQuantityOfProducts(Product product,Integer quantity) {
+	public void setQuantityOfProduct(Product product,Integer quantity) {
 		if(products.replace(product, quantity)==null) {
 			logger.warn("In method setQuantityOfProducts was not any replacement!!!");
 		}
@@ -50,10 +56,15 @@ public class ShoppingCard {
 	
 	public void removeProduct(Product product) {
 		products.remove(product);
+		amount.decrementAndGet();
 	}
 	
 	public void removeAllProducts() {
 		products.clear();
+	}
+	
+	public int size() {
+		return amount.get();
 	}
 	
 	@Override

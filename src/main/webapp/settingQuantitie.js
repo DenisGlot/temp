@@ -1,10 +1,16 @@
-
 var isSubmitting = false;
-
+//Make the connection with SoppingSrvlet
 $('.minus-btn').on('click', function(e) {
 	e.preventDefault();
+	if(isSubmitting){
+		return;
+	}
+	isSubmitting =true;
 	var $this = $(this);
+	var post_url = $this.attr('action');
 	var $input = $this.closest('div').find('input');
+	var $totalprice = $this.closest('div').next();
+	var price = parseInt($this.closest('div').prev().find('.priceOfProduct').text());
 	var value = parseInt($input.val());
 
 	if (value > 1) {
@@ -14,14 +20,37 @@ $('.minus-btn').on('click', function(e) {
 	}
 
 	$input.val(value);
-	update();
+	$totalprice.html(value*price + '$');
+	var post_data = {
+			productId : $this.closest('div').parent().attr('id'),
+	        quantity : $input.val()
+      };
+	$.ajax({
+		    url: post_url,
+		    contentType: "application/json",
+            data: JSON.stringify(post_data),
+		    type: 'POST',
+		    success: function(msg) {
+                isSubmitting=false;
+            },
+            error: function(message) {
+                isSubmitting=false;
+            }
+    });
 
 });
 
 $('.plus-btn').on('click', function(e) {
 	e.preventDefault();
+	if(isSubmitting){
+		return;
+	}
+	isSubmitting =true;
 	var $this = $(this);
+	var post_url = $this.attr('action');
 	var $input = $this.closest('div').find('input');
+	var $totalprice = $this.closest('div').next();
+	var price = parseInt($this.closest('div').prev().find('.priceOfProduct').text());
 	var value = parseInt($input.val());
 
 	if (value < 100) {
@@ -31,39 +60,22 @@ $('.plus-btn').on('click', function(e) {
 	}
 
 	$input.val(value);
-	update();
+	$totalprice.html(value*price + '$');
+	
+	var post_data = {
+			productId : $this.closest('div').parent().attr('id'),
+	        quantity : $input.val()
+      };
+	$.ajax({
+		    url: post_url,
+		    contentType: "application/json",
+            data: JSON.stringify(post_data),
+		    type: 'POST',
+		    success: function(msg) {
+                isSubmitting=false;
+            },
+            error: function(message) {
+                isSubmitting=false;
+            }
+    });
 });
-
-
-function update(){
-        $(function(){
-        	if(isSubmitting){
-        		return;
-        	}
-        	isSubmitting=true;
-                var form = $(this);
-                var post_url = form.attr('action');
-                if($('#quantity').val()==null){
-                	return;
-                }
-                var post_data = {
-                      quantity : $('#quantity').val()
-                };
-                $('#total-price', form).fadeOut(1000);
-                $.ajax({
-                    type: 'POST',
-                    url: post_url, 
-                    contentType: "application/json",
-                    data: JSON.stringify(post_data),
-                    async: true,
-                    success: function(msg) {
-                        $('body').html(msg).fadeIn(1000);
-                        isSubmitting=false;
-                    },
-                    error: function(message) {
-                    	$('body').html(msg);
-                        isSubmitting=false;
-                    }
-                });
-        });
-     }

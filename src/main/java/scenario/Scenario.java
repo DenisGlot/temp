@@ -87,7 +87,7 @@ public class Scenario {
 	}
 
 	public void updateProductInBasket(ShoppingCard shoppingCard, Product product, Integer quantity) {
-		shoppingCard.setQuantityOfProducts(product, quantity);
+		shoppingCard.setQuantityOfProduct(product, quantity);
 	}
 
 	/**

@@ -28,6 +28,11 @@ import scenario.Scenario;
 import shopping_card.ShoppingCard;
 
 @WebServlet("/item")
+/**
+ * Maximum products must be 10(all logic about this is here)
+ * @author denis
+ *
+ */
 public class ItemServlet extends TemplateServlet {
 	private static final long serialVersionUID = 1234234534L;
 
@@ -55,13 +60,16 @@ public class ItemServlet extends TemplateServlet {
 	@Override
 	public void insertLogic(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
 			throws IOException {
-		// Logic begins
+		// Variables
 		HttpSession session = request.getSession();
 		String phone = (String) session.getAttribute("phone");
 		String productidString = request.getParameter("product");
 		String quantity = request.getParameter("quantity");
 		Integer productid;
 		Product product;
+		//It means products in card equals ten 
+		boolean criticalCondition = false;
+		//
 		if (productidString == null) {
 			logger.warn("Parameter item was null!!!");
 			response.sendRedirect(Prefix.prefix);
@@ -73,16 +81,23 @@ public class ItemServlet extends TemplateServlet {
 				logger.warn("In database was not any appropriate id for product");
 				return;
 			}
-			String isPutting = request.getParameter("cart");
-			boolean isPut = isPutting != null && isPutting.equals("yes");
+			String isPutString = request.getParameter("cart");
+			boolean isPut = isPutString != null && isPutString.equals("yes");
 			if (isPut) {
-				ShoppingCard shoppingCard = new ShoppingCard((User) scenario.getById(CacheType.USER, phone));
-				shoppingCard.addProduct(product, Integer.parseInt(quantity));
-				session.setAttribute("card", shoppingCard);
+				ShoppingCard shoppingCard = (ShoppingCard) session.getAttribute("card");
+				if(shoppingCard == null) {
+					shoppingCard = new ShoppingCard((User) scenario.getById(CacheType.USER, phone));
+				}
+				//if products in card 10
+				if(shoppingCard.size()<10) {
+					shoppingCard.addProduct(product, Integer.parseInt(quantity));
+					session.setAttribute("card", shoppingCard);
+				} else {
+					criticalCondition = true;
+				}
 			}
-
-			// Logic ends
-			// Real html
+			
+			//Sending html
 			out.println(" <div class=\"container\">");
 			out.println("<h1 class=\"my-4\">" + product.getName() + "</h1>");
 			out.println("<div class=\"row\">");
@@ -98,7 +113,10 @@ public class ItemServlet extends TemplateServlet {
 			if (isPut) {
 				out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/shoppingcart?cart=yes\">Go to the shopping cart</a>");
 			} else {
-				if(product.getQuantity()<=0) {
+				if(criticalCondition) {
+					out.println("<p>Sorry, you can't have more than 10 products in your shoppingcard</p>");
+				}
+			    else if(product.getQuantity()<=0) {
 					out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "\">Sorry,Nothing left.Go choose something else</a>");
 				} else {
 					out.println("<a style =\"font: bold 20px Arial;background-color: #ADFF2F;margin-left: 27%;color: #333333;padding: 2px 6px 2px 6px;border: 2px solid #CCCCCC; border-radius: 6px;\" href = \"" + Prefix.prefix + "/item?product=" + productid
